@@ -1,0 +1,239 @@
+%% ISO 3382-2 Background Noise Measurement
+% Background noise evaluation using calibrated microphones
+% Author: Christian Lykke
+% Date: 30-01-2026
+
+%% Flags
+plotPerMic = 0;    % true: plot A vs Z for each mic individually
+plotAverage = 0;   % true: plot only spatial average
+plotFFTPerMic = 0;     % true: FFT for each mic
+plotFFTAverage = 0;    % true: FFT of spatial average
+
+
+%% Paths
+basePath = 'C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\';
+calFile  = fullfile(basePath, 'micCalibrationConstants_94dB_1kHz_matlab.mat');
+
+%% Load calibration data
+S = load(calFile);
+N = 8;
+
+if isfield(S,'K_mic')
+    K_mic = S.K_mic;
+elseif isfield(S,'K')
+    K_mic = S.K;
+elseif isfield(S, 'cal')
+    K_mic = [S.cal.mic.calFactor_PaPerVolt];
+else
+    error('Calibration file does not contain K_mic or K');
+end
+
+if numel(K_mic) ~= N
+    error('Calibration vector must contain 8 microphone constants');
+end
+
+%% Time window (seconds)
+t_start = 2*60 + 30;   % 2:30
+t_end   = 10*60 + 30;  % 10:30
+
+%% Preallocate
+LAeq_A = zeros(1,N);
+SPL_Z  = zeros(1,N);
+pA_all = cell(1,N);
+pZ_all = cell(1,N);
+fs_all = zeros(1,N);
+
+fprintf('\nISO 3382-2 BACKGROUND NOISE MEASUREMENT\n');
+fprintf('--------------------------------------\n');
+fprintf('Time window: %02d:%02d to %02d:%02d (%.0f s)\n', ...
+        floor(t_start/60), mod(t_start,60), ...
+        floor(t_end/60),   mod(t_end,60), ...
+        t_end - t_start);
+fprintf('Reference  : 20 µPa\n\n');
+
+%% Loop over microphones
+for mic = 1:N
+
+    %% Load audio
+    fileName = sprintf('backgroundMeasurement_100%d.wav', mic);
+    filePath = fullfile(basePath, fileName);
+
+    [x, fs] = audioread(filePath);
+    x = x - mean(x);   % DC removal
+
+    %% Extract time segment
+    idx_start = round(t_start * fs) + 1;
+    idx_end   = round(t_end   * fs);
+
+    if idx_end > length(x)
+        error('File %s is shorter than 10:30', fileName);
+    end
+
+    x = x(idx_start:idx_end);
+
+    %% Convert to pressure (Pa)
+    p = x* K_mic(mic); % Already in Pa; no calibration factor
+
+    %% Z-weighted (unweighted)
+    SPL_Z(mic) = 20*log10(rms(p)/20e-6);
+    pZ_all{mic} = p;
+    fs_all(mic) = fs;
+
+    %% A-weighted
+    A = weightingFilter('A-weighting','SampleRate',fs);
+    pA = A(p);
+    LAeq_A(mic) = 10*log10(mean(pA.^2)/(20e-6)^2);
+    pA_all{mic} = pA;
+
+    %% Display
+    fprintf('Mic %d: Z-weighted = %5.2f dB, A-weighted = %5.2f dB(A)\n', mic, SPL_Z(mic), LAeq_A(mic));
+
+end
+
+%% Spatial averages
+LAeq_A_mean = 10*log10( mean(10.^(LAeq_A/10)) );
+SPL_Z_mean  = 10*log10( mean(10.^(SPL_Z/10)) );
+
+fprintf('\n--------------------------------------\n');
+fprintf('Spatial average Z-weighted SPL : %5.2f dB\n', SPL_Z_mean);
+fprintf('Spatial average A-weighted LAeq: %5.2f dB(A)\n', LAeq_A_mean);
+fprintf('--------------------------------------\n\n');
+
+%% Plotting
+if plotPerMic
+    figure('Name','Background Noise A vs Z','NumberTitle','off');
+    for mic = 1:N
+        t_vec = (0:length(pA_all{mic})-1)/fs_all(mic);
+        subplot(4,2,mic)
+        plot(t_vec,20*log10(abs(pZ_all{mic})/20e-6),'b'); hold on;
+        plot(t_vec,20*log10(abs(pA_all{mic})/20e-6),'r');
+        xlabel('Time [s]'); ylabel('SPL [dB]');
+        title(sprintf('Mic %d',mic));
+        legend('Z-weighted','A-weighted');
+        grid on;
+    end
+end
+
+if plotAverage
+    figure('Name','Spatial Average Background Noise','NumberTitle','off');
+    t_vec = (0:length(pA_all{1})-1)/fs_all(1);
+    pZ_avg = mean(cell2mat(cellfun(@(c) c(:), pZ_all,'UniformOutput',false)),2);
+    pA_avg = mean(cell2mat(cellfun(@(c) c(:), pA_all,'UniformOutput',false)),2);
+    plot(t_vec,20*log10(abs(pZ_avg)/20e-6),'b'); hold on;
+    plot(t_vec,20*log10(abs(pA_avg)/20e-6),'r');
+    xlabel('Time [s]'); ylabel('SPL [dB]');
+    title('Spatial average of 8 microphones');
+    legend('Z-weighted','A-weighted');
+    grid on;
+end
+%% FFT PLOTTING (Magnitude Spectrum in dB re 20 µPa)
+% Notes:
+% - Uses Hann window
+% - Single-sided spectrum
+% - Scaled to approximate amplitude spectrum in Pa
+% - Plotted as dB re 20 µPa
+
+p_ref = 20e-6;
+
+if plotFFTPerMic
+    figure('Name','FFT per Microphone (A vs Z)','NumberTitle','off');
+
+    for mic = 1:N
+
+        pZ = pZ_all{mic};
+        pA = pA_all{mic};
+        fs = fs_all(mic);
+
+        L = length(pZ);
+
+        % Hann window
+        w = hann(L);
+        Wcorr = sum(w)/L;   % amplitude correction for window
+
+        % FFT
+        PZ = fft(pZ .* w);
+        PA = fft(pA .* w);
+
+        % Single-sided
+        PZ = PZ(1:floor(L/2)+1);
+        PA = PA(1:floor(L/2)+1);
+
+        % Frequency vector
+        f = (0:floor(L/2)) * fs/L;
+
+        % Amplitude spectrum scaling (Pa)
+        PZ_mag = abs(PZ) / (L*Wcorr);
+        PA_mag = abs(PA) / (L*Wcorr);
+
+        % Double all bins except DC and Nyquist
+        if mod(L,2) == 0
+            PZ_mag(2:end-1) = 2*PZ_mag(2:end-1);
+            PA_mag(2:end-1) = 2*PA_mag(2:end-1);
+        else
+            PZ_mag(2:end) = 2*PZ_mag(2:end);
+            PA_mag(2:end) = 2*PA_mag(2:end);
+        end
+
+        % Convert to dB re 20 µPa
+        PZ_dB = 20*log10(PZ_mag/p_ref);
+        PA_dB = 20*log10(PA_mag/p_ref);
+
+        subplot(4,2,mic)
+        semilogx(f, PZ_dB,'b'); hold on;
+        semilogx(f, PA_dB,'r');
+        grid on;
+        xlabel('Frequency [Hz]');
+        ylabel('Magnitude [dB re 20 µPa]');
+        title(sprintf('Mic %d FFT', mic));
+        legend('Z-weighted','A-weighted','Location','best');
+        xlim([10 fs/2]);
+        ylim([-100 70]);
+    end
+end
+
+
+if plotFFTAverage
+    % Build spatial average signals (time domain)
+    pZ_avg = mean(cell2mat(cellfun(@(c) c(:), pZ_all,'UniformOutput',false)),2);
+    pA_avg = mean(cell2mat(cellfun(@(c) c(:), pA_all,'UniformOutput',false)),2);
+
+    fs = fs_all(1);
+    L = length(pZ_avg);
+
+    w = hann(L);
+    Wcorr = sum(w)/L;
+
+    PZ = fft(pZ_avg .* w);
+    PA = fft(pA_avg .* w);
+
+    PZ = PZ(1:floor(L/2)+1);
+    PA = PA(1:floor(L/2)+1);
+
+    f = (0:floor(L/2)) * fs/L;
+
+    PZ_mag = abs(PZ) / (L*Wcorr);
+    PA_mag = abs(PA) / (L*Wcorr);
+
+    if mod(L,2) == 0
+        PZ_mag(2:end-1) = 2*PZ_mag(2:end-1);
+        PA_mag(2:end-1) = 2*PA_mag(2:end-1);
+    else
+        PZ_mag(2:end) = 2*PZ_mag(2:end);
+        PA_mag(2:end) = 2*PA_mag(2:end);
+    end
+
+    PZ_dB = 20*log10(PZ_mag/p_ref);
+    PA_dB = 20*log10(PA_mag/p_ref);
+
+    figure('Name','Spatial Average FFT (A vs Z)','NumberTitle','off');
+    semilogx(f, PZ_dB,'b'); hold on;
+    semilogx(f, PA_dB,'r');
+    grid on;
+    xlabel('Frequency [Hz]');
+    ylabel('Magnitude [dB re 20 µPa]');
+    title('Spatial Average FFT of 8 microphones');
+    legend('Z-weighted','A-weighted','Location','best');
+    xlim([10 fs/2]);
+    ylim([-100 70]);
+end
+
