@@ -4,15 +4,15 @@
 % Date: 30-01-2026
 
 %% Flags
-plotPerMic = 0;    % true: plot A vs Z for each mic individually
-plotAverage = 0;   % true: plot only spatial average
-plotFFTPerMic = 0;     % true: FFT for each mic
-plotFFTAverage = 0;    % true: FFT of spatial average
+plotPerMic = 1;    % true: plot A vs Z for each mic individually
+plotAverage = 1;   % true: plot only spatial average
+plotFFTPerMic = 1;     % true: FFT for each mic
+plotFFTAverage = 1;    % true: FFT of spatial average
 
 
 %% Paths
 basePath = 'C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\';
-calFile  = fullfile(basePath, 'micCalibrationConstants_94dB_1kHz.mat');
+calFile  = fullfile(basePath, 'micCalibrationConstants_94dB_1kHz_13022026.mat');
 
 %% Load calibration data
 S = load(calFile);
@@ -55,7 +55,7 @@ fprintf('Reference  : 20 µPa\n\n');
 for mic = 1:N
 
     %% Load audio
-    fileName = sprintf('backgroundMeasurement_100%d.wav', mic);
+    fileName = sprintf('backgroundMeasurement13022026__100%d.wav', mic);
     filePath = fullfile(basePath, fileName);
 
     [x, fs] = audioread(filePath);

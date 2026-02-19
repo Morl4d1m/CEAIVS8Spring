@@ -1,7 +1,7 @@
 
 %% USER SETTINGS
 folder = 'C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\';
-filePattern = 'kalibrering020220262__1%03d.wav';
+filePattern = 'kalibrering02022026__1%03d.wav';
 
 numMics = 8;
 toneFreq = 1000;
