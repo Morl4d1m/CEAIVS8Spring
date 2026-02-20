@@ -10,6 +10,7 @@
 // General audio preparation
 AudioOutputI2S i2s1;
 AudioControlSGTL5000 sgtl5000_1;
+float sineAmpCurrent = 0.0f;
 
 // Mixer to enable all signals being "active" at once.
 AudioMixer4 mixer;                              // Has 4 channels to mix on
@@ -22,7 +23,12 @@ AudioConnection patchCord1(MLSSignal, 0, mixer, 0);  // Sends the MLS to channel
 
 // When pure sine is generated
 AudioSynthWaveform sineWave;                        // Utilizes pre-made sine wave generator
-AudioConnection patchCord2(sineWave, 0, mixer, 1);  // Sends the pure sine to channel 1 in the mixer
+//AudioConnection patchCord2(sineWave, 0, mixer, 1);  // Sends the pure sine to channel 1 in the mixer
+
+AudioEffectEnvelope sineEnv;
+
+AudioConnection patchCord8(sineWave, 0, sineEnv, 0);
+AudioConnection patchCord7(sineEnv, 0, mixer, 1);
 
 // When white noise is generated
 AudioSynthNoiseWhite whiteNoise;                      // Utilizes pre-made white noise generator
@@ -49,9 +55,14 @@ void setup() {
   AudioMemory(100);               // Haven't quite figures out yet
   Serial.begin(115200);           // Sets BAUD rate
   sgtl5000_1.enable();            // Turns on audio shield
-  sgtl5000_1.volume(1);        // Sets the volume on the audio shield
+  sgtl5000_1.volume(1);           // Sets the volume on the audio shield
   sineWave.begin(WAVEFORM_SINE);  // Designates a pure sinusoid
   pinMode(ledPin, OUTPUT);        // Enables the builtin LED
+  sineWave.amplitude(1.0);        // keep waveform always at full amplitude
+  sineEnv.attack(50);    // 25 ms fade in
+  sineEnv.release(25);   // 25 ms fade out
+  sineEnv.sustain(1.0);  // full level
+  sineEnv.decay(0);      // no decay stage
   delay(1000);
 
   // Set gain for different channels from 0-1
@@ -66,18 +77,22 @@ void loop() {
   Serial.print("Iteration #");
   Serial.println(count);
   count++;
-  sineWave.amplitude(1);
+  //sineWave.amplitude(0);
 
   for (int f = 7; f <= 33; f++) {  // Increments frequency by 1/3 octave bands
     Serial.print("Sine at ");
     Serial.print(octaveFrequency(f));
     Serial.println(" Hz");
-    mixer.gain(1, 0.11);  // 0.0793);  // Gain for pure sine
+    //mixer.gain(1, 0.11);  // 0.0793);  // Gain for pure sine
+    //rampSineAmplitude(1.0f, 25);
     //sineWave.amplitude(1);                   // Allows further volume control, apart from the gain set earlier
     sineWave.frequency(octaveFrequency(f));  // Sets the current frequency
+    sineEnv.noteOn();
     wait(1000);
-    mixer.gain(1, 0.00005);  // 0.0793);  // Gain for pure sine
+    //mixer.gain(1, 0.00005);  // 0.0793);  // Gain for pure sine
     //sineWave.amplitude(0);
+    //rampSineAmplitude(0.0f, 25);
+    sineEnv.noteOff();
     wait(5000);
   }
   //sineWave.frequency(400);
@@ -263,4 +278,28 @@ uint16_t octaveFrequency(uint16_t octaveBand) {
       Serial.println("Unsupported octave band!");
       return 0;
   }
+}
+
+
+void rampSineAmplitude(float targetAmp, uint16_t rampTimeMs) {
+  // rampTimeMs = total ramp time in milliseconds
+  // This uses small amplitude steps to avoid discontinuities.
+
+  const uint16_t stepTimeMs = 1;  // 1 ms per step (fast, smooth enough)
+  uint16_t steps = rampTimeMs / stepTimeMs;
+
+  if (steps < 1) steps = 1;
+
+  float startAmp = sineAmpCurrent;
+
+  for (uint16_t i = 1; i <= steps; i++) {
+    float a = startAmp + (targetAmp - startAmp) * ((float)i / (float)steps);
+    sineWave.amplitude(a);
+    sineAmpCurrent = a;
+    delay(stepTimeMs);
+  }
+
+  // force exact target at end
+  sineWave.amplitude(targetAmp);
+  sineAmpCurrent = targetAmp;
 }

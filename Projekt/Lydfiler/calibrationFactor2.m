@@ -1,7 +1,7 @@
 
 %% ================= USER SETTINGS ==========================
 folder = 'C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\';
-filePattern = 'kalibrering16022026__1%03d.wav';
+filePattern = 'kalibrering20022026__1%03d.wav';
 
 N = 8;
 
@@ -30,7 +30,7 @@ plotPerMic = 1;          % 1 = show plots per mic
 plotSummary = 1;         % 1 = show summary bar plot
 
 % Output MAT file
-outMatFile = fullfile(folder, 'micCalibrationConstants_94dB_1kHz_16022026.mat');
+outMatFile = fullfile(folder, 'micCalibrationConstants_94dB_1kHz_20022026.mat');
 %% ==========================================================
 
 

@@ -20,7 +20,7 @@ plotThirdOctaveBars = 0;
 
 %% =========================== PATHS ===========================
 basePath = 'C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\';
-calFile  = fullfile(basePath,'micCalibrationConstants_94dB_1kHz_16022026.mat');
+calFile  = fullfile(basePath,'micCalibrationConstants_94dB_1kHz_20022026.mat');
 
 N = 8;
 p_ref = 20e-6;
@@ -81,7 +81,7 @@ pC_all = cell(1,N);
 %% ====================== MAIN LOOP ============================
 for mic = 1:N
 
-    fileName = sprintf('backgroundMeasurement16022026__100%d.wav',mic);
+    fileName = sprintf('DETredjeFredag20022026kl1519-1529__100%d.wav',mic);
     [x, ~] = audioread(fullfile(basePath,fileName));
     x = x(:) - mean(x);
 
