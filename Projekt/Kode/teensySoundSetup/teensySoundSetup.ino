@@ -14,33 +14,36 @@ float sineAmpCurrent = 0.0f;
 
 // Mixer to enable all signals being "active" at once.
 AudioMixer4 mixer;                              // Has 4 channels to mix on
-AudioConnection patchCord5(mixer, 0, i2s1, 0);  // Mixer to left output
-AudioConnection patchCord6(mixer, 0, i2s1, 1);  // Mixer to right output
+AudioConnection patchCord1(mixer, 0, i2s1, 0);  // Mixer to left output
+AudioConnection patchCord2(mixer, 0, i2s1, 1);  // Mixer to right output
 
 // When MLS is generated
 AudioPlayQueue MLSSignal;
-AudioConnection patchCord1(MLSSignal, 0, mixer, 0);  // Sends the MLS to channel 0 in the mixer
+AudioConnection patchCord3(MLSSignal, 0, mixer, 0);  // Sends the MLS to channel 0 in the mixer
 
 // When pure sine is generated
-AudioSynthWaveform sineWave;                        // Utilizes pre-made sine wave generator
+AudioSynthWaveform sineWave;  // Utilizes pre-made sine wave generator
 //AudioConnection patchCord2(sineWave, 0, mixer, 1);  // Sends the pure sine to channel 1 in the mixer
-
 AudioEffectEnvelope sineEnv;
-
-AudioConnection patchCord8(sineWave, 0, sineEnv, 0);
-AudioConnection patchCord7(sineEnv, 0, mixer, 1);
-
-// When white noise is generated
-AudioSynthNoiseWhite whiteNoise;                      // Utilizes pre-made white noise generator
-AudioConnection patchCord3(whiteNoise, 0, mixer, 2);  // Sends the white noise to channel 2 in the mixer
-
-// When white noise is generated
-//AudioSynthNoisePink pinkNoise;                       // Utilizes pre-made white noise generator
-//AudioConnection patchCord7(pinkNoise, 0, mixer, 2);  // Sends the white noise to channel 2 in the mixer
-
+AudioConnection patchCord4(sineWave, 0, sineEnv, 0);
+AudioConnection patchCord5(sineEnv, 0, mixer, 1);
 // When sine sweep is generated
 AudioSynthToneSweep sineSweep;                       // Utilizes pre-made sine sweep generator
-AudioConnection patchCord4(sineSweep, 0, mixer, 3);  // Sends the sine sweep to channel 3 in the mixer
+AudioConnection patchCord6(sineSweep, 0, mixer, 3);  // Sends the sine sweep to channel 3 in the mixer
+
+AudioMixer4 mixerNoise;
+// When white noise is generated
+AudioSynthNoiseWhite whiteNoise;                           // Utilizes pre-made white noise generator
+AudioConnection patchCord7(whiteNoise, 0, mixerNoise, 0);  // Sends the white noise to channel 2 in the mixer
+
+// When pink noise is generated
+AudioSynthNoisePink pinkNoise;                            // Utilizes pre-made pink noise generator
+AudioConnection patchCord8(pinkNoise, 0, mixerNoise, 1);  // Sends the pink noise to channel 2 in the mixer
+
+// Connect noise mixer to original mixer
+AudioConnection patchCord9(mixerNoise, 0, mixer, 2);
+
+
 
 // Global variables
 uint16_t count = 1;
@@ -59,16 +62,16 @@ void setup() {
   sineWave.begin(WAVEFORM_SINE);  // Designates a pure sinusoid
   pinMode(ledPin, OUTPUT);        // Enables the builtin LED
   sineWave.amplitude(1.0);        // keep waveform always at full amplitude
-  sineEnv.attack(50);    // 25 ms fade in
-  sineEnv.release(25);   // 25 ms fade out
-  sineEnv.sustain(1.0);  // full level
-  sineEnv.decay(0);      // no decay stage
+  sineEnv.attack(50);             // 25 ms fade in
+  sineEnv.release(25);            // 25 ms fade out
+  sineEnv.sustain(1.0);           // full level
+  sineEnv.decay(0);               // no decay stage
   delay(1000);
 
   // Set gain for different channels from 0-1
   mixer.gain(0, 0.11);  // 0.0653);  // Gain for MLS
   mixer.gain(1, 0.11);  //0.0793);  // Gain for pure sine
-  mixer.gain(2, 0.11);  // 0.105);   // Gain for white noise
+  mixer.gain(2, 0.11);  // 0.105);   // Gain for white and pink noise
   mixer.gain(3, 0.11);  // 0.078);   // Gain for sine sweep
 }
 
@@ -104,13 +107,13 @@ void loop() {
   wait(1000);
   whiteNoise.amplitude(0.0);
   wait(5000);
-  /*
+  
   Serial.println("Pink noise");
   pinkNoise.amplitude(1);
   wait(1000);
   pinkNoise.amplitude(0.0);
   wait(5000);
-*/
+
   Serial.println("Sine sweep");
   sineSweep.play(1, 50, 20000, sineSweepTime);
   wait(sineSweepTime * 1000);
