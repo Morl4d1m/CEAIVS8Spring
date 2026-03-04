@@ -1,0 +1,181 @@
+%% ISO 3382-2 Processing (Correct Sweep Deconvolution)
+
+load("C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\impulseResponseMeasurerData\mlsAndSweep03032026.mat")
+
+fs = 44100;
+plotFlag = 0;   % <<<<<< TURN OFF IF NEEDED
+
+fc = [100 125 160 200 250 315 400 500 630 800 ...
+      1000 1250 1600 2000 2500 3150 4000 5000 6300 8000];
+nBands = length(fc);
+
+isSweep = strcmp(irdata_084724.Method,'Swept sine');
+isMLS   = strcmp(irdata_084724.Method,'MLS');
+
+methods  = {'Sweep','MLS'};
+datasets = {irdata_084724(isSweep,:), irdata_084724(isMLS,:)};
+
+for methodIdx = 1:2
+    
+    data = datasets{methodIdx};
+    methodName = methods{methodIdx};
+    
+    fprintf('\n============================================\n');
+    fprintf('Processing %s measurements\n', methodName);
+    fprintf('============================================\n');
+    
+    nSpk = 8; nMic = 8;
+    
+    EDT  = zeros(nSpk,nMic,nBands);
+    RT10 = zeros(nSpk,nMic,nBands);
+    T20  = zeros(nSpk,nMic,nBands);
+    T30  = zeros(nSpk,nMic,nBands);
+    RT60 = zeros(nSpk,nMic,nBands);
+    C50  = zeros(nSpk,nMic,nBands);
+    C80  = zeros(nSpk,nMic,nBands);
+    D50  = zeros(nSpk,nMic,nBands);
+    D80  = zeros(nSpk,nMic,nBands);
+    
+    for m = 1:height(data)
+        
+        spk = ceil(m/8);
+        mic = mod(m-1,8)+1;
+        
+        %% ---- Get impulse response ----
+        
+        if strcmp(methodName,'MLS')
+            
+            h = data.ImpulseResponse(m).Amplitude;
+            h = h(:);
+            
+        else  % Sweep
+            
+            exc = data.RawAudioData(m).ExcitationSignal(:);
+            rec = data.RawAudioData(m).RecordedSignal(:);
+            
+            % FFT-based deconvolution (frequency domain division)
+            N = length(rec) + length(exc);
+            H = ifft( fft(rec,N) ./ (fft(exc,N) + 1e-12) );
+            
+            h = real(H);
+            
+            % Truncate to reasonable IR length (first 3 seconds)
+            h = h(1:min(round(3*fs),length(h)));
+        end
+        
+        if isempty(h) || all(abs(h)<1e-12)
+            warning("Measurement %d has zero IR",m)
+            continue
+        end
+        
+        % Remove DC and normalize
+        h = h - mean(h);
+        h = h / max(abs(h));
+        
+        %% ---- Band processing ----
+        
+        for b = 1:nBands
+            
+            of = octaveFilter(fc(b),'1/3 octave','SampleRate',fs);
+            h_band = of(h);
+            
+            % Direct sound alignment (robust)
+            [~,idx_peak] = max(abs(h_band));
+            h_band = h_band(idx_peak:end);
+            
+            h2 = h_band.^2;
+            edc = flipud(cumsum(flipud(h2)));
+            
+            if max(edc)==0
+                continue
+            end
+            
+            edc = edc / max(edc);
+            edc_db = 10*log10(edc);
+            t = (0:length(edc_db)-1)'/fs;
+            
+            EDT(spk,mic,b)  = localRT(t,edc_db,0,-10);
+            RT10(spk,mic,b) = localRT(t,edc_db,0,-10);
+            T20(spk,mic,b)  = localRT(t,edc_db,-5,-25);
+            T30(spk,mic,b)  = localRT(t,edc_db,-5,-35);
+            
+            % Proper RT60 derivation
+            if ~isnan(T30(spk,mic,b))
+                RT60(spk,mic,b) = 2*T30(spk,mic,b);
+            elseif ~isnan(T20(spk,mic,b))
+                RT60(spk,mic,b) = 3*T20(spk,mic,b);
+            else
+                RT60(spk,mic,b) = NaN;
+            end
+            
+            % Clarity / Definition
+            n50 = round(0.050*fs);
+            n80 = round(0.080*fs);
+            
+            E_total = sum(h2);
+            E50 = sum(h2(1:min(n50,end)));
+            E80 = sum(h2(1:min(n80,end)));
+            
+            if E_total>0 && (E_total-E50)>0
+                C50(spk,mic,b) = 10*log10(E50/(E_total-E50));
+                D50(spk,mic,b) = E50/E_total;
+            end
+            
+            if E_total>0 && (E_total-E80)>0
+                C80(spk,mic,b) = 10*log10(E80/(E_total-E80));
+                D80(spk,mic,b) = E80/E_total;
+            end
+        end
+    end
+    
+    %% ---- Spatial averaging ----
+    
+    avgEDT  = squeeze(mean(mean(EDT ,1),2));
+    avgRT10 = squeeze(mean(mean(RT10,1),2));
+    avgT20  = squeeze(mean(mean(T20 ,1),2));
+    avgT30  = squeeze(mean(mean(T30 ,1),2));
+    avgRT60 = squeeze(mean(mean(RT60,1),2));
+    avgC50  = squeeze(mean(mean(C50 ,1),2));
+    avgC80  = squeeze(mean(mean(C80 ,1),2));
+    avgD50  = squeeze(mean(mean(D50 ,1),2));
+    avgD80  = squeeze(mean(mean(D80 ,1),2));
+    
+    stdT20  = std(reshape(T20,[],nBands),0,1);
+    
+    resultsTable = table( ...
+        fc(:), avgEDT(:), avgRT10(:), avgT20(:), avgT30(:), avgRT60(:), ...
+        avgC50(:), avgC80(:), avgD50(:), avgD80(:), stdT20(:), ...
+        'VariableNames',{'Frequency_Hz','EDT_s','RT10_s','RT20_s','RT30_s','RT60_s',...
+        'C50_dB','C80_dB','D50','D80','Std_RT20_s'});
+    
+    fprintf('\n---- ISO 3382-2 Spatially Averaged Results (%s) ----\n', methodName);
+    disp(resultsTable)
+    
+    %% ---- Plot ----
+    
+    if plotFlag
+        for spk = 1:nSpk
+            figure('Name',sprintf('%s - Speaker %d - T20',methodName,spk));
+            hold on; grid on
+            for mic = 1:nMic
+                semilogx(fc, squeeze(T20(spk,mic,:)),'LineWidth',1.2)
+            end
+            xlabel('Frequency (Hz)')
+            ylabel('T20 (s)')
+            title(sprintf('%s - Speaker %d',methodName,spk))
+            set(gca,'XTick',fc)
+        end
+    end
+end
+
+
+%% --- RT helper ---
+function RT = localRT(t,edc_db,dB1,dB2)
+idx = find(edc_db<=dB1 & edc_db>=dB2);
+if numel(idx)<10
+    RT = NaN;
+    return
+end
+p = polyfit(t(idx),edc_db(idx),1);
+RT = -60/p(1);
+end

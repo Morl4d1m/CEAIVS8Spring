@@ -1,0 +1,107 @@
+2026-03-02 15250a9 answered the questions for mp1
+
+ .../Opgaver/mandelbrotWithOutputs.ipynb            | 373 ++++++++++++++++++++-
+ 1 file changed, 368 insertions(+), 5 deletions(-)
+2026-03-02 9ec1e13 All milestones completed, should be ready for handin
+
+ .../Opgaver/mandelbrot.py                          |  322 +++-
+ .../Opgaver/mandelbrotWithOutputs.ipynb            | 2016 ++++++++++++++++++++
+ 2 files changed, 2245 insertions(+), 93 deletions(-)
+2026-03-01 c0673cc Updated plotting for mandelbrot
+
+ .../Opgaver/fastProfile.prof                       | Bin 0 -> 5233 bytes
+ .../Opgaver/mandelbrot.py                          | 157 ++++++++++++++++-----
+ .../Opgaver/naiveProfile.prof                      | Bin 0 -> 2757 bytes
+ .../Opgaver/numbaProfile.prof                      | Bin 0 -> 3786 bytes
+ 4 files changed, 124 insertions(+), 33 deletions(-)
+2026-02-23 b6ed618 Finalized sound signal code
+
+ Projekt/Kode/teensySoundSetup/teensySoundSetup.ino | 49 ++++++++++++----------
+ 1 file changed, 26 insertions(+), 23 deletions(-)
+2026-02-20 ca125d4 Updated Teensy code - should work now
+
+ .../Noter/Architecture_and_Vectorisation.pdf       | Bin 0 -> 19340231 bytes
+ .../Noter/Reproducible_Science_Infrastructure.pdf  | Bin 0 -> 16937890 bytes
+ .../Opgaver/mandelbrot.py                          | 120 +++++++++++++++++++++
+ .../Slides/L02_comparch_multi-core.pdf             | Bin 0 -> 1056897 bytes
+ Projekt/Kode/teensySoundSetup/teensySoundSetup.ino |  49 ++++++++-
+ Projekt/Lydfiler/calibrationFactor2.m              |   4 +-
+ .../micCalibrationConstants_94dB_1kHz_16022026.mat | Bin 1417 -> 1417 bytes
+ .../micCalibrationConstants_94dB_1kHz_20022026.mat | Bin 0 -> 1412 bytes
+ Projekt/Lydfiler/noiseCalculatorAllWeightings.m    |   4 +-
+ 9 files changed, 168 insertions(+), 9 deletions(-)
+2026-02-20 f170893 Made gitignore
+
+ .gitignore | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+2026-02-19 1e2ff69 Added a lot of matlab scripts and a teensy
+
+ .../FAaS Agenda F2025 Basic physics.pdf            | Bin 0 -> 138464 bytes
+ .../Noter/Chapter 5 (Kinsler et al. 4th).pdf       | Bin 0 -> 1781122 bytes
+ .../Noter/Chapter 6 (Kinsler et al. 4th).pdf       | Bin 0 -> 1088659 bytes
+ ...nt Time Frequency Analysis by Flemming Munk.pdf | Bin 0 -> 46269677 bytes
+ ... in audio signal feature extraction methods.pdf | Bin 0 -> 4414049 bytes
+ .../Opgaver/02-chris_&_chokoladefabrikken_#1.mp3   | Bin 0 -> 3605193 bytes
+ Fundamentals of Acoustics/Opgaver/02.Lay Down.mp3  | Bin 0 -> 7435609 bytes
+ ...solutions - basic physics and media changes.pdf | Bin 0 -> 93076 bytes
+ Fundamentals of Acoustics/Opgaver/Exercise1.wav    | Bin 0 -> 529244 bytes
+ Fundamentals of Acoustics/Opgaver/Exercise3.wav    | Bin 0 -> 1764044 bytes
+ .../FAaS Agenda F2025 Basic physics Lecture 3.pdf  | Bin 0 -> 138464 bytes
+ Fundamentals of Acoustics/Opgaver/FAaS2.m          |   5 +
+ Fundamentals of Acoustics/Opgaver/FAaS2Live.mlx    | Bin 0 -> 4941 bytes
+ ...undamentals of Acoustics and Sound Lecture 2.mw | 152 +++++
+ ...undamentals of Acoustics and Sound Lecture 3.mw | 735 +++++++++++++++++++++
+ .../Opgaver/SolutionsTopic1.m                      |  86 +++
+ ...physics of sound and media change - slides.pptx | Bin 0 -> 67758028 bytes
+ Fundamentals of Acoustics/Slides/Topic2_slides.pdf | Bin 4204963 -> 4975526 bytes
+ Fundamentals of Acoustics/Topic1_agenda.pdf        | Bin 0 -> 147736 bytes
+ Fundamentals of Acoustics/Topic2_agenda.pdf        | Bin 0 -> 135213 bytes
+ Projekt/DEFloorPlan.bak                            | Bin 0 -> 239053 bytes
+ Projekt/DEFloorPlan.dwg                            | Bin 0 -> 239504 bytes
+ Projekt/DEFloorPlan.jpg                            | Bin 0 -> 196646 bytes
+ Projekt/DEFloorPlan.pdf                            | Bin 0 -> 98429 bytes
+ Projekt/DEFloorPlanMicPlacements.jpg               | Bin 0 -> 174956 bytes
+ Projekt/DEFloorPlanMicPlacements.pdf               | Bin 0 -> 99211 bytes
+ Projekt/DEFloorPlanSpeakerPlacements.jpg           | Bin 0 -> 189024 bytes
+ Projekt/DEFloorPlanSpeakerPlacements.pdf           | Bin 0 -> 99154 bytes
+ Projekt/Kode/teensySoundSetup/teensySoundSetup.ino | 266 ++++++++
+ Projekt/Lydfiler/backgroundNoiseCalculator.m       |  12 +-
+ Projekt/Lydfiler/calibrationFactor.m               |   2 +-
+ Projekt/Lydfiler/calibrationFactor2.m              | 290 ++++++++
+ .../Lydfiler/micCalibrationConstants_94dB_1kHz.mat | Bin 1466 -> 1412 bytes
+ .../micCalibrationConstants_94dB_1kHz_13022026.mat | Bin 0 -> 1413 bytes
+ .../micCalibrationConstants_94dB_1kHz_16022026.mat | Bin 0 -> 1417 bytes
+ Projekt/Lydfiler/noiseCalculatorAllWeightings.m    | 283 ++++++++
+ Projekt/Lydfiler/toneGeneratorTeensyClone.m        | 341 ++++++++++
+ Projekt/Simuleringer/DEKunVaegge.proj              | Bin 0 -> 944219 bytes
+ .../Simuleringer/DEKunVaeggeSimpelMenForkert.proj  | Bin 0 -> 122562 bytes
+ .../Simuleringer/DEKunV\303\246ggeSimpel.proj"     | Bin 0 -> 4881950 bytes
+ Projekt/Simuleringer/Tutorial1.proj                | Bin 0 -> 4340350 bytes
+ 41 files changed, 2165 insertions(+), 7 deletions(-)
+2026-02-12 55c7c5a Possibly correct calibration and background noise scripts
+
+ .../backgroundMeasurementWithShortWindow.m         |  168 ++
+ Projekt/Lydfiler/backgroundNoiseCalculator.asv     |  239 +++
+ Projekt/Lydfiler/backgroundNoiseCalculator.m       |  239 +++
+ Projekt/Lydfiler/calibrationFactor.m               |  191 ++
+ Projekt/Lydfiler/kalibrering02022026.mat           |  Bin 0 -> 418 bytes
+ Projekt/Lydfiler/kalibrering020220262.mat          |  Bin 0 -> 419 bytes
+ Projekt/Lydfiler/kalibrering11022026Lab.mat        |  Bin 0 -> 292 bytes
+ Projekt/Lydfiler/kalibrering11022026Lab2.mat       |  Bin 0 -> 292 bytes
+ Projekt/Lydfiler/kalibrering30012026.mat           |  Bin 0 -> 420 bytes
+ .../Lydfiler/micCalibrationConstants_94dB_1kHz.mat |  Bin 0 -> 1466 bytes
+ .../micCalibrationConstants_94dB_1kHz_matlab.mat   |  Bin 0 -> 1767 bytes
+ Projekt/Lydfiler/mic_calibration.mat               |  Bin 0 -> 420 bytes
+ Projekt/Lydfiler/mikrofonKalibrering.m             |   55 +
+ Projekt/Lydfiler/setupFor8Channels.dc3             | 1838 ++++++++++++++++++++
+ Projekt/Lydfiler/setupFor8ChannelsShowAll.dc3      | 1838 ++++++++++++++++++++
+ Projekt/Lydfiler/splTest.m                         |    5 +
+ 16 files changed, 4573 insertions(+)
+2026-02-06 08ac922 Initial Commit
+
+ .../Slides/L1-Fundamentals-of-Deep-Learning.pdf      | Bin 0 -> 20106705 bytes
+ Fundamentals of Acoustics/Slides/Topic1_slides.pdf   | Bin 0 -> 4153436 bytes
+ Fundamentals of Acoustics/Slides/Topic2_slides.pdf   | Bin 0 -> 4204963 bytes
+ .../Slides/L01_CourseIntro_DevTools.pdf              | Bin 0 -> 557138 bytes
+ "Projekt/seddelTilDEOmM\303\245linger.docx"          | Bin 0 -> 17490 bytes
+ 5 files changed, 0 insertions(+), 0 deletions(-)
