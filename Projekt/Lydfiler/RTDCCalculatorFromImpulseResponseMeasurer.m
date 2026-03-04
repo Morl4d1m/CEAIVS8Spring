@@ -65,8 +65,8 @@ for methodIdx = 1:2
             h_band = of(h);
             
             % Align to direct sound using 20% threshold
-            thr = 0.2*max(abs(h_band));
-            idx = find(abs(h_band)>=thr,1,'first');
+            [~, idx] = max(abs(h_band));
+            h_band = h_band(idx:end);
             if isempty(idx)
                 continue
             end
@@ -79,10 +79,25 @@ for methodIdx = 1:2
             edc = edc / max(edc);
             edc_db = 10*log10(edc);
             t = (0:length(edc_db)-1)'/fs;
+            % Remove noise floor
+            N = length(edc_db);
+
+            tailLength = min(1000, floor(N/3));   % use at most last third
+            
+            noiseFloor = mean(edc_db(N-tailLength+1:N));
+            
+            limit = noiseFloor + 10;   % 10 dB above noise
+            
+            validEnd = find(edc_db <= limit,1,'first');
+            
+            if ~isempty(validEnd) && validEnd > 10
+                edc_db = edc_db(1:validEnd);
+                t = t(1:validEnd);
+            end
             
             % Decay parameters
             EDT(spk,mic,b)  = localRT(t,edc_db,0,-10);
-            RT10(spk,mic,b) = localRT(t,edc_db,0,-10);
+            RT10(spk,mic,b) = localRT(t,edc_db,-5,-15);
             T20(spk,mic,b)  = localRT(t,edc_db,-5,-25);
             T30(spk,mic,b)  = localRT(t,edc_db,-5,-35);
             
@@ -113,15 +128,15 @@ for methodIdx = 1:2
     end
     
     %% Spatial averages
-    avgEDT  = squeeze(mean(mean(EDT ,1),2));
-    avgRT10 = squeeze(mean(mean(RT10,1),2));
-    avgT20  = squeeze(mean(mean(T20 ,1),2));
-    avgT30  = squeeze(mean(mean(T30 ,1),2));
-    avgRT60 = squeeze(mean(mean(RT60,1),2));
-    avgC50  = squeeze(mean(mean(C50 ,1),2));
-    avgC80  = squeeze(mean(mean(C80 ,1),2));
-    avgD50  = squeeze(mean(mean(D50 ,1),2));
-    avgD80  = squeeze(mean(mean(D80 ,1),2));
+    avgEDT  = squeeze(mean(mean(EDT ,'omitnan'),2,'omitnan'));
+    avgRT10 = squeeze(mean(mean(RT10,'omitnan'),2,'omitnan'));
+    avgT20  = squeeze(mean(mean(T20 ,'omitnan'),2,'omitnan'));
+    avgT30  = squeeze(mean(mean(T30 ,'omitnan'),2,'omitnan'));
+    avgRT60 = squeeze(mean(mean(RT60,'omitnan'),2,'omitnan'));
+    avgC50  = squeeze(mean(mean(C50 ,'omitnan'),2,'omitnan'));
+    avgC80  = squeeze(mean(mean(C80 ,'omitnan'),2,'omitnan'));
+    avgD50  = squeeze(mean(mean(D50 ,'omitnan'),2,'omitnan'));
+    avgD80  = squeeze(mean(mean(D80 ,'omitnan'),2,'omitnan'));
     
     stdT20  = std(reshape(T20,[],nBands),0,1);
     
@@ -129,9 +144,9 @@ for methodIdx = 1:2
     
     resultsTable = table( ...
         fc_col, avgEDT(:), avgRT10(:), avgT20(:), avgT30(:), avgRT60(:), ...
-        avgC50(:), avgC80(:), avgD50(:), avgD80(:), stdT20(:), ...
-        'VariableNames',{'Frequency_Hz','EDT_s','RT10_s','RT20_s','RT30_s','RT60_s',...
-        'C50_dB','C80_dB','D50','D80','Std_RT20_s'});
+        avgC50(:), avgC80(:), avgD50(:), avgD80(:), ...% stdT20(:), ...
+        'VariableNames',{'Frequency in Hz','EDT in S','RT10 in S','RT20 in S','RT30 in S','RT60 in S',...
+        'C50 in dB','C80 in dB','D50','D80'});%,'Std_RT20 in S'});
     
     fprintf('\n---- ISO 3382-2 Spatially Averaged Results (%s) ----\n', methodName);
     disp(resultsTable)
@@ -153,12 +168,40 @@ for methodIdx = 1:2
 end
 
 %% Linear regression helper
-function RT = localRT(t, edc_db, dB1, dB2)
+function T = localRT(t, edc_db, dB1, dB2)
+
+% Select regression region
 idx = find(edc_db <= dB1 & edc_db >= dB2);
-if numel(idx) < 10
-    RT = NaN;
+
+if numel(idx) < 20
+    T = NaN;
     return
 end
+
+% Dynamic range check
+dynamicRange = max(edc_db) - min(edc_db);
+requiredRange = abs(dB2);
+
+if dynamicRange < requiredRange + 5
+    T = NaN;
+    return
+end
+
+% Linear regression
 p = polyfit(t(idx), edc_db(idx),1);
-RT = -60/p(1);
+
+% Correlation check
+yfit = polyval(p,t(idx));
+R = corrcoef(edc_db(idx), yfit);
+r = R(1,2);
+
+if r < 0.98
+    T = NaN;
+    return
+end
+
+% Compute decay time
+decayRange = abs(dB2 - dB1);
+T = -decayRange / p(1);
+
 end
