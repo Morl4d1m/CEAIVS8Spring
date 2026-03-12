@@ -13,7 +13,7 @@ except NameError:
         return func
 
 testMemory = 0
-gridSizes = [64,128,256,512,1024,2048,4096]
+gridSizes = [64,128,256,512,1024]#,2048,4096]
 sizeComparison = 0
 regions = {"Full": (-2, 1.5, -2, 2),"Seahorse Valley": (-0.8, -0.7, 0.05, 0.15),"Elephant Valley": (0.25, 0.35, -0.05, 0.05),"Deep Seahorse": (-0.7435, -0.7425, 0.1315, 0.1325)}
 regionTest = 0
@@ -68,7 +68,7 @@ def main():
     print("\n")
     summarize(resultsForSummary)
 
-#@profile
+@profile
 def mandelBrot(xMin, xMax, yMin, yMax, xyValues,dataType):
     xDomain, yDomain = np.linspace(xMin,xMax,xyValues).astype(dataType), np.linspace(yMin,yMax,xyValues).astype(dataType)
     bound = 2
@@ -91,7 +91,7 @@ def mandelBrot(xMin, xMax, yMin, yMax, xyValues,dataType):
         iterationArray.append(row)
     return np.array(iterationArray)
 
-#@profile
+@profile
 def mandelBrotFast(xMin, xMax, yMin, yMax, xyValues,dataType):
     xDomain, yDomain = np.linspace(xMin,xMax,xyValues).astype(dataType), np.linspace(yMin,yMax,xyValues).astype(dataType)
     bound = 2

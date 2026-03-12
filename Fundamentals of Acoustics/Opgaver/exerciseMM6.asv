@@ -1,0 +1,200 @@
+%% Parameters
+fs = 44100;
+c = 343;
+
+room = [7.8 4.13 2.76];     % scene
+tx = [6.0 1.0 1.8];         % source
+rx = [2.0 2.0 1.8];         % receiver
+
+octaveBands = [125 250 500 1000 2000 4000];
+
+%% Room geometry for Sabine
+V = prod(room);
+
+Sx = room(2)*room(3);
+Sy = room(1)*room(3);
+Sz = room(1)*room(2);
+
+S_total = 2*(Sx + Sy + Sz);
+
+%% Base absorption
+alpha0 = 0.2;
+
+%% Generate RIR using acousticRoomResponse
+rir = acousticRoomResponse( ...
+    room, ...
+    tx, ...
+    rx, ...
+    SampleRate=fs, ...
+    MaterialAbsorption=alpha0, ...
+    Algorithm="image-source", ...
+    ImageSourceOrder=10 );
+
+rir = rir(:);
+
+%% Function for T30
+estimateT30 = @(h) computeT30(h,fs);
+
+T30_sim = zeros(length(octaveBands),1);
+T60_sabine = zeros(length(octaveBands),1);
+
+%% ---- Simulation with constant absorption ----
+for k = 1:length(octaveBands)
+
+    fc = octaveBands(k);
+
+    fl = fc/sqrt(2);
+    fh = fc*sqrt(2);
+
+    oct = octaveFilter(fc,'1 octave','SampleRate',fs);
+    h_band = oct(rir);
+
+    T30_sim(k) = estimateT30(h_band);
+
+    A = alpha0 * S_total;
+
+    T60_sabine(k) = 0.161 * V / A;
+
+end
+
+%% ---- Simulation with increased absorption ----
+
+T30_sim_var = zeros(length(octaveBands),1);
+T60_sabine_var = zeros(length(octaveBands),1);
+
+for k = 1:length(octaveBands)
+
+    alpha = min(alpha0 + 0.2*(k-1),0.95);
+
+    rir2 = acousticRoomResponse( ...
+        room, ...
+        tx, ...
+        rx, ...
+        SampleRate=fs, ...
+        MaterialAbsorption=alpha, ...
+        Algorithm="image-source", ...
+        ImageSourceOrder=10 );
+
+    fc = octaveBands(k);
+
+    fl = fc/sqrt(2);
+    fh = fc*sqrt(2);
+
+    oct = octaveFilter(fc,'1 octave','SampleRate',fs);
+    h_band = oct(rir2);
+
+    T30_sim_var(k) = estimateT30(h_band);
+
+    A = alpha * S_total;
+
+    T60_sabine_var(k) = 0.161 * V / A;
+
+end
+
+%% Display results
+disp(table(octaveBands',T30_sim,T60_sabine,T30_sim_var,T60_sabine_var,...
+    'VariableNames',{'Freq_Hz','T30_sim','T60_Sabine','T30_sim_var','T60_Sabine_var'}))
+
+%% Plot results
+figure
+semilogx(octaveBands,T30_sim,'o-','LineWidth',1.5)
+hold on
+semilogx(octaveBands,T60_sabine,'s-','LineWidth',1.5)
+semilogx(octaveBands,T30_sim_var,'o--','LineWidth',1.5)
+semilogx(octaveBands,T60_sabine_var,'s--','LineWidth',1.5)
+
+grid on
+xlabel('Frequency (Hz)')
+ylabel('Reverberation time (s)')
+legend('T30 simulation','T60 Sabine','T30 simulation (higher absorption)','T60 Sabine (higher absorption)')
+title('Reverberation Time Comparison')
+
+%% =========================================================
+%% Problem 2 : Auralization
+%% =========================================================
+
+[x,fs_audio] = audioread('02-chris_&_chokoladefabrikken_#1.mp3');
+
+% Convert stereo to mono
+if size(x,2) > 1
+    x = mean(x,2);
+end
+
+if fs_audio ~= fs
+    x = resample(x,fs,fs_audio);
+end
+
+%% Highly reverberant room
+rir_reverb = acousticRoomResponse( ...
+    room, tx, rx, ...
+    SampleRate=fs, ...
+    MaterialAbsorption=0.05, ...
+    Algorithm="image-source", ...
+    ImageSourceOrder=6 );
+
+y_reverb = conv(x,rir_reverb);
+
+%% Highly damped room
+rir_damped = acousticRoomResponse( ...
+    room, tx, rx, ...
+    SampleRate=fs, ...
+    MaterialAbsorption=0.8, ...
+    Algorithm="image-source", ...
+    ImageSourceOrder=6 );
+
+y_damped = conv(x,rir_damped);
+
+%% Normalize
+y_reverb = y_reverb ./ max(abs(y_reverb));
+y_damped = y_damped ./ max(abs(y_damped));
+
+rir = rir(:);
+rir_reverb = rir_reverb(:);
+rir_damped = rir_damped(:);
+
+%% Save results
+audiowrite('auralization_reverberant.wav',y_reverb,fs)
+audiowrite('auralization_damped.wav',y_damped,fs)
+
+disp('Auralization files created:')
+disp('auralization_reverberant.wav')
+disp('auralization_damped.wav')
+
+%% =========================================================
+%% Function: T30 estimation (Schroeder decay)
+%% =========================================================
+function T30 = computeT30(ir,fs)
+
+ir = ir(:);
+
+% Schroeder integration
+E = flipud(cumsum(flipud(ir.^2)));
+E = E ./ max(E);
+
+Edb = 10*log10(E);
+
+t = (0:length(Edb)-1)'/fs;
+
+% Find decay limits
+idx5  = find(Edb <= -5,1);
+idx35 = find(Edb <= -35,1);
+idx25 = find(Edb <= -25,1);
+
+% Prefer T30
+if ~isempty(idx5) && ~isempty(idx35) && idx35 > idx5
+    p = polyfit(t(idx5:idx35),Edb(idx5:idx35),1);
+    T30 = -60/p(1);
+    return
+end
+
+% Otherwise fallback to T20
+if ~isempty(idx5) && ~isempty(idx25) && idx25 > idx5
+    p = polyfit(t(idx5:idx25),Edb(idx5:idx25),1);
+    T30 = -60/p(1);
+    return
+end
+
+% If decay too short
+T30 = NaN;
+
+end

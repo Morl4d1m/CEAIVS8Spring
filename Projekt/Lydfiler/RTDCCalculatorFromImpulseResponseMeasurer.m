@@ -9,7 +9,12 @@ fc = [50 63 80 100 125 160 200 250 315 400 500 630 800 ...
       10000 12500 16000 20000];
 nBands = length(fc);
 
-plotFlag = 0;   % <<< TURN OFF HERE IF NEEDED
+plotFlagT20 = 1;
+plotFFTflag = 0;
+plotSchroederFlag = 1;
+plotRT60boxFlag = 1;
+exportCSV = 0;
+outputFolder = "C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\impulseResponseMeasurerData";
 
 %% Separate methods
 isSweep = strcmp(irdata_084724.Method,'Swept Sine');
@@ -28,6 +33,11 @@ for methodIdx = 1:2
     fprintf('============================================\n');
     
     nSpk = 8; nMic = 8;
+
+    colors = lines(nSpk);
+    speakerLabels = { ...
+        'Speaker 1','Speaker 2','Speaker 3','Speaker 4', ...
+        'Speaker 5','Speaker 6','Speaker 7','Speaker 8'};
     
     EDT  = zeros(nSpk,nMic,nBands);
     RT10 = zeros(nSpk,nMic,nBands);
@@ -38,6 +48,8 @@ for methodIdx = 1:2
     C80  = zeros(nSpk,nMic,nBands);
     D50  = zeros(nSpk,nMic,nBands);
     D80  = zeros(nSpk,nMic,nBands);
+    rows = {};
+    rowCounter = 1;
     
     %% Loop measurements
     for m = 1:height(data)
@@ -58,6 +70,19 @@ for methodIdx = 1:2
         % Remove DC and normalize
         h = h - mean(h);
         h = h / max(abs(h));
+
+        %% Store FFT data
+        if plotFFTflag
+            
+            Nfft = 2^nextpow2(length(h));
+            
+            H = fft(h,Nfft);
+            
+            f = (0:Nfft/2-1)*fs/Nfft;
+            
+            FFTdata{spk,mic} = 20*log10(abs(H(1:Nfft/2)));
+            
+        end
         
         for b = 1:nBands
             
@@ -79,6 +104,15 @@ for methodIdx = 1:2
             edc = edc / max(edc);
             edc_db = 10*log10(edc);
             t = (0:length(edc_db)-1)'/fs;
+
+            %% Store Schroeder curve (fullband example using 1 kHz band)
+            if plotSchroederFlag && fc(b)==1000
+                
+                SchroederTime{spk,mic} = t;
+                SchroederEDC{spk,mic} = edc_db;
+                
+            end
+
             % Remove noise floor
             N = length(edc_db);
 
@@ -124,6 +158,53 @@ for methodIdx = 1:2
                 D50(spk,mic,b) = E50/E_total;
                 D80(spk,mic,b) = E80/E_total;
             end
+            if exportCSV
+    
+                rows{rowCounter,1} = methodName;
+                rows{rowCounter,2} = spk;
+                rows{rowCounter,3} = mic;
+                rows{rowCounter,4} = fc(b);
+                
+                rows{rowCounter,5} = EDT(spk,mic,b);
+                rows{rowCounter,6} = RT10(spk,mic,b);
+                rows{rowCounter,7} = T20(spk,mic,b);
+                rows{rowCounter,8} = T30(spk,mic,b);
+                rows{rowCounter,9} = RT60(spk,mic,b);
+                
+                rows{rowCounter,10} = C50(spk,mic,b);
+                rows{rowCounter,11} = C80(spk,mic,b);
+                rows{rowCounter,12} = D50(spk,mic,b);
+                rows{rowCounter,13} = D80(spk,mic,b);
+                
+                rowCounter = rowCounter + 1;
+                
+            end
+        if exportCSV
+    
+            resultsPerPair = cell2table(rows, ...
+                'VariableNames', { ...
+                'Method', ...
+                'Speaker', ...
+                'Microphone', ...
+                'Frequency in Hz', ...
+                'EDT in s', ...
+                'RT10 in s', ...
+                'RT20 in s', ...
+                'RT30 in s', ...
+                'RT60 in s', ...
+                'C50 in dB', ...
+                'C80 in dB', ...
+                'D50', ...
+                'D80'});
+            
+            filename = fullfile(outputFolder, ...
+                sprintf('RoomAcoustics_%s_AllPairs.csv',methodName));
+            
+            writetable(resultsPerPair, filename);
+            
+            %fprintf('\nSaved per-measurement results to:\n%s\n', filename);
+            
+        end
         end
     end
     
@@ -152,18 +233,120 @@ for methodIdx = 1:2
     disp(resultsTable)
     
     %% Plot
-    if plotFlag
+    if plotFlagT20
         for spk = 1:nSpk
             figure('Name',sprintf('%s - Speaker %d - T20',methodName,spk));
             hold on; grid on
             for mic = 1:nMic
-                semilogx(fc, squeeze(T20(spk,mic,:)),'LineWidth',1.2)
+                semilogx(fc, squeeze(T20(spk,mic,:)), ...
+                'Color',colors(mic,:), ...
+                'LineWidth',1.2)
             end
-            set(gca,'XTick',fc)
+            set(gca,'XScale','log')   % force logarithmic axis
+            
+            % Explicit tick locations in Hz
+            xticks([fc])
             xlabel('Frequency (Hz)')
             ylabel('T20 (s)')
             title(sprintf('%s - Speaker %d',methodName,spk))
+        
+            legend({'Mic1','Mic2','Mic3','Mic4','Mic5','Mic6','Mic7','Mic8'}, ...
+                'Location','northeast')
+            
+            xlim([50 20000])     % dummy values
+            ylim([0 0.4])          % dummy values
         end
+    end
+
+    %% FFT plots per microphone
+    if plotFFTflag        
+        for mic = 1:nMic
+            figure('Name',sprintf('%s FFT Mic %d',methodName,mic))
+            hold on
+            grid on
+            
+            for spk = 1:nSpk                
+                if isempty(FFTdata{spk,mic})
+                    continue
+                end                
+                plot(f, FFTdata{spk,mic}, ...
+                    'Color',colors(spk,:), ...
+                    'LineWidth',1.2)                
+            end
+            
+            set(gca,'XScale','log')   % force logarithmic axis
+            
+            % Explicit tick locations in Hz
+            xticks([fc])
+            
+            % Force tick labels to appear as numbers instead of 10^x
+            xtickformat('%.0f')
+            xlabel('Frequency (Hz)')
+            ylabel('Magnitude (dB)')
+            title(sprintf('%s FFT - Microphone %d',methodName,mic))
+            legend(speakerLabels,'Location','northeast')
+            xlim([20 20000])     % dummy values
+            ylim([-60 80])      % dummy values
+        end
+        
+    end
+
+    %% Schroeder decay plots
+    if plotSchroederFlag
+        
+        for mic = 1:nMic
+            
+            figure('Name',sprintf('%s Schroeder Mic %d',methodName,mic))
+            hold on
+            grid on
+            
+            for spk = 1:nSpk
+                
+                if isempty(SchroederTime{spk,mic})
+                    continue
+                end
+                
+                plot(SchroederTime{spk,mic},SchroederEDC{spk,mic}, ...
+                'Color',colors(spk,:), ...
+                'LineWidth',1.2)
+                
+            end
+            
+            xlabel('Time (s)')
+            ylabel('Level (dB)')
+            title(sprintf('%s Schroeder Decay - Microphone %d',methodName,mic))
+            
+            title(sprintf('%s Schroeder Decay - Microphone %d',methodName,mic))
+            
+            legend(speakerLabels,'Location','northeast')
+            yticks([-65 -60 -55 -50 -45 -40 -35 -30 -25 -20 -15 -10 -5 0 5])
+            
+            xlim([0 0.75])       % dummy values
+            ylim([-65 5])     % dummy values
+        end
+        
+    end
+    %% RT60 box plot averaged across speakers
+    if plotRT60boxFlag
+        
+        % Average across frequency bands only
+        RT60avgFreq = squeeze(mean(RT60,3,'omitnan'));   % size = [8 speakers x 8 mics]
+        
+        % Transpose so each column becomes a microphone group
+        RT60box = RT60avgFreq';   % size = [8 speakers x 8 microphones]
+        
+        figure('Name',sprintf('%s RT60 Box Plot',methodName))
+        
+        boxplot(RT60box,'Labels',{'Mic1','Mic2','Mic3','Mic4','Mic5','Mic6','Mic7','Mic8'})
+        
+        xlabel('Microphone Number')
+        ylabel('RT60 (s)')
+        title(sprintf('%s Average RT60 per Microphone',methodName))
+        
+        grid on
+        
+        %xlim([0.5 8.5])
+        %ylim([0 1.25])
     end
 end
 
