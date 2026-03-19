@@ -15,35 +15,77 @@ doOctave      = 0;
 doThirdOctave = 0;
 
 plotFFTAverage = 0;
+plotFFTPerMic  = 0;  
 plotOctaveBars = 0;
 plotThirdOctaveBars = 0;
+batchProcessMeasurements = 1; 
 
 %% =========================== PATHS ===========================
 basePath = 'C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\';
-calFile  = fullfile(basePath,'micCalibrationConstants_94dB_1kHz_28022026.mat');
+%calFile  = fullfile(basePath,'micCalibrationConstants_94dB_1kHz_20022026.mat');
 
+%% ================= BATCH FILE LIST =================
+fileList = {
+'DEAAbning02022026kl1415-1431'
+'DEAAbning02022026kl1448-1459MangeIBaren'
+'DEAAbning02022026kl1536-1547Tits'
+'DEAAbning02022026kl1632-1640IndenMusik'
+'DEFoersteFredag06022026Snestorm'
+'DEFoersteFredag06022026Snestorm2'
+'poolSpilMedLidtBaggrundsSnak13022026'
+'poolOgBordFåMennesker13022026'
+'DEAndenFredag13022026'
+'DEAndenFredag130220262'
+'DEAndenFredag13022026Tits'
+'DEAndenFredag13022026Beerpong'
+'DETredjeFredag20022026kl1306-1317'
+'DETredjeFredag20022026kl1330-1344'
+'DETredjeFredag20022026kl1410-1424'
+'DETredjeFredag20022026kl1432-1452'
+'DETredjeFredag20022026kl1519-1529'
+'DETredjeFredag20022026JengaTits'
+'DEFjerdeFredag27022026'
+'DEFjerdeFredag27022026kl14-1420'
+'DEFjerdeFredag27022026kl1427-1442'
+'DEFemteFredag06032026kl1311-1323'
+'DEFemteFredag06032026kl1337-1357'
+'DEFemteFredag06032026kl1408-1415'
+'DEFemteFredag06032026kl1424-1445'
+'DESjetteFredag13032026kl1301-1317'
+'DESjetteFredag13032026kl1322-1335'
+'DESjetteFredag13032026kl1339-1356'
+};
+
+
+if batchProcessMeasurements
+    measurementList=fileList;
+else
+    measurementList= {'DETredjeFredag20022026JengaTits'};
+end
+resultTable = table;
+
+%% ================= CONSTANTS =================
 N = 8;
 p_ref = 20e-6;
+fc = [50 63 80 100 125 160 200 250 315 400 500 630 800 ...
+      1000 1250 1600 2000 2500 3150 4000 5000 6300 8000 ...
+      10000 12500 16000 20000];
+fs=44100;
 
 %% ==================== LOAD CALIBRATION =======================
-S = load(calFile);
+%S = load(calFile);
 
-if isfield(S,'K_mic')
-    K_mic = S.K_mic;
-elseif isfield(S,'K')
-    K_mic = S.K;
-elseif isfield(S,'cal')
-    K_mic = [S.cal.mic.K_PaPerFS];
-else
-    error('Calibration constants not found.');
-end
+%if isfield(S,'K_mic')
+%    K_mic = S.K_mic;
+%elseif isfield(S,'K')
+%    K_mic = S.K;
+%elseif isfield(S,'cal')
+%    K_mic = [S.cal.mic.K_PaPerFS];
+%else
+%    error('Calibration constants not found.');
+%end
 
-%% ======================= TIME WINDOW =========================
-t_start =60;% 2*60 + 30;
-t_end   =length(x)/fs;;% 10*60 + 30;
 
-%% ================= PRE-READ SAMPLERATE =======================
-fs=44100;
 
 %% ================= CREATE FILTERS (ONCE) =====================
 if doA
@@ -78,12 +120,46 @@ p_all = cell(1,N);
 pA_all = cell(1,N);
 pC_all = cell(1,N);
 
+%% ================= MEASUREMENT LOOP =================
+
+for meas = 1:length(measurementList)
+
+baseFileName = measurementList{meas};
+
+fprintf('\n====================================\n');
+fprintf('Processing measurement:\n%s\n',baseFileName);
+
+%% ================= LOAD CALIBRATION =================
+
+dateToken = regexp(baseFileName,'\d{8}','match','once');
+
+if isempty(dateToken)
+    error('Date not found in filename: %s',baseFileName)
+end
+
+calFile = fullfile(basePath, ...
+    sprintf('micCalibrationConstants_94dB_1kHz_%s.mat',dateToken));
+
+S = load(calFile);
+
+if isfield(S,'K_mic')
+    K_mic = S.K_mic;
+elseif isfield(S,'K')
+    K_mic = S.K;
+elseif isfield(S,'cal')
+    K_mic = [S.cal.mic.K_PaPerFS];
+else
+    error('Calibration constants not found.')
+end
+
 %% ====================== MAIN LOOP ============================
 for mic = 1:N
-
-    fileName = sprintf('backgroundMeasurement28022026__100%d.wav',mic);
+    fileName = sprintf('%s__100%d.wav',baseFileName,mic);
     [x, ~] = audioread(fullfile(basePath,fileName));
     x = x(:) - mean(x);
+
+    t_start = 0;           % seconds
+    t_end   = length(x)/fs; % full file length
 
     idx1 = round(t_start*fs)+1;
     idx2 = round(t_end*fs);
@@ -133,6 +209,13 @@ fprintf('LAeq = %.2f dB(A)\n',LAeq_A_mean);
 fprintf('LCeq = %.2f dB(C)\n',LAeq_C_mean);
 fprintf('LZeq = %.2f dB\n',LAeq_Z_mean);
 
+resultTable = [resultTable; table( ...
+string(baseFileName), ...
+LAeq_A_mean, ...
+LAeq_C_mean, ...
+LAeq_Z_mean, ...
+'VariableNames',{'Measurement','LAeq_dBA','LCeq_dBC','LZeq_dB'})];
+
 %% ================= BUILD SPATIAL AVG SIGNALS =================
 pZ_mat = cat(2,p_all{:});
 pZ_avg = mean(pZ_mat,2);
@@ -157,60 +240,72 @@ if plotFFTAverage
 
     [f,PZ] = localFFT(pZ_avg,fs,w,Wcorr,p_ref);
     semilogx(f,PZ);
-
-    if doA
-        [~,PA] = localFFT(pA_avg,fs,w,Wcorr,p_ref);
-        semilogx(f,PA);
-    end
     if doC
         [~,PC] = localFFT(pC_avg,fs,w,Wcorr,p_ref);
         semilogx(f,PC);
     end
 
-    legend('Z','A','C');
+    if doA
+        [~,PA] = localFFT(pA_avg,fs,w,Wcorr,p_ref);
+        semilogx(f,PA);
+    end
+
+    legend('Z','C','A');
     xlabel('Frequency [Hz]');
     ylabel('Magnitude [dB re 20 µPa]');
+    xticks([fc])
+    xtickformat('%.0f');
     xlim([10 fs/2]);
     ax = gca;
     ax.XAxis.Exponent = 0;  % disables the x10^N scaling
     ax.XScale = 'log';      % ensures x-axis is logarithmic
-    ylim([-50 110]);
+    ylim([-50 90]);
 end
+
+end
+
 %% ================= PER-MIC FFT PLOTS =========================
-if plotFFTAverage
+if plotFFTPerMic
     for mic = 1:N
         figure;
-        hold on; grid on;
+        hold on; 
+        grid on;
 
         L = length(p_all{mic});
         w = hann(L);
         Wcorr = sum(w)/L;
 
-        % FFT of Z-weighted
+        % Z-weighted FFT
         [f,PZ] = localFFT(p_all{mic},fs,w,Wcorr,p_ref);
         semilogx(f,PZ,'DisplayName','Z');
 
-        % FFT of A-weighted
-        if doA
-            [~,PA] = localFFT(pA_all{mic},fs,w,Wcorr,p_ref);
-            semilogx(f,PA,'DisplayName','A');
-        end
-
-        % FFT of C-weighted
+        % C-weighted FFT
         if doC
             [~,PC] = localFFT(pC_all{mic},fs,w,Wcorr,p_ref);
             semilogx(f,PC,'DisplayName','C');
         end
 
+        % A-weighted FFT
+        if doA
+            [~,PA] = localFFT(pA_all{mic},fs,w,Wcorr,p_ref);
+            semilogx(f,PA,'DisplayName','A');
+        end
+
         xlabel('Frequency [Hz]');
         ylabel('Magnitude [dB re 20 µPa]');
-        title(sprintf('Mic %d FFT',mic));
+        title(sprintf('Microphone %d FFT Spectrum',mic));
+
         legend show;
+
         xlim([10 fs/2]);
+        xticks([fc])
+        xtickformat('%.0f');
+
         ax = gca;
-        ax.XAxis.Exponent = 0;  % disables the x10^N scaling
-        ax.XScale = 'log';      % ensures x-axis is logarithmic
-        ylim([-50 110]);
+        ax.XAxis.Exponent = 0;
+        ax.XScale = 'log';
+
+        ylim([-50 90]);
     end
 end
 
@@ -280,4 +375,12 @@ mag = abs(X)/(L*Wcorr);
 mag(2:end-1) = 2*mag(2:end-1);
 
 SdB = 20*log10(mag/p_ref);
+end
+
+%% ================= FINAL BATCH SUMMARY =================
+
+if batchProcessMeasurements
+    fprintf('\n====================================\n');
+    fprintf('BATCH MEASUREMENT SUMMARY\n');
+    disp(resultTable)
 end

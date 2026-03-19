@@ -10,11 +10,17 @@ fc = [50 63 80 100 125 160 200 250 315 400 500 630 800 ...
 nBands = length(fc);
 
 plotFlagT20 = 1;
-plotFFTflag = 0;
+plotFFTflag = 1;
 plotSchroederFlag = 1;
 plotRT60boxFlag = 1;
+savePlots = 1;
 exportCSV = 0;
+exportLatex = 0;
 outputFolder = "C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\impulseResponseMeasurerData";
+plotFolder = fullfile(outputFolder, "impulseResponsePlots");
+if ~exist(plotFolder, 'dir')
+    mkdir(plotFolder);
+end
 
 %% Separate methods
 isSweep = strcmp(irdata_084724.Method,'Swept Sine');
@@ -231,11 +237,260 @@ for methodIdx = 1:2
     
     fprintf('\n---- ISO 3382-2 Spatially Averaged Results (%s) ----\n', methodName);
     disp(resultsTable)
+
+    %% Export LaTeX table
+    if exportLatex
+    
+        % Average across speakers (ISO practice)
+        EDTmic  = squeeze(mean(EDT ,1,'omitnan'));   % [mic x band]
+        T20mic  = squeeze(mean(T20 ,1,'omitnan'));
+        RT60mic = squeeze(mean(RT60,1,'omitnan'));
+        C50mic  = squeeze(mean(C50 ,1,'omitnan'));
+        C80mic  = squeeze(mean(C80 ,1,'omitnan'));
+        D50mic  = squeeze(mean(D50 ,1,'omitnan'));
+    
+        % File name
+        latexFile = fullfile(outputFolder, sprintf('LatexTable_%s.txt',methodName));
+    
+        fid = fopen(latexFile,'w');
+    
+        if fid == -1
+            error('Cannot create LaTeX file')
+        end
+    
+        %% ---------- TABLE HEADER ----------
+        fprintf(fid,'\\begin{sidewaystable}[p]\n');
+        fprintf(fid,'\\centering\n');
+        fprintf(fid,'\\renewcommand{\\arraystretch}{1.2}\n');
+        fprintf(fid,'\\setlength{\\tabcolsep}{2.5pt}\n');
+    
+        fprintf(fid,'\\begin{tabular}{|p{1.6cm}|');
+        for k = 1:22
+            fprintf(fid,'p{0.9cm}|');
+        end
+        fprintf(fid,'}\n\\hline\n');
+    
+        fprintf(fid,'\\textbf{Speaker} & \\multicolumn{22}{c|}{\\textbf{OmniPower measurements averaged over all positions}} \\\\\n');
+        fprintf(fid,'\\hline\n');
+    
+        %% ---------- FREQUENCY HEADER ----------
+        freqList = [100 125 160 200 315 400 500 630 800 1000 1250 1600 ...
+                    2000 3150 4000 5000 6300 8000 10000 12500 16000 20000];
+    
+        fprintf(fid,'&');
+    
+        for f = 1:length(freqList)
+            fprintf(fid,' \\rotatebox{90}{%d Hz} &',freqList(f));
+        end
+    
+        %fprintf(fid,' \\rotatebox{90}{White noise}');
+        %fprintf(fid,' & \\rotatebox{90}{Pink Noise}');
+        %fprintf(fid,' & \\rotatebox{90}{Sweep}');
+        fprintf(fid,'\\\\\n');% & \\rotatebox{90}{16 bit MLS} \\\\\n');
+    
+        fprintf(fid,'\\hline\n');
+    
+        %% ---------- EDT ----------
+        fprintf(fid,'\\textbf{Mic No.} & \\multicolumn{22}{c|}{\\textbf{Reverberation time (EDT) by signal type in seconds}} \\\\\n');
+        fprintf(fid,'\\hline\n');
+    
+        for mic = 1:nMic
+    
+            fprintf(fid,'%d ',mic);
+    
+            for b = 1:length(freqList)
+    
+                idx = find(fc == freqList(b));
+    
+                if isempty(idx)
+                    fprintf(fid,'& ');
+                else
+                    fprintf(fid,'& %.2f ',EDTmic(mic,idx));
+                end
+    
+            end
+    
+            fprintf(fid, ' \\\\\n');%'& & & & \\\\\n');
+            fprintf(fid,'\\hline\n');
+    
+        end
+    
+        %% ---------- RT20 ----------
+        fprintf(fid,'& \\multicolumn{22}{c|}{\\textbf{Reverberation time (RT20) by signal type in seconds}} \\\\\n');
+        fprintf(fid,'\\hline\n');
+    
+        for mic = 1:nMic
+    
+            fprintf(fid,'%d ',mic);
+    
+            for b = 1:length(freqList)
+    
+                idx = find(fc == freqList(b));
+    
+                if isempty(idx)
+                    fprintf(fid,'& ');
+                else
+                    fprintf(fid,'& %.2f ',T20mic(mic,idx));
+                end
+    
+            end
+    
+            fprintf(fid, ' \\\\\n');%'& & & & \\\\\n');
+            fprintf(fid,'\\hline\n');
+        end
+    
+        %% ---------- RT60 ----------
+        fprintf(fid,'& \\multicolumn{22}{c|}{\\textbf{Reverberation time (RT60) by signal type in seconds}} \\\\\n');
+        fprintf(fid,'\\hline\n');
+    
+        for mic = 1:nMic
+    
+            fprintf(fid,'%d ',mic);
+    
+            for b = 1:length(freqList)
+    
+                idx = find(fc == freqList(b));
+    
+                if isempty(idx)
+                    fprintf(fid,'& ');
+                else
+                    fprintf(fid,'& %.2f ',RT60mic(mic,idx));
+                end
+    
+            end
+    
+            fprintf(fid, ' \\\\\n');%'& & & & \\\\\n');
+            fprintf(fid,'\\hline\n');
+    
+        end
+    
+        fprintf(fid,'\\end{tabular}\n');
+        fprintf(fid,'\\caption{Acoustic parameters averaged over all speaker positions.}\n');
+        fprintf(fid,'\\label{tab:averageParametersOmniPower1%s}\n',methodName);
+        fprintf(fid,'\\end{sidewaystable}\n');
+    
+        fprintf(fid,'\\begin{sidewaystable}[p]\n');
+        fprintf(fid,'\\ContinuedFloat\n');
+        fprintf(fid,'\\centering\n');
+        fprintf(fid,'\\renewcommand{\\arraystretch}{1.2}\n');
+        fprintf(fid,'\\setlength{\\tabcolsep}{2.5pt}\n');
+    
+        fprintf(fid,'\\begin{tabular}{|p{1.6cm}|');
+        for k = 1:22
+            fprintf(fid,'p{0.9cm}|');
+        end
+        fprintf(fid,'}\n\\hline\n');
+    
+        fprintf(fid,'\\textbf{Speaker} & \\multicolumn{22}{c|}{\\textbf{OmniPower measurements averaged over all positions}} \\\\\n');
+        fprintf(fid,'\\hline\n');
+    
+        %% ---------- FREQUENCY HEADER ----------
+        freqList = [100 125 160 200 315 400 500 630 800 1000 1250 1600 ...
+                    2000 3150 4000 5000 6300 8000 10000 12500 16000 20000];
+    
+        %fprintf(fid,'&');
+    
+        for f = 1:length(freqList)
+            fprintf(fid,' & \\rotatebox{90}{%d Hz}',freqList(f));
+        end
+    
+        %fprintf(fid,' \\rotatebox{90}{White noise}');
+        %fprintf(fid,' & \\rotatebox{90}{Pink Noise}');
+        %fprintf(fid,' & \\rotatebox{90}{Sweep}');
+        fprintf(fid,'\\\\\n');% & \\rotatebox{90}{16 bit MLS} \\\\\n');
+    
+        fprintf(fid,'\\hline\n');
+    
+        %% ---------- C50 ----------
+        fprintf(fid,'\\textbf{Mic No.} & \\multicolumn{22}{c|}{\\textbf{Clarity (C50) by signal type in dB}} \\\\\n');
+        fprintf(fid,'\\hline\n');
+    
+        for mic = 1:nMic
+    
+            fprintf(fid,'%d ',mic);
+    
+            for b = 1:length(freqList)
+    
+                idx = find(fc == freqList(b));
+    
+                if isempty(idx)
+                    fprintf(fid,'& ');
+                else
+                    fprintf(fid,'& %.2f ',C50mic(mic,idx));
+                end
+    
+            end
+    
+            fprintf(fid, ' \\\\\n');%'& & & & \\\\\n');
+            fprintf(fid,'\\hline\n');
+    
+        end
+    
+        %% ---------- C80 ----------
+        fprintf(fid,'& \\multicolumn{22}{c|}{\\textbf{Clarity (C80) by signal type in dB}} \\\\\n');
+        fprintf(fid,'\\hline\n');
+    
+        for mic = 1:nMic
+    
+            fprintf(fid,'%d ',mic);
+    
+            for b = 1:length(freqList)
+    
+                idx = find(fc == freqList(b));
+    
+                if isempty(idx)
+                    fprintf(fid,'& ');
+                else
+                    fprintf(fid,'& %.2f ',C80mic(mic,idx));
+                end
+    
+            end
+    
+            fprintf(fid, ' \\\\\n');%'& & & & \\\\\n');
+            fprintf(fid,'\\hline\n');
+    
+        end
+    
+        %% ---------- D50 ----------
+        fprintf(fid,'& \\multicolumn{22}{c|}{\\textbf{Deutlichkeit/definition (D50) by signal type}} \\\\\n');
+        fprintf(fid,'\\hline\n');
+    
+        for mic = 1:nMic
+    
+            fprintf(fid,'%d ',mic);
+    
+            for b = 1:length(freqList)
+    
+                idx = find(fc == freqList(b));
+    
+                if isempty(idx)
+                    fprintf(fid,'& ');
+                else
+                    fprintf(fid,'& %.2f ',D50mic(mic,idx));
+                end
+    
+            end
+    
+            fprintf(fid, ' \\\\\n');%'& & & & \\\\\n');
+            fprintf(fid,'\\hline\n');
+    
+        end
+    
+        fprintf(fid,'\\end{tabular}\n');
+        fprintf(fid,'\\caption{Acoustic parameters averaged over all speaker positions.}\n');
+        fprintf(fid,'\\label{tab:averageParametersOmniPower2%s}\n',methodName);
+        fprintf(fid,'\\end{sidewaystable}\n');
+        
+        fclose(fid);
+    
+        fprintf('LaTeX table saved to:\n%s\n',latexFile);
+    
+    end
     
     %% Plot
     if plotFlagT20
         for spk = 1:nSpk
-            figure('Name',sprintf('%s - Speaker %d - T20',methodName,spk));
+            fig = figure('Name',sprintf('%s - Speaker %d - T20',methodName,spk));
             hold on; grid on
             for mic = 1:nMic
                 semilogx(fc, squeeze(T20(spk,mic,:)), ...
@@ -255,6 +510,11 @@ for methodIdx = 1:2
             
             xlim([50 20000])     % dummy values
             ylim([0 0.4])          % dummy values
+
+            if savePlots
+                filename = fullfile(plotFolder,sprintf('%sT20Speaker%d.jpg', methodName, spk));
+                exportgraphics(fig, filename, 'Resolution', 150);
+            end
         end
     end
 
@@ -287,6 +547,11 @@ for methodIdx = 1:2
             legend(speakerLabels,'Location','northeast')
             xlim([20 20000])     % dummy values
             ylim([-60 80])      % dummy values
+
+            if savePlots
+                filename = fullfile(plotFolder,sprintf('%sFFTMic%d.jpg', methodName, mic));
+                exportgraphics(gcf, filename, 'Resolution', 150);
+            end
         end
         
     end
@@ -323,6 +588,11 @@ for methodIdx = 1:2
             
             xlim([0 0.75])       % dummy values
             ylim([-65 5])     % dummy values
+
+            if savePlots
+                filename = fullfile(plotFolder,sprintf('%sSchroederMic%d.jpg', methodName, mic));
+                exportgraphics(gcf, filename, 'Resolution', 150);
+            end
         end
         
     end
@@ -347,6 +617,11 @@ for methodIdx = 1:2
         
         %xlim([0.5 8.5])
         %ylim([0 1.25])
+
+        if savePlots
+            filename = fullfile(plotFolder,sprintf('%sRT60Boxplot.jpg', methodName));
+            exportgraphics(gcf, filename, 'Resolution', 150);
+        end
     end
 end
 

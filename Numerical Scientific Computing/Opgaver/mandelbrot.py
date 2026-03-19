@@ -29,14 +29,14 @@ def main():
     if sizeComparison:
         for i in range(len(gridSizes)):
             gridSize = gridSizes[i]
-            print(f"Using gridsize {gridSize}")
+            print(f"\n\n\nUsing gridsize {gridSize}")
             results = dataTypeComparison(gridSize)
             resultsForSummary.extend(results)
             if regionTest:
                 regionComparison(gridSize)
     else: 
         gridSize = 512 # for speed in testing
-        print(f"Using gridsize {gridSize}")
+        print(f"\n\n\nUsing gridsize {gridSize}")
         results = dataTypeComparison(gridSize)
         resultsForSummary.extend(results)
         if regionTest:
@@ -56,6 +56,7 @@ def main():
 
     if testMemory:
         memoryLayoutTest()
+        print("\n")
         #memoryProfileComparison()
     else:
         print("Memory testing has not been done this run")
