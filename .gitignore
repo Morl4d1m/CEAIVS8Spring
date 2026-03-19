@@ -6,4 +6,6 @@
 *.gz
 *.gz.tif
 *.bmp
-Projekt/Lydfiler/impulseResponseMeasurerData/*
+*.aup3
+Projekt/Lydfiler/impulseResponseMeasurerData/mlsAndSweep03032026.mat
+Projekt/PDF'er/*
