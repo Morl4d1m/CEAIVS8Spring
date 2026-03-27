@@ -18,7 +18,8 @@ plotFFTAverage = 0;
 plotFFTPerMic  = 0;  
 plotOctaveBars = 0;
 plotThirdOctaveBars = 0;
-batchProcessMeasurements = 1; 
+batchProcessMeasurements = 1;
+doStatisticsAndExport = 0;
 
 %% =========================== PATHS ===========================
 basePath = 'C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\';
@@ -54,13 +55,33 @@ fileList = {
 'DESjetteFredag13032026kl1301-1317'
 'DESjetteFredag13032026kl1322-1335'
 'DESjetteFredag13032026kl1339-1356'
+'DESyvendeFredag20032026kl1300-1312'
+'DESyvendeFredag20032026kl1324-1339'
+'DESyvendeFredag20032026kl1355-1401'
+'DESyvendeFredag20032026kl1410-1417Tits'
+'DESyvendeFredag20032026kl1420-1501Beerpong'
+'DESyvendeFredag20032026kl1518-1535'
+'DESyvendeFredag20032026kl1539-1547'
+'DESyvendeFredag20032026kl1613-1625Vihygger'
+'DESyvendeFredag20032026kl1717-1734'
+'DESyvendeFredag20032026kl1744-1844'
+'backgroundMeasurement13022026'
+'backgroundMeasurement13032026'
+'backgroundMeasurement16022026'
+'backgroundMeasurement18022026'
+'backgroundMeasurement20022026'
+'backgroundMeasurement27022026'
+'backgroundMeasurement28022026'
+'backgroundMeasurement03032026'
+'backgroundMeasurement06032026'
+'backgroundMeasurement20032026'
 };
 
 
 if batchProcessMeasurements
     measurementList=fileList;
 else
-    measurementList= {'DETredjeFredag20022026JengaTits'};
+    measurementList= {'backgroundMeasurement20032026'};
 end
 resultTable = table;
 
@@ -216,6 +237,22 @@ LAeq_C_mean, ...
 LAeq_Z_mean, ...
 'VariableNames',{'Measurement','LAeq_dBA','LCeq_dBC','LZeq_dB'})];
 
+%% ================= STORE MIC DATA =================
+
+if meas == 1
+    micTable = table;
+end
+
+for mic = 1:N
+    micTable = [micTable; table( ...
+        string(baseFileName), ...
+        mic, ...
+        LAeq_A(mic), ...
+        LAeq_C(mic), ...
+        LAeq_Z(mic), ...
+        'VariableNames',{'Measurement','Mic','LAeq_dBA','LCeq_dBC','LZeq_dB'})];
+end
+
 %% ================= BUILD SPATIAL AVG SIGNALS =================
 pZ_mat = cat(2,p_all{:});
 pZ_avg = mean(pZ_mat,2);
@@ -249,7 +286,7 @@ if plotFFTAverage
         [~,PA] = localFFT(pA_avg,fs,w,Wcorr,p_ref);
         semilogx(f,PA);
     end
-
+    title('Average FFT of measurement: %d', baseFileName);
     legend('Z','C','A');
     xlabel('Frequency [Hz]');
     ylabel('Magnitude [dB re 20 µPa]');
@@ -383,4 +420,81 @@ if batchProcessMeasurements
     fprintf('\n====================================\n');
     fprintf('BATCH MEASUREMENT SUMMARY\n');
     disp(resultTable)
+end
+
+%% ================= STATISTICS + CSV EXPORT =================
+
+if doStatisticsAndExport && batchProcessMeasurements
+
+    fprintf('\n====================================\n');
+    fprintf('EXPORTING DATA + COMPUTING STATISTICS\n');
+
+    %% -------- Identify background measurements --------
+    isBackground = contains(resultTable.Measurement,"background","IgnoreCase",true);
+
+    resultTable.Group = repmat("NonBackground",height(resultTable),1);
+    resultTable.Group(isBackground) = "Background";
+
+    micTable.Group = repmat("NonBackground",height(micTable),1);
+    micTable.Group(contains(micTable.Measurement,"background","IgnoreCase",true)) = "Background";
+
+    %% -------- Save raw data --------
+    writetable(resultTable, fullfile(basePath,'SpatialAverages_AllMeasurements.csv'));
+    writetable(micTable, fullfile(basePath,'PerMic_AllMeasurements.csv'));
+
+    %% -------- Helper function --------
+    statFun = @(x)[mean(x), std(x), min(x), max(x)];
+
+    %% ================= SPATIAL STATS =================
+    statsSpatial = table;
+
+    groups = ["Background","NonBackground"];
+
+    for g = 1:length(groups)
+        idx = resultTable.Group == groups(g);
+
+        if any(idx)
+            LA = resultTable.LAeq_dBA(idx);
+
+            s = statFun(LA);
+
+            statsSpatial = [statsSpatial; table( ...
+                groups(g), ...
+                s(1), s(2), s(3), s(4), ...
+                'VariableNames',{'Group','Mean_dBA','Std_dB','Min_dB','Max_dB'})];
+        end
+    end
+
+    %% ================= MIC STATS =================
+    statsMic = table;
+
+    for g = 1:length(groups)
+        for mic = 1:N
+
+            idx = micTable.Group == groups(g) & micTable.Mic == mic;
+
+            if any(idx)
+                LA = micTable.LAeq_dBA(idx);
+
+                s = statFun(LA);
+
+                statsMic = [statsMic; table( ...
+                    groups(g), mic, ...
+                    s(1), s(2), s(3), s(4), ...
+                    'VariableNames',{'Group','Mic','Mean_dBA','Std_dB','Min_dB','Max_dB'})];
+            end
+        end
+    end
+
+    %% -------- Save statistics --------
+    writetable(statsSpatial, fullfile(basePath,'Stats_Spatial.csv'));
+    writetable(statsMic, fullfile(basePath,'Stats_PerMic.csv'));
+
+    %% -------- Display --------
+    fprintf('\nSpatial Statistics:\n');
+    disp(statsSpatial)
+
+    fprintf('\nPer-Microphone Statistics:\n');
+    disp(statsMic)
+
 end

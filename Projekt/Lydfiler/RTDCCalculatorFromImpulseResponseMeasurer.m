@@ -1,6 +1,7 @@
 %% ISO 3382-2 Processing (MLS + Sweep, Fully Functional)
 
-load("C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\impulseResponseMeasurerData\mlsAndSweep03032026.mat")
+load("C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\impulseResponseMeasurerData\omniSource\mlsAndSweepOmniSource25032026.mat")
+load("C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\impulseResponseMeasurerData\omniPower\mlsAndSweep03032026.mat")
 
 fs = 44100;
 
@@ -9,25 +10,28 @@ fc = [50 63 80 100 125 160 200 250 315 400 500 630 800 ...
       10000 12500 16000 20000];
 nBands = length(fc);
 
-plotFlagT20 = 1;
-plotFFTflag = 1;
-plotSchroederFlag = 1;
-plotRT60boxFlag = 1;
+plotT20 = 1;
+plotFFT = 1;
+plotSchroeder = 1;
+plotRT60box = 1;
 savePlots = 1;
 exportCSV = 0;
 exportLatex = 0;
-outputFolder = "C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\impulseResponseMeasurerData";
+outputFolder = "C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\impulseResponseMeasurerData\omniSource";
 plotFolder = fullfile(outputFolder, "impulseResponsePlots");
 if ~exist(plotFolder, 'dir')
     mkdir(plotFolder);
 end
 
 %% Separate methods
-isSweep = strcmp(irdata_084724.Method,'Swept Sine');
-isMLS   = strcmp(irdata_084724.Method,'MLS');
+%isSweep = strcmp(irdata_084724.Method,'Swept Sine');
+%isMLS   = strcmp(irdata_084724.Method,'MLS');
+isSweep = strcmp(irdata_120508.Method,'Swept Sine');
+isMLS   = strcmp(irdata_120508.Method,'MLS');
 
 methods  = {'Sweep','MLS'};
-datasets = {irdata_084724(isSweep,:), irdata_084724(isMLS,:)};
+%datasets = {irdata_084724(isSweep,:), irdata_084724(isMLS,:)};
+datasets = {irdata_120508(isSweep,:), irdata_120508(isMLS,:)};
 
 for methodIdx = 1:2
     
@@ -78,7 +82,7 @@ for methodIdx = 1:2
         h = h / max(abs(h));
 
         %% Store FFT data
-        if plotFFTflag
+        if plotFFT
             
             Nfft = 2^nextpow2(length(h));
             
@@ -112,7 +116,7 @@ for methodIdx = 1:2
             t = (0:length(edc_db)-1)'/fs;
 
             %% Store Schroeder curve (fullband example using 1 kHz band)
-            if plotSchroederFlag && fc(b)==1000
+            if plotSchroeder && fc(b)==1000
                 
                 SchroederTime{spk,mic} = t;
                 SchroederEDC{spk,mic} = edc_db;
@@ -270,7 +274,7 @@ for methodIdx = 1:2
         end
         fprintf(fid,'}\n\\hline\n');
     
-        fprintf(fid,'\\textbf{Speaker} & \\multicolumn{22}{c|}{\\textbf{OmniPower measurements averaged over all positions}} \\\\\n');
+        fprintf(fid,'\\textbf{Speaker} & \\multicolumn{22}{c|}{\\textbf{OmniSource measurements averaged over all positions}} \\\\\n');
         fprintf(fid,'\\hline\n');
     
         %% ---------- FREQUENCY HEADER ----------
@@ -366,7 +370,7 @@ for methodIdx = 1:2
     
         fprintf(fid,'\\end{tabular}\n');
         fprintf(fid,'\\caption{Acoustic parameters averaged over all speaker positions.}\n');
-        fprintf(fid,'\\label{tab:averageParametersOmniPower1%s}\n',methodName);
+        fprintf(fid,'\\label{tab:averageParametersOmniSource1%s}\n',methodName);
         fprintf(fid,'\\end{sidewaystable}\n');
     
         fprintf(fid,'\\begin{sidewaystable}[p]\n');
@@ -381,7 +385,7 @@ for methodIdx = 1:2
         end
         fprintf(fid,'}\n\\hline\n');
     
-        fprintf(fid,'\\textbf{Speaker} & \\multicolumn{22}{c|}{\\textbf{OmniPower measurements averaged over all positions}} \\\\\n');
+        fprintf(fid,'\\textbf{Speaker} & \\multicolumn{22}{c|}{\\textbf{OmniSource measurements averaged over all positions}} \\\\\n');
         fprintf(fid,'\\hline\n');
     
         %% ---------- FREQUENCY HEADER ----------
@@ -478,7 +482,7 @@ for methodIdx = 1:2
     
         fprintf(fid,'\\end{tabular}\n');
         fprintf(fid,'\\caption{Acoustic parameters averaged over all speaker positions.}\n');
-        fprintf(fid,'\\label{tab:averageParametersOmniPower2%s}\n',methodName);
+        fprintf(fid,'\\label{tab:averageParametersOmniSource2%s}\n',methodName);
         fprintf(fid,'\\end{sidewaystable}\n');
         
         fclose(fid);
@@ -488,7 +492,7 @@ for methodIdx = 1:2
     end
     
     %% Plot
-    if plotFlagT20
+    if plotT20
         for spk = 1:nSpk
             fig = figure('Name',sprintf('%s - Speaker %d - T20',methodName,spk));
             hold on; grid on
@@ -519,7 +523,7 @@ for methodIdx = 1:2
     end
 
     %% FFT plots per microphone
-    if plotFFTflag        
+    if plotFFT        
         for mic = 1:nMic
             figure('Name',sprintf('%s FFT Mic %d',methodName,mic))
             hold on
@@ -557,7 +561,7 @@ for methodIdx = 1:2
     end
 
     %% Schroeder decay plots
-    if plotSchroederFlag
+    if plotSchroeder
         
         for mic = 1:nMic
             
@@ -597,7 +601,7 @@ for methodIdx = 1:2
         
     end
     %% RT60 box plot averaged across speakers
-    if plotRT60boxFlag
+    if plotRT60box
         
         % Average across frequency bands only
         RT60avgFreq = squeeze(mean(RT60,3,'omitnan'));   % size = [8 speakers x 8 mics]
