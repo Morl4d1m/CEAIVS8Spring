@@ -10,3 +10,8 @@
 Projekt/Lydfiler/impulseResponseMeasurerData/mlsAndSweep03032026.mat
 Projekt/PDF'er/*
 Projekt/Simuleringer/*
+*.pem
+*.ssh
+*.key
+*.ppk
+*.pub
