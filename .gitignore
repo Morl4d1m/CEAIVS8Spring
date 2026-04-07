@@ -8,6 +8,9 @@
 *.bmp
 *.aup3
 Projekt/Lydfiler/impulseResponseMeasurerData/mlsAndSweep03032026.mat
+Projekt/Lydfiler/impulseResponseMeasurerData/omniPower/mlsAndSweep03032026.mat
+Projekt/Lydfiler/impulseResponseMeasurerData/omniSource/mlsAndSweep25032026.mat
+Projekt/Lydfiler/impulseResponseMeasurerData/omniSource/mlsAndSweep25032026_With3dB.mat
 Projekt/PDF'er/*
 Projekt/Simuleringer/*
 *.pem

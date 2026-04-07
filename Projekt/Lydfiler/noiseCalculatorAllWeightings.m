@@ -1,29 +1,29 @@
 %% ISO 3382-2 Background Noise Measurement
 % Optimized + ISO compliant tables
-% MATLAB R2023a compatible
-%
 % Author: Christian Lykke
-% Updated: Optimized version
 
 
 %% =========================== FLAGS ===========================
 doZ = true;
 doA = true;
 doC = true;
-
 doOctave      = 0;
 doThirdOctave = 0;
-
-plotFFTAverage = 0;
-plotFFTPerMic  = 0;  
+plotFFTAverage = 1;
+plotFFTPerMic  = 1;  
 plotOctaveBars = 0;
 plotThirdOctaveBars = 0;
-batchProcessMeasurements = 1;
+batchProcessMeasurements = 0;
 doStatisticsAndExport = 0;
+savePlots = 1;
 
 %% =========================== PATHS ===========================
 basePath = 'C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\';
 %calFile  = fullfile(basePath,'micCalibrationConstants_94dB_1kHz_20022026.mat');
+plotPath = fullfile(basePath,'noisePlots');
+if savePlots && ~exist(plotPath,'dir')
+    mkdir(plotPath);
+end
 
 %% ================= BATCH FILE LIST =================
 fileList = {
@@ -77,18 +77,41 @@ fileList = {
 'backgroundMeasurement20032026'
 };
 
+lombardTest = {
+'DELombard55dB27032026'
+'DELombard60dB27032026'
+'DELombard65dB27032026'
+'DELombard70dB27032026'
+'DELombard75dB27032026'
+};
+
+backgroundNoise = {    
+'backgroundMeasurement13022026'
+'backgroundMeasurement13032026'
+'backgroundMeasurement16022026'
+'backgroundMeasurement18022026'
+'backgroundMeasurement20022026'
+'backgroundMeasurement27022026'
+'backgroundMeasurement28022026'
+'backgroundMeasurement03032026'
+'backgroundMeasurement06032026'
+'backgroundMeasurement20032026'
+};
+
 
 if batchProcessMeasurements
-    measurementList=fileList;
+    %measurementList=fileList;
+    measurementList=lombardTest;
+    %measurementList=backgroundNoise;
 else
-    measurementList= {'backgroundMeasurement20032026'};
+    measurementList= {'completeOpenNoise28032026'};
 end
 resultTable = table;
 
 %% ================= CONSTANTS =================
 N = 8;
 p_ref = 20e-6;
-fc = [50 63 80 100 125 160 200 250 315 400 500 630 800 ...
+fc = [20 25 31.5 40 50 63 80 100 125 160 200 250 315 400 500 630 800 ...
       1000 1250 1600 2000 2500 3150 4000 5000 6300 8000 ...
       10000 12500 16000 20000];
 fs=44100;
@@ -178,9 +201,13 @@ for mic = 1:N
     fileName = sprintf('%s__100%d.wav',baseFileName,mic);
     [x, ~] = audioread(fullfile(basePath,fileName));
     x = x(:) - mean(x);
-
-    t_start = 0;           % seconds
-    t_end   = length(x)/fs; % full file length
+    
+    if contains(baseFileName, "background", 'IgnoreCase', true)
+        t_start = 0;
+    else
+        t_start = 6*60*60+20*60;           % seconds
+    end
+    t_end   = 6*60*60+20*60+70*60; %length(x)/fs; % full file length
 
     idx1 = round(t_start*fs)+1;
     idx2 = round(t_end*fs);
@@ -226,9 +253,9 @@ T_full = table((1:N)',LAeq_A',LAeq_C',LAeq_Z', ...
 disp(T_full)
 
 fprintf('\nSpatial Average:\n');
-fprintf('LAeq = %.2f dB(A)\n',LAeq_A_mean);
-fprintf('LCeq = %.2f dB(C)\n',LAeq_C_mean);
-fprintf('LZeq = %.2f dB\n',LAeq_Z_mean);
+fprintf('LAeq = %.3f dB(A)\n',LAeq_A_mean);
+fprintf('LCeq = %.3f dB(C)\n',LAeq_C_mean);
+fprintf('LZeq = %.3f dB\n',LAeq_Z_mean);
 
 resultTable = [resultTable; table( ...
 string(baseFileName), ...
@@ -265,7 +292,7 @@ if doC
     pC_mat = cat(2,pC_all{:});
     pC_avg = mean(pC_mat,2);
 end
-
+set(0,'DefaultFigureVisible','off')
 %% ===================== FFT PLOT ===============================
 if plotFFTAverage
     figure;
@@ -286,20 +313,21 @@ if plotFFTAverage
         [~,PA] = localFFT(pA_avg,fs,w,Wcorr,p_ref);
         semilogx(f,PA);
     end
-    title('Average FFT of measurement: %d', baseFileName);
+    plotName=regexprep(baseFileName, '_', '');
+    title(sprintf('Average FFT of measurement: %s', plotName), 'Interpreter','none');
     legend('Z','C','A');
-    xlabel('Frequency [Hz]');
-    ylabel('Magnitude [dB re 20 µPa]');
+    xlabel('Frequency (Hz)');
+    ylabel('Magnitude (dB)');
     xticks([fc])
     xtickformat('%.0f');
-    xlim([10 fs/2]);
+    xlim([20 fs/2]);
     ax = gca;
     ax.XAxis.Exponent = 0;  % disables the x10^N scaling
     ax.XScale = 'log';      % ensures x-axis is logarithmic
-    ylim([-50 90]);
+    ylim([-70 70]);
+    savePlot(savePlots, plotPath, sprintf('FFTAverage%s.jpg',plotName));
 end
 
-end
 
 %% ================= PER-MIC FFT PLOTS =========================
 if plotFFTPerMic
@@ -328,13 +356,13 @@ if plotFFTPerMic
             semilogx(f,PA,'DisplayName','A');
         end
 
-        xlabel('Frequency [Hz]');
-        ylabel('Magnitude [dB re 20 µPa]');
+        xlabel('Frequency (Hz)');
+        ylabel('Magnitude (dB)');
         title(sprintf('Microphone %d FFT Spectrum',mic));
 
         legend show;
 
-        xlim([10 fs/2]);
+        xlim([20 fs/2]);
         xticks([fc])
         xtickformat('%.0f');
 
@@ -342,8 +370,12 @@ if plotFFTPerMic
         ax.XAxis.Exponent = 0;
         ax.XScale = 'log';
 
-        ylim([-50 90]);
+        ylim([-70 70]);
+        plotName=regexprep(baseFileName, '_', '');
+        savePlot(savePlots, plotPath, sprintf('FFTMic%d%s.jpg',mic,plotName));
     end
+end
+set(0,'DefaultFigureVisible','on')
 end
 
 %% ===================== OCTAVE BANDS ==========================
@@ -370,6 +402,8 @@ if doOctave
         xlabel('Hz'); ylabel('dB(A)');
         title('Octave Band LAeq');
         grid on;
+        plotName=regexprep(baseFileName, '_', '');
+        savePlot(savePlots, plotPath, sprintf('Octaves%s.jpg',plotName));
     end
 end
 
@@ -397,21 +431,9 @@ if doThirdOctave
         xlabel('Hz'); ylabel('dB(A)');
         title('1/3 Octave Band LAeq');
         grid on;
+        plotName=regexprep(baseFileName, '_', '');
+        savePlot(savePlots, plotPath, sprintf('thirdOctaves%s.jpg',plotName));
     end
-end
-
-%% ===================== LOCAL FUNCTION ========================
-function [f,SdB] = localFFT(sig,fs,w,Wcorr,p_ref)
-
-L = length(sig);
-X = fft(sig.*w);
-X = X(1:floor(L/2)+1);
-f = (0:floor(L/2))*fs/L;
-
-mag = abs(X)/(L*Wcorr);
-mag(2:end-1) = 2*mag(2:end-1);
-
-SdB = 20*log10(mag/p_ref);
 end
 
 %% ================= FINAL BATCH SUMMARY =================
@@ -497,4 +519,26 @@ if doStatisticsAndExport && batchProcessMeasurements
     fprintf('\nPer-Microphone Statistics:\n');
     disp(statsMic)
 
+end
+
+function savePlot(savePlots, plotPath, fileName)
+if savePlots
+    exportgraphics(gcf, fullfile(plotPath, fileName), 'Resolution', 150);
+    close(gcf);
+end
+end
+
+
+%% ===================== LOCAL FUNCTION ========================
+function [f,SdB] = localFFT(sig,fs,w,Wcorr,p_ref)
+
+L = length(sig);
+X = fft(sig.*w);
+X = X(1:floor(L/2)+1);
+f = (0:floor(L/2))*fs/L;
+
+mag = abs(X)/(L*Wcorr);
+mag(2:end-1) = 2*mag(2:end-1);
+
+SdB = 20*log10(mag/p_ref);
 end
