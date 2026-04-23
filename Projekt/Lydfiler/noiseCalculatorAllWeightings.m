@@ -9,13 +9,13 @@ doA = true;
 doC = true;
 doOctave      = 0;
 doThirdOctave = 0;
-plotFFTAverage = 1;
-plotFFTPerMic  = 1;  
+plotFFTAverage = 0;
+plotFFTPerMic  = 0;  
 plotOctaveBars = 0;
 plotThirdOctaveBars = 0;
 batchProcessMeasurements = 0;
 doStatisticsAndExport = 0;
-savePlots = 1;
+savePlots = 0;
 
 %% =========================== PATHS ===========================
 basePath = 'C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\';
@@ -77,6 +77,30 @@ fileList = {
 'backgroundMeasurement20032026'
 };
 
+paaskeFrokost = {
+'DEPaaskeFrokost09042026kl1629-1657FolkKommerDryssende'
+'DEPaaskeFrokost09042026FolkSætterSig'
+'DEPaaskeFrokost09042026DerSpises'
+'DEPaaskeFrokost09042026EfterMaden'
+'DEPaaskeFrokost09042026EventyrDel1'
+'DEPaaskeFrokost09042026EventyrDel2'
+'DEPaaskeFrokost09042026FriLeg'
+'DEPaaskeFrokost09042026SnapseSmagning'
+'DENiendeFredag10042026kl1300-1318MegetFaaMennesker'
+'DENiendeFredag10042026kl1330-1342StadigFaaMennesker'
+'DENiendeFredag10042026kl1404-1414LidtFlereMennesker'
+'DENiendeFredag10042026kl1433-145020Mennesker'
+'backgroundMeasurement10042026'
+};
+
+NiendeFredag = {
+'DENiendeFredag10042026kl1300-1318MegetFaaMennesker'
+'DENiendeFredag10042026kl1330-1342StadigFaaMennesker'
+'DENiendeFredag10042026kl1404-1414LidtFlereMennesker'
+'DENiendeFredag10042026kl1433-145020Mennesker'
+'backgroundMeasurement10042026'
+};
+
 lombardTest = {
 'DELombard55dB27032026'
 'DELombard60dB27032026'
@@ -96,15 +120,18 @@ backgroundNoise = {
 'backgroundMeasurement03032026'
 'backgroundMeasurement06032026'
 'backgroundMeasurement20032026'
+'backgroundMeasurement09042026'
 };
 
 
 if batchProcessMeasurements
     %measurementList=fileList;
-    measurementList=lombardTest;
+    %measurementList=lombardTest;
     %measurementList=backgroundNoise;
+    measurementList=paaskeFrokost;
+    %measurementList=NiendeFredag;
 else
-    measurementList= {'completeOpenNoise28032026'};
+    measurementList= {'backgroundMeasurement09042026'};
 end
 resultTable = table;
 
@@ -205,9 +232,9 @@ for mic = 1:N
     if contains(baseFileName, "background", 'IgnoreCase', true)
         t_start = 0;
     else
-        t_start = 6*60*60+20*60;           % seconds
+        t_start = 0;           % seconds
     end
-    t_end   = 6*60*60+20*60+70*60; %length(x)/fs; % full file length
+    t_end   = length(x)/fs; % full file length
 
     idx1 = round(t_start*fs)+1;
     idx2 = round(t_end*fs);
