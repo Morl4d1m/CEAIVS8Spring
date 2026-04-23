@@ -13,17 +13,17 @@ import os
 #import dask
 from dask import delayed, compute
 from dask.distributed import Client, LocalCluster
-from matplotlib.colors import LogNorm
-#import pyopencl as cl
 try:
     profile
 except NameError:
     def profile(func):
         return func
+from matplotlib.colors import LogNorm
+import pyopencl as cl
 
-testMemory = 0
-gridSizes = [64,128,256,512,1024]#,2048,4096]
-sizeComparison = 0
+testMemory = 1
+gridSizes = [64,128,256,512,1024,2048,4096]
+sizeComparison = 1
 regions = {"Full": (-2, 1.5, -2, 2),"Seahorse Valley": (-0.8, -0.7, 0.05, 0.15),"Elephant Valley": (0.25, 0.35, -0.05, 0.05),"Deep Seahorse": (-0.7435, -0.7425, 0.1315, 0.1325)}
 regionTest = 0
 cProfiling = 0
@@ -33,6 +33,60 @@ parallelScalingTest = 1
 checkEps = 0
 checkPrecision = 0
 runTests = 0
+useOpenCL = 1
+
+kernelF32 = """
+__kernel void mandelbrot_f32(
+    __global int *result,
+    const float x_min, const float x_max,
+    const float y_min, const float y_max,
+    const int N, const int max_iter)
+{
+    int col = get_global_id(0);
+    int row = get_global_id(1);
+    if (col >= N || row >= N) return;
+
+    float c_real = x_min + col * (x_max - x_min) / (float)N;
+    float c_imag = y_min + row * (y_max - y_min) / (float)N;
+
+    float z_real = 0.0f, z_imag = 0.0f;
+    int count = 0;
+    while (count < max_iter && z_real*z_real + z_imag*z_imag <= 4.0f) {
+        float tmp = z_real*z_real - z_imag*z_imag + c_real;
+        z_imag = 2.0f * z_real * z_imag + c_imag;
+        z_real = tmp;
+        count++;
+    }
+    result[row * N + col] = count;
+}
+"""
+
+kernelF64 = """
+#pragma OPENCL EXTENSION cl_khr_fp64 : enable
+__kernel void mandelbrot_f64(
+    __global int *result,
+    const double x_min, const double x_max,
+    const double y_min, const double y_max,
+    const int N, const int max_iter)
+{
+    int col = get_global_id(0);
+    int row = get_global_id(1);
+    if (col >= N || row >= N) return;
+
+    double c_real = x_min + col * (x_max - x_min) / (double)N;
+    double c_imag = y_min + row * (y_max - y_min) / (double)N;
+
+    double z_real = 0.0, z_imag = 0.0;
+    int count = 0;
+    while (count < max_iter && z_real*z_real + z_imag*z_imag <= 4.0) {
+        double tmp = z_real*z_real - z_imag*z_imag + c_real;
+        z_imag = 2.0 * z_real * z_imag + c_imag;
+        z_real = tmp;
+        count++;
+    }
+    result[row * N + col] = count;
+}
+"""
 
 def main():
     print("Program begun")
@@ -40,6 +94,12 @@ def main():
     if runTests:
         runUnitTests()
         return
+
+    if useOpenCL:
+        openclResults = runOpenCLBenchmark()
+        #return # for debugging opencl
+    else:
+        openclResults = None
 
     if checkEps:
         for dtype in [np.float16,np.float32,np.float64]:
@@ -122,7 +182,7 @@ def main():
         plt.show()
 
     print("\n")
-    summarize(resultsForSummary,parallelResults,resultsDask)
+    summarize(resultsForSummary,parallelResults,resultsDask,openclResults)
     printDaskTable(resultsDask, tSerial)
     #plotDask(resultsDask)
     if checkPrecision:
@@ -438,8 +498,7 @@ def benchmarkParallel(N, xMin, xMax, yMin, yMax, maxIter):
             for _ in range(3):
                 t0 = time.perf_counter()
                 parts = pool.map(worker, chunks)
-                result = np.vstack(parts)
-                print(result)
+                np.vstack(parts)
                 times.append(time.perf_counter() - t0)
         tp = statistics.median(times)
         speedup = tSerial / tp
@@ -699,7 +758,7 @@ def dataTypeComparison(gridSize):
         results.append(entry)
     return results
 
-def summarize(results, resultsParallel,resultsDask):
+def summarize(results, resultsParallel,resultsDask, openclResults=None):
     print("In summary:")
     bestMP = getBestMP(resultsParallel) if resultsParallel else None
     bestDask = getBestDask(resultsDask) if resultsDask else None
@@ -707,9 +766,13 @@ def summarize(results, resultsParallel,resultsDask):
     tDask = bestDask["time"] if bestDask else None
 
 
-    header = (f"{'Grid':>6} | {'DType':>8} | "f"{'Slow':>8} | {'Fast':>8} | {'Numba':>8} | {'NumbaParallel':>14} | "f"{'S/F':>6} | {'S/N':>6} | {'F/N':>6} | {'S/NP':>6} | {'F/NP':>6} | {'N/NP':>6} | {'MP/S':>6} | {'MP/F':>6} | {'MP/N':>6} | {'MP/NP':>6} | {'D/S':>6} | {'D/F':>6} | {'D/N':>6} | {'D/NP':>6}")
+    header = (f"{'Grid':>6} | {'DType':>8} | "f"{'Slow':>8} | {'Fast':>8} | {'Numba':>8} | {'NumbaParallel':>14} | "f"{'S/F':>6} | {'S/N':>6} | {'F/N':>6} | {'S/NP':>6} | {'F/NP':>6} | {'N/NP':>6} | {'MP/S':>6} | {'MP/F':>6} | {'MP/N':>6} | {'MP/NP':>6} | {'D/S':>6} | {'D/F':>6} | {'D/N':>6} | {'D/NP':>6} | {'CL32':>8} | {'CL64':>8} | {'CL64/32':>8} | {'CL32/S':>8} | {'CL32/N':>8} | {'CL32/NP':>8} | {'CL64/S':>8} | {'CL64/N':>8} | {'CL64/NP':>8}")
     print(header)
     print("-" * len(header))
+    openclMap = {}
+    if openclResults:
+        for r in openclResults:
+            openclMap[r["gridSize"]] = r
     for r in results:
         tSlow = r["medianSlow"]
         tFast = r["medianFast"]
@@ -727,7 +790,22 @@ def summarize(results, resultsParallel,resultsDask):
         d_f = tFast / tDask if tDask else 0
         d_n = tNumba / tDask if tDask else 0
         d_np = tNumbaParallel / tDask if tDask else 0
-        print(f"{r['gridSize']:6} | "f"{r['dtype']:8} | "f"{r['medianSlow']:8.4f} | "f"{r['medianFast']:8.4f} | "f"{r['medianNumba']:8.4f} | "f"{r['medianNumbaParallel']:14.4f} | "f"{r['speedupSlowFast']:6.2f} | "f"{r['speedupSlowNumba']:6.2f} | "f"{r['speedupFastNumba']:6.2f} | "f"{r['speedupSlowNumbaParallel']:6.2f} | "f"{r['speedupFastNumbaParallel']:6.2f} | "f"{r['speedupNumbaNumbaParallel']:6.2f} | {mp_s:6.2f} | {mp_f:6.2f} | {mp_n:6.2f} | {mp_np:6.2f} | {d_s:6.2f} | {d_f:6.2f} | {d_n:6.2f} | {d_np:6.2f}")
+
+        #OpenCL
+        cl32 = openclMap.get(r["gridSize"], {}).get("opencl32", 0)
+        cl64 = openclMap.get(r["gridSize"], {}).get("opencl64", 0)
+        clratio = openclMap.get(r["gridSize"], {}).get("ratio", 0)
+
+        # OpenCL speedups
+        cl32_s = tSlow / cl32 if cl32 else 0
+        cl32_n = tNumba / cl32 if cl32 else 0
+        cl32_np = tNumbaParallel / cl32 if cl32 else 0
+        cl64_s = tSlow / cl64 if cl64 else 0
+        cl64_n = tNumba / cl64 if cl64 else 0
+        cl64_np = tNumbaParallel / cl64 if cl64 else 0
+
+
+        print(f"{r['gridSize']:6} | "f"{r['dtype']:8} | "f"{r['medianSlow']:8.4f} | "f"{r['medianFast']:8.4f} | "f"{r['medianNumba']:8.4f} | "f"{r['medianNumbaParallel']:14.4f} | "f"{r['speedupSlowFast']:6.2f} | "f"{r['speedupSlowNumba']:6.2f} | "f"{r['speedupFastNumba']:6.2f} | "f"{r['speedupSlowNumbaParallel']:6.2f} | "f"{r['speedupFastNumbaParallel']:6.2f} | "f"{r['speedupNumbaNumbaParallel']:6.2f} | {mp_s:6.2f} | {mp_f:6.2f} | {mp_n:6.2f} | {mp_np:6.2f} | {d_s:6.2f} | {d_f:6.2f} | {d_n:6.2f} | {d_np:6.2f} | {cl32:8.4f} | {cl64:8.4f} | {clratio:8.2f} | {cl32_s:8.2f} | {cl32_n:8.2f} | {cl32_np:8.2f} | {cl64_s:8.2f} | {cl64_n:8.2f} | {cl64_np:8.2f}")
     
     parallelData = resultsParallel
     if parallelData:
@@ -987,6 +1065,196 @@ def testImplementationsAgree():
     assert np.array_equal(slow, numba2)
 
     print("  passed")
+
+def initOpenCL():
+    """
+    Initialize OpenCL context and queue.
+
+    Returns
+    -------
+    tuple[cl.Context, cl.CommandQueue]
+        OpenCL context and command queue.
+    """
+    import pyopencl as cl
+
+    ctx = cl.create_some_context(interactive=False)
+    queue = cl.CommandQueue(ctx)
+
+    device = ctx.devices[0]
+    print(f"OpenCL device: {device.name}")
+
+    return ctx, queue
+
+
+def mandelbrotOpenCL32(
+    ctx,
+    queue,
+    N: int,
+    xMin: float,
+    xMax: float,
+    yMin: float,
+    yMax: float,
+    maxIter: int,
+) -> np.ndarray:
+    """
+    Compute Mandelbrot set using OpenCL float32 kernel.
+
+    Parameters
+    ----------
+    ctx : cl.Context
+        OpenCL context.
+    queue : cl.CommandQueue
+        OpenCL command queue.
+    N : int
+        Grid resolution.
+    xMin, xMax, yMin, yMax : float
+        Domain limits.
+    maxIter : int
+        Maximum iterations.
+
+    Returns
+    -------
+    np.ndarray
+        Mandelbrot iteration grid.
+    """
+
+    program = cl.Program(ctx, kernelF32).build()
+
+    resultHost = np.zeros((N, N), dtype=np.int32)
+    resultDev = cl.Buffer(
+        ctx,
+        cl.mem_flags.WRITE_ONLY,
+        resultHost.nbytes
+    )
+
+    program.mandelbrot_f32(
+        queue,
+        (N, N),
+        None,
+        resultDev,
+        np.float32(xMin),
+        np.float32(xMax),
+        np.float32(yMin),
+        np.float32(yMax),
+        np.int32(N),
+        np.int32(maxIter),
+    )
+
+    cl.enqueue_copy(queue, resultHost, resultDev)
+    queue.finish()
+
+    return resultHost
+
+def mandelbrotOpenCL64(
+    ctx,
+    queue,
+    N: int,
+    xMin: float,
+    xMax: float,
+    yMin: float,
+    yMax: float,
+    maxIter: int,
+) -> np.ndarray | None:
+    """
+    Compute Mandelbrot set using OpenCL float64 kernel.
+
+    Returns None if device does not support fp64.
+    """
+
+    device = ctx.devices[0]
+
+    if "cl_khr_fp64" not in device.extensions:
+        print("Float64 not supported on device")
+        return None
+
+    program = cl.Program(ctx, kernelF64).build()
+
+    resultHost = np.zeros((N, N), dtype=np.int32)
+    resultDev = cl.Buffer(
+        ctx,
+        cl.mem_flags.WRITE_ONLY,
+        resultHost.nbytes
+    )
+
+    program.mandelbrot_f64(
+        queue,
+        (N, N),
+        None,
+        resultDev,
+        np.float64(xMin),
+        np.float64(xMax),
+        np.float64(yMin),
+        np.float64(yMax),
+        np.int32(N),
+        np.int32(maxIter),
+    )
+
+    cl.enqueue_copy(queue, resultHost, resultDev)
+    queue.finish()
+
+    return resultHost
+
+def runOpenCLBenchmark():
+    print("\nRunning OpenCL benchmark")
+
+    ctx, queue = initOpenCL()
+
+    maxIter = 100
+    Ns = [1024, 2048, 4096]
+
+    results = []
+
+    # warmup compile
+    mandelbrotOpenCL32(ctx, queue, 64, -2, 1.5, -2, 2, maxIter)
+
+    for N in Ns:
+        print(f"\nN = {N}")
+
+        t32, img32 = benchmark(
+            mandelbrotOpenCL32,
+            ctx, queue,
+            N, -2, 1.5, -2, 2,
+            maxIter
+        )
+
+        print(f"OpenCL float32: {t32:.4f}s")
+
+        img64 = mandelbrotOpenCL64(
+            ctx, queue,
+            N, -2, 1.5, -2, 2,
+            maxIter
+        )
+
+        if img64 is not None:
+
+            t64, _ = benchmark(
+                mandelbrotOpenCL64,
+                ctx, queue,
+                N, -2, 1.5, -2, 2,
+                maxIter
+            )
+
+            ratio = t64 / t32
+            diff = np.abs(img32 - img64).max()
+
+            print(f"OpenCL float64: {t64:.4f}s")
+            print(f"Ratio: {ratio:.2f}x")
+            print(f"Max diff: {diff}")
+
+        else:
+            t64 = None
+            ratio = None
+            diff = None
+
+        results.append({
+            "gridSize": N,
+            "opencl32": t32,
+            "opencl64": t64,
+            "ratio": ratio,
+            "diff": diff
+        })
+
+    return results
 
 if __name__ == '__main__':
     main()
