@@ -8,14 +8,14 @@ doZ = true;
 doA = true;
 doC = true;
 doOctave      = 0;
-doThirdOctave = 0;
+doThirdOctave = 1;
 plotFFTAverage = 0;
 plotFFTPerMic  = 0;  
-plotOctaveBars = 0;
-plotThirdOctaveBars = 0;
-batchProcessMeasurements = 0;
+plotOctaveBars = 1;
+plotThirdOctaveBars = 1;
+batchProcessMeasurements = 1;
 doStatisticsAndExport = 0;
-savePlots = 0;
+savePlots = 1;
 
 %% =========================== PATHS ===========================
 basePath = 'C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\';
@@ -59,14 +59,38 @@ fileList = {
 'DESyvendeFredag20032026kl1324-1339'
 'DESyvendeFredag20032026kl1355-1401'
 'DESyvendeFredag20032026kl1410-1417Tits'
-'DESyvendeFredag20032026kl1420-1501Beerpong'
 'DESyvendeFredag20032026kl1518-1535'
 'DESyvendeFredag20032026kl1539-1547'
 'DESyvendeFredag20032026kl1613-1625Vihygger'
 'DESyvendeFredag20032026kl1717-1734'
-'DESyvendeFredag20032026kl1744-1844'
+'DELombard55dB27032026'
+'DELombard60dB27032026'
+'DELombard65dB27032026'
+'DELombard70dB27032026'
+'DELombard75dB27032026'
+'DEPaaskeFrokost09042026kl1629-1657FolkKommerDryssende'
+'DEPaaskeFrokost09042026FolkSætterSig'
+'DEPaaskeFrokost09042026EfterMaden'
+'DEPaaskeFrokost09042026EventyrDel1'
+'DEPaaskeFrokost09042026EventyrDel2'
+'DEPaaskeFrokost09042026FriLeg'
+'DEPaaskeFrokost09042026SnapseSmagning'
+'DENiendeFredag10042026kl1300-1318MegetFaaMennesker'
+'DENiendeFredag10042026kl1330-1342StadigFaaMennesker'
+'DENiendeFredag10042026kl1404-1414LidtFlereMennesker'
+'DENiendeFredag10042026kl1433-145020Mennesker'
+'DETiendeFredag17042026kl1315-1323'
+'DETiendeFredag17042026kl1350-1405'
+'DETiendeFredag17042026kl1417-1432'
+'DETiendeFredag17042026kl1445-1516'
+'DETiendeFredag17042026kl1529-1547'
+'DETiendeFredag17042026kl1315-1323'
+'DEEllevteFredag24042026kl1310-1332'
+'DEEllevteFredag24042026kl1348-1409'
+'DEEllevteFredag24042026kl1447-1513'
+'DEEllevteFredag24042026kl1527-1553'
+'DEEllevteFredag24042026kl1708-1738'
 'backgroundMeasurement13022026'
-'backgroundMeasurement13032026'
 'backgroundMeasurement16022026'
 'backgroundMeasurement18022026'
 'backgroundMeasurement20022026'
@@ -74,7 +98,18 @@ fileList = {
 'backgroundMeasurement28022026'
 'backgroundMeasurement03032026'
 'backgroundMeasurement06032026'
+'backgroundMeasurement13032026'
 'backgroundMeasurement20032026'
+'backgroundMeasurement25032026'
+'backgroundMeasurement27032026'
+'backgroundMeasurement09042026'
+'backgroundMeasurement10042026'
+'backgroundMeasurement17042026'
+'backgroundMeasurement24042026'
+'DESyvendeFredag20032026kl1420-1501Beerpong'
+'DEEllevteFredag24042026kl1626-1706'
+'DEPaaskeFrokost09042026DerSpises'
+'DESyvendeFredag20032026kl1744-1844'
 };
 
 paaskeFrokost = {
@@ -86,11 +121,6 @@ paaskeFrokost = {
 'DEPaaskeFrokost09042026EventyrDel2'
 'DEPaaskeFrokost09042026FriLeg'
 'DEPaaskeFrokost09042026SnapseSmagning'
-'DENiendeFredag10042026kl1300-1318MegetFaaMennesker'
-'DENiendeFredag10042026kl1330-1342StadigFaaMennesker'
-'DENiendeFredag10042026kl1404-1414LidtFlereMennesker'
-'DENiendeFredag10042026kl1433-145020Mennesker'
-'backgroundMeasurement10042026'
 };
 
 NiendeFredag = {
@@ -123,15 +153,28 @@ backgroundNoise = {
 'backgroundMeasurement09042026'
 };
 
+EllevteFredag = {
+'DEEllevteFredag24042026kl1310-1332'
+'DEEllevteFredag24042026kl1348-1409'
+'DEEllevteFredag24042026kl1447-1513'
+'DEEllevteFredag24042026kl1527-1553'
+'DEEllevteFredag24042026kl1626-1706'
+'DEEllevteFredag24042026kl1708-1738'
+};
+
+resten = {
+'DESyvendeFredag20032026kl1744-1844'
+};
 
 if batchProcessMeasurements
     %measurementList=fileList;
+    measurementList=resten;
     %measurementList=lombardTest;
     %measurementList=backgroundNoise;
-    measurementList=paaskeFrokost;
+    %measurementList=paaskeFrokost;
     %measurementList=NiendeFredag;
 else
-    measurementList= {'backgroundMeasurement09042026'};
+    measurementList= {'DEPaaskeFrokost09042026DerSpises'};
 end
 resultTable = table;
 
@@ -141,22 +184,8 @@ p_ref = 20e-6;
 fc = [20 25 31.5 40 50 63 80 100 125 160 200 250 315 400 500 630 800 ...
       1000 1250 1600 2000 2500 3150 4000 5000 6300 8000 ...
       10000 12500 16000 20000];
+fc1 = [31.5 63 125 250 500 1000 2000 4000 8000 16000];
 fs=44100;
-
-%% ==================== LOAD CALIBRATION =======================
-%S = load(calFile);
-
-%if isfield(S,'K_mic')
-%    K_mic = S.K_mic;
-%elseif isfield(S,'K')
-%    K_mic = S.K;
-%elseif isfield(S,'cal')
-%    K_mic = [S.cal.mic.K_PaPerFS];
-%else
-%    error('Calibration constants not found.');
-%end
-
-
 
 %% ================= CREATE FILTERS (ONCE) =====================
 if doA
@@ -230,11 +259,11 @@ for mic = 1:N
     x = x(:) - mean(x);
     
     if contains(baseFileName, "background", 'IgnoreCase', true)
-        t_start = 0;
+        t_start = 60;
     else
-        t_start = 0;           % seconds
+        t_start = 0;%45*60;           % seconds
     end
-    t_end   = length(x)/fs; % full file length
+    t_end   = length(x)/fs-10*60; % full file length
 
     idx1 = round(t_start*fs)+1;
     idx2 = round(t_end*fs);
@@ -402,8 +431,6 @@ if plotFFTPerMic
         savePlot(savePlots, plotPath, sprintf('FFTMic%d%s.jpg',mic,plotName));
     end
 end
-set(0,'DefaultFigureVisible','on')
-end
 
 %% ===================== OCTAVE BANDS ==========================
 if doOctave
@@ -419,48 +446,309 @@ if doOctave
     T_oct = table(fc_oct',Lmean_oct', ...
         'VariableNames',{'CenterFrequency_Hz','LAeq_dBA'});
 
-    fprintf('\nOCTAVE BAND LAeq (Spatial Average)\n');
-    disp(T_oct)
+    %fprintf('\nOCTAVE BAND LAeq (Spatial Average)\n');
+    %disp(T_oct)
 
     if plotOctaveBars
-        figure;
-        bar(fc_oct,Lmean_oct);
-        set(gca,'XScale','log');
-        xlabel('Hz'); ylabel('dB(A)');
-        title('Octave Band LAeq');
-        grid on;
+        figure; hold on; grid on;
+    
+        % --- band edges ---
+        f1 = fc_oct / sqrt(2);
+        f2 = fc_oct * sqrt(2);
+    
+        % --- colors ---
+        colZ = hex2rgb('#1171BE');
+        colC = hex2rgb('#DD5400');
+        colA = hex2rgb('#EDB120');
+    
+        % ---------- Z ----------
+        if doZ
+            Lmic = zeros(N,length(fc_oct));
+            for mic = 1:N
+                y = FB_oct(p_all{mic});
+                Lmic(mic,:) = 10*log10(mean(y.^2,1)/p_ref^2);
+            end
+            LmeanZ = 10*log10(mean(10.^(Lmic/10),1));
+    
+            for k = 1:length(fc_oct)
+                patch([f1(k) f2(k) f2(k) f1(k)], ...
+                      [-80 -80 LmeanZ(k) LmeanZ(k)], ...
+                      colZ,'EdgeColor','none','FaceAlpha',1);
+            end
+        end
+    
+        % ---------- C ----------
+        if doC
+            Lmic = zeros(N,length(fc_oct));
+            for mic = 1:N
+                y = FB_oct(pC_all{mic});
+                Lmic(mic,:) = 10*log10(mean(y.^2,1)/p_ref^2);
+            end
+            LmeanC = 10*log10(mean(10.^(Lmic/10),1));
+    
+            for k = 1:length(fc_oct)
+                patch([f1(k) f2(k) f2(k) f1(k)], ...
+                      [-80 -80 LmeanC(k) LmeanC(k)], ...
+                      colC,'EdgeColor','none','FaceAlpha',1);
+            end
+        end
+    
+        % ---------- A ----------
+        if doA
+            for k = 1:length(fc_oct)
+                patch([f1(k) f2(k) f2(k) f1(k)], ...
+                      [-80 -80 Lmean_oct(k) Lmean_oct(k)], ...
+                      colA,'EdgeColor','none','FaceAlpha',1);
+            end
+        end
+    
+        set(gca,'XScale','log')
+        xlim([min(f1) max(f2)])
+        ylim([0 90])
+    
+        xlabel('Frequency (Hz)')
+        ylabel('Magnitude (dB)')
+        title('Octave Band Spectrum')
+    
+        xticks([fc1])
+        xtickformat('%.0f')
+        yticks([0 5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90])
+    
+        hZ = patch(NaN,NaN,colZ,'FaceAlpha',1); 
+        hC = patch(NaN,NaN,colC,'FaceAlpha',1);
+        hA = patch(NaN,NaN,colA,'FaceAlpha',1);
+        
+        legendHandles = [];
+        legendEntries = {};
+        if doZ, legendHandles(end+1) = hZ; legendEntries{end+1} = 'Z'; end
+        if doC, legendHandles(end+1) = hC; legendEntries{end+1} = 'C'; end
+        if doA, legendHandles(end+1) = hA; legendEntries{end+1} = 'A'; end
+        legend(legendHandles, legendEntries,'Location','northeast');
         plotName=regexprep(baseFileName, '_', '');
-        savePlot(savePlots, plotPath, sprintf('Octaves%s.jpg',plotName));
+        savePlot(savePlots, plotPath, sprintf('octaveAverage%s.jpg',plotName));
+    end
+end
+
+if doOctave && plotOctaveBars
+    for mic = 1:N
+        figure; hold on; grid on;
+
+        % Band edges
+        f1 = fc_oct / sqrt(2);
+        f2 = fc_oct * sqrt(2);
+
+        % Colors
+        colZ = hex2rgb('#1171BE');
+        colC = hex2rgb('#DD5400');
+        colA = hex2rgb('#EDB120');
+
+        % ---------- Z ----------
+        if doZ
+            y = FB_oct(p_all{mic});
+            LmicZ = 10*log10(mean(y.^2,1)/p_ref^2);
+            for k = 1:length(fc_oct)
+                patch([f1(k) f2(k) f2(k) f1(k)], ...
+                      [-80 -80 LmicZ(k) LmicZ(k)], ...
+                      colZ,'EdgeColor','none','FaceAlpha',1);
+            end
+        end
+
+        % ---------- C ----------
+        if doC
+            y = FB_oct(pC_all{mic});
+            LmicC = 10*log10(mean(y.^2,1)/p_ref^2);
+            for k = 1:length(fc_oct)
+                patch([f1(k) f2(k) f2(k) f1(k)], ...
+                      [-80 -80 LmicC(k) LmicC(k)], ...
+                      colC,'EdgeColor','none','FaceAlpha',1);
+            end
+        end
+
+        % ---------- A ----------
+        if doA
+            y = FB_oct(pA_all{mic});
+            LmicA = 10*log10(mean(y.^2,1)/p_ref^2);
+            for k = 1:length(fc_oct)
+                patch([f1(k) f2(k) f2(k) f1(k)], ...
+                      [-80 -80 LmicA(k) LmicA(k)], ...
+                      colA,'EdgeColor','none','FaceAlpha',1);
+            end
+        end
+
+        set(gca,'XScale','log')
+        xlim([min(f1) max(f2)])
+        ylim([0 90])
+        xlabel('Frequency (Hz)')
+        ylabel('Magnitude (dB)')
+        title(sprintf('Octave Band Spectrum - Mic %d', mic))
+        xticks([fc1])
+        xtickformat('%.0f')
+        yticks([0 5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90])
+
+        % Legend
+        hZ = patch(NaN,NaN,colZ,'FaceAlpha',1);
+        hC = patch(NaN,NaN,colC,'FaceAlpha',1);
+        hA = patch(NaN,NaN,colA,'FaceAlpha',1);
+        legendHandles = [];
+        legendEntries = {};
+        if doZ, legendHandles(end+1) = hZ; legendEntries{end+1} = 'Z'; end
+        if doC, legendHandles(end+1) = hC; legendEntries{end+1} = 'C'; end
+        if doA, legendHandles(end+1) = hA; legendEntries{end+1} = 'A'; end
+        legend(legendHandles, legendEntries,'Location','northeast');
+
+        plotName=regexprep(baseFileName, '_', '');
+        savePlot(savePlots, plotPath, sprintf('octaveMic%d%s.jpg',mic,plotName));
     end
 end
 
 %% ================== 1/3 OCTAVE BANDS =========================
-if doThirdOctave
-    Lmic_third = zeros(N,length(fc_third));
+if plotThirdOctaveBars
+    figure; hold on; grid on;
 
+    f1 = fc_third / 2^(1/6);
+    f2 = fc_third * 2^(1/6);
+
+    colZ = hex2rgb('#1171BE');
+    colC = hex2rgb('#DD5400');
+    colA = hex2rgb('#EDB120');
+
+    % ---------- Z ----------
+    if doZ
+        L = zeros(N,length(fc_third));
+        for mic = 1:N
+            y = FB_third(p_all{mic});
+            L(mic,:) = 10*log10(mean(y.^2,1)/p_ref^2);
+        end
+        LmeanZ = 10*log10(mean(10.^(L/10),1));
+        for k = 1:length(fc_third)
+            patch([f1(k) f2(k) f2(k) f1(k)],[-80 -80 LmeanZ(k) LmeanZ(k)],colZ,'EdgeColor','none');
+        end
+    end
+
+    % ---------- C ----------
+    if doC
+        L = zeros(N,length(fc_third));
+        for mic = 1:N
+            y = FB_third(pC_all{mic});
+            L(mic,:) = 10*log10(mean(y.^2,1)/p_ref^2);
+        end
+        LmeanC = 10*log10(mean(10.^(L/10),1));
+        for k = 1:length(fc_third)
+            patch([f1(k) f2(k) f2(k) f1(k)],[-80 -80 LmeanC(k) LmeanC(k)],colC,'EdgeColor','none');
+        end
+    end
+
+    % ---------- A ----------
+    if doA
+        L = zeros(N,length(fc_third));
+        for mic = 1:N
+            y = FB_third(pA_all{mic});
+            L(mic,:) = 10*log10(mean(y.^2,1)/p_ref^2);
+        end
+        LmeanA = 10*log10(mean(10.^(L/10),1));
+        for k = 1:length(fc_third)
+            patch([f1(k) f2(k) f2(k) f1(k)],[-80 -80 LmeanA(k) LmeanA(k)],colA,'EdgeColor','none');
+        end
+    end
+
+    set(gca,'XScale','log')
+    xlim([20 max(f2)])
+    ylim([0 90])
+
+    xlabel('Frequency (Hz)')
+    ylabel('Magnitude (dB)')
+    title('1/3 Octave Band Spectrum')
+
+    xticks([fc])
+    xtickformat('%.0f')
+    yticks([0 5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90])
+
+    hZ = patch(NaN,NaN,colZ,'FaceAlpha',1);  % invisible, for legend
+    hC = patch(NaN,NaN,colC,'FaceAlpha',1);
+    hA = patch(NaN,NaN,colA,'FaceAlpha',1);
+    
+    legendHandles = [];
+    legendEntries = {};
+    if doZ, legendHandles(end+1) = hZ; legendEntries{end+1} = 'Z'; end
+    if doC, legendHandles(end+1) = hC; legendEntries{end+1} = 'C'; end
+    if doA, legendHandles(end+1) = hA; legendEntries{end+1} = 'A'; end
+    legend(legendHandles, legendEntries,'Location','northeast');
+    plotName=regexprep(baseFileName, '_', '');
+    savePlot(savePlots, plotPath, sprintf('thirdOctaveAverage%s.jpg',plotName));
+end
+
+if doThirdOctave && plotThirdOctaveBars
     for mic = 1:N
-        y = FB_third(pA_all{mic});
-        Lmic_third(mic,:) = 10*log10(mean(y.^2,1)/p_ref^2);
-    end
+        figure; hold on; grid on;
 
-    Lmean_third = 10*log10(mean(10.^(Lmic_third/10),1));
+        % Band edges
+        f1 = fc_third / 2^(1/6);
+        f2 = fc_third * 2^(1/6);
 
-    T_third = table(fc_third',Lmean_third', ...
-        'VariableNames',{'CenterFrequency_Hz','LAeq_dBA'});
+        % Colors
+        colZ = hex2rgb('#1171BE');
+        colC = hex2rgb('#DD5400');
+        colA = hex2rgb('#EDB120');
 
-    fprintf('\n1/3 OCTAVE BAND LAeq (Spatial Average)\n');
-    disp(T_third)
+        % ---------- Z ----------
+        if doZ
+            y = FB_third(p_all{mic});
+            LmicZ = 10*log10(mean(y.^2,1)/p_ref^2);
+            for k = 1:length(fc_third)
+                patch([f1(k) f2(k) f2(k) f1(k)], ...
+                      [-80 -80 LmicZ(k) LmicZ(k)], ...
+                      colZ,'EdgeColor','none','FaceAlpha',1);
+            end
+        end
 
-    if plotThirdOctaveBars
-        figure;
-        bar(fc_third,Lmean_third);
-        set(gca,'XScale','log');
-        xlabel('Hz'); ylabel('dB(A)');
-        title('1/3 Octave Band LAeq');
-        grid on;
+        % ---------- C ----------
+        if doC
+            y = FB_third(pC_all{mic});
+            LmicC = 10*log10(mean(y.^2,1)/p_ref^2);
+            for k = 1:length(fc_third)
+                patch([f1(k) f2(k) f2(k) f1(k)], ...
+                      [-80 -80 LmicC(k) LmicC(k)], ...
+                      colC,'EdgeColor','none','FaceAlpha',1);
+            end
+        end
+
+        % ---------- A ----------
+        if doA
+            y = FB_third(pA_all{mic});
+            LmicA = 10*log10(mean(y.^2,1)/p_ref^2);
+            for k = 1:length(fc_third)
+                patch([f1(k) f2(k) f2(k) f1(k)], ...
+                      [-80 -80 LmicA(k) LmicA(k)], ...
+                      colA,'EdgeColor','none','FaceAlpha',1);
+            end
+        end
+
+        set(gca,'XScale','log')
+        xlim([20 max(f2)])
+        ylim([0 90])
+        xlabel('Frequency (Hz)')
+        ylabel('Magnitude (dB)')
+        title(sprintf('1/3 Octave Band Spectrum - Mic %d', mic))
+        xticks([fc])
+        xtickformat('%.0f')
+        yticks([0 5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90])
+
+        % Legend
+        hZ = patch(NaN,NaN,colZ,'FaceAlpha',1);
+        hC = patch(NaN,NaN,colC,'FaceAlpha',1);
+        hA = patch(NaN,NaN,colA,'FaceAlpha',1);
+        legendHandles = [];
+        legendEntries = {};
+        if doZ, legendHandles(end+1) = hZ; legendEntries{end+1} = 'Z'; end
+        if doC, legendHandles(end+1) = hC; legendEntries{end+1} = 'C'; end
+        if doA, legendHandles(end+1) = hA; legendEntries{end+1} = 'A'; end
+        legend(legendHandles, legendEntries,'Location','northeast');
+
         plotName=regexprep(baseFileName, '_', '');
-        savePlot(savePlots, plotPath, sprintf('thirdOctaves%s.jpg',plotName));
+        savePlot(savePlots, plotPath, sprintf('thirdOctaveMic%d%s.jpg',mic,plotName));
     end
+end
+set(0,'DefaultFigureVisible','on')
 end
 
 %% ================= FINAL BATCH SUMMARY =================

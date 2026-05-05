@@ -1,0 +1,13 @@
+\begin{sidewaystable}[p]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{|p{1.6cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|p{0.9cm}|}
+\hline
+\textbf{Speaker} & \multicolumn{22}{c|}{\textbf{OmniSource measurements averaged over all positions}} \\
+\hline
+& \rotatebox{90}{100 Hz} & \rotatebox{90}{125 Hz} & \rotatebox{90}{160 Hz} & \rotatebox{90}{200 Hz} & \rotatebox{90}{315 Hz} & \rotatebox{90}{400 Hz} & \rotatebox{90}{500 Hz} & \rotatebox{90}{630 Hz} & \rotatebox{90}{800 Hz} & \rotatebox{90}{1000 Hz} & \rotatebox{90}{1250 Hz} & \rotatebox{90}{1600 Hz} & \rotatebox{90}{2000 Hz} & \rotatebox{90}{3150 Hz} & \rotatebox{90}{4000 Hz} & \rotatebox{90}{5000 Hz} & \rotatebox{90}{6300 Hz} & \rotatebox{90}{8000 Hz} & \rotatebox{90}{10000 Hz} & \rotatebox{90}{12500 Hz} & \rotatebox{90}{16000 Hz} & \rotatebox{90}{20000 Hz} &\\
+\hline
+\textbf{Mic No.} & \multicolumn{22}{c|}{\textbf{Reverberation time (EDT) by signal type in seconds}} \\
+\hline
+1 

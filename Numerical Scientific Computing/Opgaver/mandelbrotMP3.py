@@ -23,15 +23,15 @@ import pyopencl as cl
 
 testMemory = 1
 gridSizes = [64,128,256,512,1024,2048,4096]
-sizeComparison = 1
+sizeComparison = 0
 regions = {"Full": (-2, 1.5, -2, 2),"Seahorse Valley": (-0.8, -0.7, 0.05, 0.15),"Elephant Valley": (0.25, 0.35, -0.05, 0.05),"Deep Seahorse": (-0.7435, -0.7425, 0.1315, 0.1325)}
 regionTest = 0
 cProfiling = 0
-makePlots = 0
+makePlots = 1
 gridPlot = 0
 parallelScalingTest = 1
 checkEps = 0
-checkPrecision = 0
+checkPrecision = 1
 runTests = 0
 useOpenCL = 1
 

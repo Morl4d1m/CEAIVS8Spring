@@ -1,7 +1,7 @@
 
 %% ================= USER SETTINGS ==========================
 folder = 'C:\Users\Christian Lykke\Documents\Skole\Aalborg Universitet\CEAIVS8\Projekt\Lydfiler\';
-filePattern = 'kalibrering09042026__1%03d.wav';
+filePattern = 'kalibrering01052026__1%03d.wav';
 
 N = 8;
 
@@ -11,9 +11,9 @@ calLevel_dB = 94;        % dB SPL
 p_ref = 20e-6;           % Pa
 
 % Method selection:
-%   "hardmath_rms"     = RMS of bandpassed 1 kHz tone (recommended)
-%   "hardmath_sinefit" = sine fit at 1 kHz (very robust)
-%   "matlab_builtin"   = uses calibrateMicrophone() (if available)
+%   "hardmath_rms"     = RMS of bandpassed 1 kHz tone
+%   "hardmath_sinefit" = sine fit at 1 kHz
+%   "matlab_builtin"   = uses calibrateMicrophone()
 calMethod = "hardmath_sinefit";
 
 % Bandpass used for hard-math methods
@@ -26,11 +26,11 @@ segmentDuration_s = 2.0;     % seconds used for calibration
 searchMargin_s = 0.5;        % ignore first/last part of file
 
 % Debug plots
-plotPerMic = 0;          % 1 = show plots per mic
-plotSummary = 0;         % 1 = show summary bar plot
+plotPerMic = 1;          % 1 = show plots per mic
+plotSummary = 1;         % 1 = show summary bar plot
 
 % Output MAT file
-outMatFile = fullfile(folder, 'micCalibrationConstants_94dB_1kHz_09042026.mat');
+outMatFile = fullfile(folder, 'micCalibrationConstants_94dB_1kHz_01052026.mat');
 %% ==========================================================
 
 
@@ -88,7 +88,7 @@ for mic = 1:N
     x_bp = filtfilt(bp, x_use);
 
     % Find a stable region:
-    % We compute a short-time RMS and pick the strongest, most stable segment.
+    % Compute a short-time RMS and pick the strongest, most stable segment.
     win_s = 0.050;                      % 50 ms RMS window
     hop_s = 0.010;                      % 10 ms hop
     win = max(16, round(win_s*fs));

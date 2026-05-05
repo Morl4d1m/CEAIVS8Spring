@@ -1,0 +1,1090 @@
+2026-04-23 201a3bc Finalized MP3 in NSC
+
+ .../Opgaver/MP3CLJ.ipynb                           | 2492 ++++++++++++++++++++
+ .../Opgaver/mandelbrotMP3.py                       |  290 ++-
+ 2 files changed, 2771 insertions(+), 11 deletions(-)
+2026-04-23 a0e8104 updated ignore
+
+ .gitignore | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+2026-04-23 62ad772 Made milestones from lecture 8 in NSC and updated a lot in project
+
+ .../Opgaver/MP2HandinCLJ.zip                       |  Bin 0 -> 31476 bytes
+ .../Opgaver/MP2HandinCLJ/MP2CLJ.ipynb              | 1295 ++++++++++++++++++++
+ .../Opgaver/MP2HandinCLJ/git_log2.txt              |  920 ++++++++++++++
+ .../Opgaver/MP2HandinCLJ/mandelBrotDaskForVM.py    |  607 +++++++++
+ .../Opgaver/MP2HandinCLJ/mandelbrotMP2.py          |  606 +++++++++
+ .../Opgaver/git_log2.txt                           |  920 ++++++++++++++
+ .../Opgaver/mandelbrotMP3.py                       |  992 +++++++++++++++
+ Projekt/DEEaster1.jpeg                             |  Bin 0 -> 2107164 bytes
+ Projekt/DEEaster2.jpeg                             |  Bin 0 -> 2125927 bytes
+ Projekt/Lydfiler/PerMic_AllMeasurements.csv        |  424 +------
+ Projekt/Lydfiler/RTDCLydLab.m                      |  682 +++++++++++
+ Projekt/Lydfiler/RoomAcoustics_Sweep_AllPairs.csv  |   28 +
+ .../Lydfiler/SpatialAverages_AllMeasurements.csv   |   53 +-
+ Projekt/Lydfiler/Stats_PerMic.csv                  |   32 +-
+ Projekt/Lydfiler/Stats_Spatial.csv                 |    4 +-
+ Projekt/Lydfiler/calibrationFactor2.m              |    4 +-
+ Projekt/Lydfiler/efterKlangLydLab.mat              |  Bin 0 -> 12163457 bytes
+ .../lydLab/RoomAcoustics_MLS_AllPairs.csv          |   28 +
+ .../lydLab/RoomAcoustics_Sweep_AllPairs.csv        |   28 +
+ .../lydLab/impulseResponsePlots/MLSFFTMic1.jpg     |  Bin 0 -> 159917 bytes
+ .../impulseResponsePlots/MLSSchroederMic1.jpg      |  Bin 0 -> 71540 bytes
+ .../lydLab/impulseResponsePlots/MLST20Speaker1.jpg |  Bin 0 -> 106972 bytes
+ .../lydLab/impulseResponsePlots/SweepFFTMic1.jpg   |  Bin 0 -> 163308 bytes
+ .../impulseResponsePlots/SweepSchroederMic1.jpg    |  Bin 0 -> 73964 bytes
+ .../impulseResponsePlots/SweepT20Speaker1.jpg      |  Bin 0 -> 110939 bytes
+ .../lydLab/lydLabValues.xlsx                       |  Bin 0 -> 17586 bytes
+ .../omniPower/excelOfValues.xlsx                   |  Bin 14441 -> 14975 bytes
+ .../Lydfiler/impulseResponsePlotsLydLab/MLSFFT.jpg |  Bin 0 -> 146715 bytes
+ .../impulseResponsePlotsLydLab/MLSRT60.jpg         |  Bin 0 -> 47466 bytes
+ .../impulseResponsePlotsLydLab/MLSSchroeder.jpg    |  Bin 0 -> 60683 bytes
+ .../Lydfiler/impulseResponsePlotsLydLab/MLST20.jpg |  Bin 0 -> 111148 bytes
+ .../impulseResponsePlotsLydLab/SweepFFT.jpg        |  Bin 0 -> 149842 bytes
+ .../impulseResponsePlotsLydLab/SweepRT60.jpg       |  Bin 0 -> 48218 bytes
+ .../impulseResponsePlotsLydLab/SweepSchroeder.jpg  |  Bin 0 -> 63515 bytes
+ .../impulseResponsePlotsLydLab/SweepT20.jpg        |  Bin 0 -> 112784 bytes
+ .../micCalibrationConstants_94dB_1kHz_09042026.mat |  Bin 0 -> 1421 bytes
+ .../micCalibrationConstants_94dB_1kHz_10042026.mat |  Bin 0 -> 1419 bytes
+ .../micCalibrationConstants_94dB_1kHz_27032026.mat |  Bin 1412 -> 1412 bytes
+ Projekt/Lydfiler/noiseCalculatorAllWeightings.m    |   41 +-
+ ...eFredag10042026kl1300-1318MegetFaaMennesker.jpg |  Bin 0 -> 160066 bytes
+ ...Fredag10042026kl1330-1342StadigFaaMennesker.jpg |  Bin 0 -> 165457 bytes
+ ...Fredag10042026kl1404-1414LidtFlereMennesker.jpg |  Bin 0 -> 164266 bytes
+ ...ENiendeFredag10042026kl1433-145020Mennesker.jpg |  Bin 0 -> 160579 bytes
+ .../FFTAverageDEPaaskeFrokost09042026DerSpises.jpg |  Bin 0 -> 153558 bytes
+ ...FFTAverageDEPaaskeFrokost09042026EfterMaden.jpg |  Bin 0 -> 157489 bytes
+ ...FTAverageDEPaaskeFrokost09042026EventyrDel1.jpg |  Bin 0 -> 163983 bytes
+ ...FTAverageDEPaaskeFrokost09042026EventyrDel2.jpg |  Bin 0 -> 164543 bytes
+ ...EPaaskeFrokost09042026FolkS\303\246tterSig.jpg" |  Bin 0 -> 166575 bytes
+ .../FFTAverageDEPaaskeFrokost09042026FriLeg.jpg    |  Bin 0 -> 161304 bytes
+ ...verageDEPaaskeFrokost09042026SnapseSmagning.jpg |  Bin 0 -> 159237 bytes
+ ...okost09042026kl1629-1657FolkKommerDryssende.jpg |  Bin 0 -> 158150 bytes
+ .../FFTAveragebackgroundMeasurement10042026.jpg    |  Bin 0 -> 158558 bytes
+ ...eFredag10042026kl1300-1318MegetFaaMennesker.jpg |  Bin 0 -> 156936 bytes
+ ...Fredag10042026kl1330-1342StadigFaaMennesker.jpg |  Bin 0 -> 159103 bytes
+ ...Fredag10042026kl1404-1414LidtFlereMennesker.jpg |  Bin 0 -> 158145 bytes
+ ...ENiendeFredag10042026kl1433-145020Mennesker.jpg |  Bin 0 -> 153861 bytes
+ .../FFTMic1DEPaaskeFrokost09042026DerSpises.jpg    |  Bin 0 -> 151938 bytes
+ .../FFTMic1DEPaaskeFrokost09042026EfterMaden.jpg   |  Bin 0 -> 151821 bytes
+ .../FFTMic1DEPaaskeFrokost09042026EventyrDel1.jpg  |  Bin 0 -> 161072 bytes
+ .../FFTMic1DEPaaskeFrokost09042026EventyrDel2.jpg  |  Bin 0 -> 161206 bytes
+ ...EPaaskeFrokost09042026FolkS\303\246tterSig.jpg" |  Bin 0 -> 158663 bytes
+ .../FFTMic1DEPaaskeFrokost09042026FriLeg.jpg       |  Bin 0 -> 157203 bytes
+ ...FTMic1DEPaaskeFrokost09042026SnapseSmagning.jpg |  Bin 0 -> 154386 bytes
+ ...okost09042026kl1629-1657FolkKommerDryssende.jpg |  Bin 0 -> 152001 bytes
+ .../FFTMic1backgroundMeasurement10042026.jpg       |  Bin 0 -> 158676 bytes
+ ...eFredag10042026kl1300-1318MegetFaaMennesker.jpg |  Bin 0 -> 154834 bytes
+ ...Fredag10042026kl1330-1342StadigFaaMennesker.jpg |  Bin 0 -> 156006 bytes
+ ...Fredag10042026kl1404-1414LidtFlereMennesker.jpg |  Bin 0 -> 158334 bytes
+ ...ENiendeFredag10042026kl1433-145020Mennesker.jpg |  Bin 0 -> 155534 bytes
+ .../FFTMic2DEPaaskeFrokost09042026DerSpises.jpg    |  Bin 0 -> 151780 bytes
+ .../FFTMic2DEPaaskeFrokost09042026EfterMaden.jpg   |  Bin 0 -> 155455 bytes
+ .../FFTMic2DEPaaskeFrokost09042026EventyrDel1.jpg  |  Bin 0 -> 164498 bytes
+ .../FFTMic2DEPaaskeFrokost09042026EventyrDel2.jpg  |  Bin 0 -> 161592 bytes
+ ...EPaaskeFrokost09042026FolkS\303\246tterSig.jpg" |  Bin 0 -> 160648 bytes
+ .../FFTMic2DEPaaskeFrokost09042026FriLeg.jpg       |  Bin 0 -> 155921 bytes
+ ...FTMic2DEPaaskeFrokost09042026SnapseSmagning.jpg |  Bin 0 -> 153451 bytes
+ ...okost09042026kl1629-1657FolkKommerDryssende.jpg |  Bin 0 -> 151738 bytes
+ .../FFTMic2backgroundMeasurement10042026.jpg       |  Bin 0 -> 162825 bytes
+ ...eFredag10042026kl1300-1318MegetFaaMennesker.jpg |  Bin 0 -> 153389 bytes
+ ...Fredag10042026kl1330-1342StadigFaaMennesker.jpg |  Bin 0 -> 159933 bytes
+ ...Fredag10042026kl1404-1414LidtFlereMennesker.jpg |  Bin 0 -> 156301 bytes
+ ...ENiendeFredag10042026kl1433-145020Mennesker.jpg |  Bin 0 -> 155568 bytes
+ .../FFTMic3DEPaaskeFrokost09042026DerSpises.jpg    |  Bin 0 -> 151854 bytes
+ .../FFTMic3DEPaaskeFrokost09042026EfterMaden.jpg   |  Bin 0 -> 152152 bytes
+ .../FFTMic3DEPaaskeFrokost09042026EventyrDel1.jpg  |  Bin 0 -> 158770 bytes
+ .../FFTMic3DEPaaskeFrokost09042026EventyrDel2.jpg  |  Bin 0 -> 158714 bytes
+ ...EPaaskeFrokost09042026FolkS\303\246tterSig.jpg" |  Bin 0 -> 159784 bytes
+ .../FFTMic3DEPaaskeFrokost09042026FriLeg.jpg       |  Bin 0 -> 157093 bytes
+ ...FTMic3DEPaaskeFrokost09042026SnapseSmagning.jpg |  Bin 0 -> 152100 bytes
+ ...okost09042026kl1629-1657FolkKommerDryssende.jpg |  Bin 0 -> 150744 bytes
+ .../FFTMic3backgroundMeasurement10042026.jpg       |  Bin 0 -> 156107 bytes
+ ...eFredag10042026kl1300-1318MegetFaaMennesker.jpg |  Bin 0 -> 154378 bytes
+ ...Fredag10042026kl1330-1342StadigFaaMennesker.jpg |  Bin 0 -> 157503 bytes
+ ...Fredag10042026kl1404-1414LidtFlereMennesker.jpg |  Bin 0 -> 158895 bytes
+ ...ENiendeFredag10042026kl1433-145020Mennesker.jpg |  Bin 0 -> 154508 bytes
+ .../FFTMic4DEPaaskeFrokost09042026DerSpises.jpg    |  Bin 0 -> 154713 bytes
+ .../FFTMic4DEPaaskeFrokost09042026EfterMaden.jpg   |  Bin 0 -> 155039 bytes
+ .../FFTMic4DEPaaskeFrokost09042026EventyrDel1.jpg  |  Bin 0 -> 165507 bytes
+ .../FFTMic4DEPaaskeFrokost09042026EventyrDel2.jpg  |  Bin 0 -> 164687 bytes
+ ...EPaaskeFrokost09042026FolkS\303\246tterSig.jpg" |  Bin 0 -> 161159 bytes
+ .../FFTMic4DEPaaskeFrokost09042026FriLeg.jpg       |  Bin 0 -> 156845 bytes
+ ...FTMic4DEPaaskeFrokost09042026SnapseSmagning.jpg |  Bin 0 -> 154858 bytes
+ ...okost09042026kl1629-1657FolkKommerDryssende.jpg |  Bin 0 -> 152313 bytes
+ .../FFTMic4backgroundMeasurement10042026.jpg       |  Bin 0 -> 157471 bytes
+ ...eFredag10042026kl1300-1318MegetFaaMennesker.jpg |  Bin 0 -> 153882 bytes
+ ...Fredag10042026kl1330-1342StadigFaaMennesker.jpg |  Bin 0 -> 157621 bytes
+ ...Fredag10042026kl1404-1414LidtFlereMennesker.jpg |  Bin 0 -> 156403 bytes
+ ...ENiendeFredag10042026kl1433-145020Mennesker.jpg |  Bin 0 -> 155498 bytes
+ .../FFTMic5DEPaaskeFrokost09042026DerSpises.jpg    |  Bin 0 -> 153000 bytes
+ .../FFTMic5DEPaaskeFrokost09042026EfterMaden.jpg   |  Bin 0 -> 154591 bytes
+ .../FFTMic5DEPaaskeFrokost09042026EventyrDel1.jpg  |  Bin 0 -> 161412 bytes
+ .../FFTMic5DEPaaskeFrokost09042026EventyrDel2.jpg  |  Bin 0 -> 163212 bytes
+ ...EPaaskeFrokost09042026FolkS\303\246tterSig.jpg" |  Bin 0 -> 162600 bytes
+ .../FFTMic5DEPaaskeFrokost09042026FriLeg.jpg       |  Bin 0 -> 157514 bytes
+ ...FTMic5DEPaaskeFrokost09042026SnapseSmagning.jpg |  Bin 0 -> 154672 bytes
+ ...okost09042026kl1629-1657FolkKommerDryssende.jpg |  Bin 0 -> 151912 bytes
+ .../FFTMic5backgroundMeasurement10042026.jpg       |  Bin 0 -> 160139 bytes
+ ...eFredag10042026kl1300-1318MegetFaaMennesker.jpg |  Bin 0 -> 151765 bytes
+ ...Fredag10042026kl1330-1342StadigFaaMennesker.jpg |  Bin 0 -> 155550 bytes
+ ...Fredag10042026kl1404-1414LidtFlereMennesker.jpg |  Bin 0 -> 156527 bytes
+ ...ENiendeFredag10042026kl1433-145020Mennesker.jpg |  Bin 0 -> 154431 bytes
+ .../FFTMic6DEPaaskeFrokost09042026DerSpises.jpg    |  Bin 0 -> 151402 bytes
+ .../FFTMic6DEPaaskeFrokost09042026EfterMaden.jpg   |  Bin 0 -> 153816 bytes
+ .../FFTMic6DEPaaskeFrokost09042026EventyrDel1.jpg  |  Bin 0 -> 160413 bytes
+ .../FFTMic6DEPaaskeFrokost09042026EventyrDel2.jpg  |  Bin 0 -> 159322 bytes
+ ...EPaaskeFrokost09042026FolkS\303\246tterSig.jpg" |  Bin 0 -> 161408 bytes
+ .../FFTMic6DEPaaskeFrokost09042026FriLeg.jpg       |  Bin 0 -> 156807 bytes
+ ...FTMic6DEPaaskeFrokost09042026SnapseSmagning.jpg |  Bin 0 -> 154925 bytes
+ ...okost09042026kl1629-1657FolkKommerDryssende.jpg |  Bin 0 -> 150910 bytes
+ .../FFTMic6backgroundMeasurement10042026.jpg       |  Bin 0 -> 155130 bytes
+ ...eFredag10042026kl1300-1318MegetFaaMennesker.jpg |  Bin 0 -> 153816 bytes
+ ...Fredag10042026kl1330-1342StadigFaaMennesker.jpg |  Bin 0 -> 156938 bytes
+ ...Fredag10042026kl1404-1414LidtFlereMennesker.jpg |  Bin 0 -> 157397 bytes
+ ...ENiendeFredag10042026kl1433-145020Mennesker.jpg |  Bin 0 -> 156622 bytes
+ .../FFTMic7DEPaaskeFrokost09042026DerSpises.jpg    |  Bin 0 -> 152403 bytes
+ .../FFTMic7DEPaaskeFrokost09042026EfterMaden.jpg   |  Bin 0 -> 152438 bytes
+ .../FFTMic7DEPaaskeFrokost09042026EventyrDel1.jpg  |  Bin 0 -> 158625 bytes
+ .../FFTMic7DEPaaskeFrokost09042026EventyrDel2.jpg  |  Bin 0 -> 159568 bytes
+ ...EPaaskeFrokost09042026FolkS\303\246tterSig.jpg" |  Bin 0 -> 161179 bytes
+ .../FFTMic7DEPaaskeFrokost09042026FriLeg.jpg       |  Bin 0 -> 157630 bytes
+ ...FTMic7DEPaaskeFrokost09042026SnapseSmagning.jpg |  Bin 0 -> 155875 bytes
+ ...okost09042026kl1629-1657FolkKommerDryssende.jpg |  Bin 0 -> 151318 bytes
+ .../FFTMic7backgroundMeasurement10042026.jpg       |  Bin 0 -> 158840 bytes
+ ...eFredag10042026kl1300-1318MegetFaaMennesker.jpg |  Bin 0 -> 154257 bytes
+ ...Fredag10042026kl1330-1342StadigFaaMennesker.jpg |  Bin 0 -> 154570 bytes
+ ...Fredag10042026kl1404-1414LidtFlereMennesker.jpg |  Bin 0 -> 156501 bytes
+ ...ENiendeFredag10042026kl1433-145020Mennesker.jpg |  Bin 0 -> 153474 bytes
+ .../FFTMic8DEPaaskeFrokost09042026DerSpises.jpg    |  Bin 0 -> 152737 bytes
+ .../FFTMic8DEPaaskeFrokost09042026EfterMaden.jpg   |  Bin 0 -> 153233 bytes
+ .../FFTMic8DEPaaskeFrokost09042026EventyrDel1.jpg  |  Bin 0 -> 161946 bytes
+ .../FFTMic8DEPaaskeFrokost09042026EventyrDel2.jpg  |  Bin 0 -> 160521 bytes
+ ...EPaaskeFrokost09042026FolkS\303\246tterSig.jpg" |  Bin 0 -> 162338 bytes
+ .../FFTMic8DEPaaskeFrokost09042026FriLeg.jpg       |  Bin 0 -> 158081 bytes
+ ...FTMic8DEPaaskeFrokost09042026SnapseSmagning.jpg |  Bin 0 -> 155533 bytes
+ ...okost09042026kl1629-1657FolkKommerDryssende.jpg |  Bin 0 -> 153193 bytes
+ .../FFTMic8backgroundMeasurement10042026.jpg       |  Bin 0 -> 159104 bytes
+ Projekt/comparisonBetweenSolutions.xlsx            |  Bin 0 -> 44804 bytes
+ ...nBetweenSolutionsBeforeRealizationAboutTRC.xlsx |  Bin 0 -> 64413 bytes
+ 158 files changed, 6205 insertions(+), 459 deletions(-)
+2026-04-07 92c6f89 finalized mp2 for NSC
+
+ .gitignore                                         |    3 +
+ .../Opgaver/MP2CLJ.ipynb                           | 1295 ++++++++++++++++++++
+ Projekt/Kode/joiningAudio.py                       |   89 ++
+ .../RTDCCalculatorFromImpulseResponseMeasurer.asv  |  644 ++++++++--
+ Projekt/Lydfiler/calibrationFactor2.m              |    4 +-
+ .../micCalibrationConstants_94dB_1kHz_25032026.mat |  Bin 1416 -> 1416 bytes
+ .../micCalibrationConstants_94dB_1kHz_27032026.mat |  Bin 0 -> 1412 bytes
+ .../micCalibrationConstants_94dB_1kHz_28032026.mat |  Bin 0 -> 243 bytes
+ Projekt/Lydfiler/noiseCalculatorAllWeightings.m    |  128 +-
+ .../FFTAverageDEAAbning02022026kl1415-1431.jpg     |  Bin 0 -> 155050 bytes
+ ...rageDEAAbning02022026kl1448-1459MangeIBaren.jpg |  Bin 0 -> 160421 bytes
+ .../FFTAverageDEAAbning02022026kl1536-1547Tits.jpg |  Bin 0 -> 161042 bytes
+ ...erageDEAAbning02022026kl1632-1640IndenMusik.jpg |  Bin 0 -> 165340 bytes
+ .../noisePlots/FFTAverageDEAndenFredag13022026.jpg |  Bin 0 -> 157886 bytes
+ .../FFTAverageDEAndenFredag130220262.jpg           |  Bin 0 -> 162670 bytes
+ .../FFTAverageDEAndenFredag13022026Beerpong.jpg    |  Bin 0 -> 154073 bytes
+ .../FFTAverageDEAndenFredag13022026Tits.jpg        |  Bin 0 -> 157486 bytes
+ .../FFTAverageDEFemteFredag06032026kl1311-1323.jpg |  Bin 0 -> 161308 bytes
+ .../FFTAverageDEFemteFredag06032026kl1337-1357.jpg |  Bin 0 -> 157253 bytes
+ .../FFTAverageDEFemteFredag06032026kl1408-1415.jpg |  Bin 0 -> 166075 bytes
+ .../FFTAverageDEFemteFredag06032026kl1424-1445.jpg |  Bin 0 -> 155623 bytes
+ .../FFTAverageDEFjerdeFredag27022026.jpg           |  Bin 0 -> 163221 bytes
+ .../FFTAverageDEFjerdeFredag27022026kl14-1420.jpg  |  Bin 0 -> 156885 bytes
+ ...FFTAverageDEFjerdeFredag27022026kl1427-1442.jpg |  Bin 0 -> 158786 bytes
+ .../FFTAverageDEFoersteFredag06022026Snestorm.jpg  |  Bin 0 -> 158994 bytes
+ .../FFTAverageDEFoersteFredag06022026Snestorm2.jpg |  Bin 0 -> 160093 bytes
+ .../noisePlots/FFTAverageDELombard55dB27032026.jpg |  Bin 0 -> 161308 bytes
+ .../noisePlots/FFTAverageDELombard60dB27032026.jpg |  Bin 0 -> 157586 bytes
+ .../noisePlots/FFTAverageDELombard65dB27032026.jpg |  Bin 0 -> 158263 bytes
+ .../noisePlots/FFTAverageDELombard70dB27032026.jpg |  Bin 0 -> 159149 bytes
+ .../noisePlots/FFTAverageDELombard75dB27032026.jpg |  Bin 0 -> 164640 bytes
+ ...FFTAverageDESjetteFredag13032026kl1301-1317.jpg |  Bin 0 -> 161739 bytes
+ ...FFTAverageDESjetteFredag13032026kl1322-1335.jpg |  Bin 0 -> 157674 bytes
+ ...FFTAverageDESjetteFredag13032026kl1339-1356.jpg |  Bin 0 -> 156200 bytes
+ ...FTAverageDESyvendeFredag20032026kl1300-1312.jpg |  Bin 0 -> 161936 bytes
+ ...FTAverageDESyvendeFredag20032026kl1324-1339.jpg |  Bin 0 -> 160012 bytes
+ ...FTAverageDESyvendeFredag20032026kl1355-1401.jpg |  Bin 0 -> 165701 bytes
+ ...erageDESyvendeFredag20032026kl1410-1417Tits.jpg |  Bin 0 -> 165061 bytes
+ ...eDESyvendeFredag20032026kl1420-1501Beerpong.jpg |  Bin 0 -> 150799 bytes
+ ...FTAverageDESyvendeFredag20032026kl1518-1535.jpg |  Bin 0 -> 156585 bytes
+ ...FTAverageDESyvendeFredag20032026kl1539-1547.jpg |  Bin 0 -> 165491 bytes
+ ...eDESyvendeFredag20032026kl1613-1625Vihygger.jpg |  Bin 0 -> 164957 bytes
+ ...FTAverageDESyvendeFredag20032026kl1717-1734.jpg |  Bin 0 -> 162411 bytes
+ ...FTAverageDESyvendeFredag20032026kl1744-1844.jpg |  Bin 0 -> 150833 bytes
+ .../FFTAverageDETredjeFredag20022026JengaTits.jpg  |  Bin 0 -> 159325 bytes
+ ...FFTAverageDETredjeFredag20022026kl1306-1317.jpg |  Bin 0 -> 161603 bytes
+ ...FFTAverageDETredjeFredag20022026kl1330-1344.jpg |  Bin 0 -> 160353 bytes
+ ...FFTAverageDETredjeFredag20022026kl1410-1424.jpg |  Bin 0 -> 159225 bytes
+ ...FFTAverageDETredjeFredag20022026kl1432-1452.jpg |  Bin 0 -> 154478 bytes
+ ...FFTAverageDETredjeFredag20022026kl1519-1529.jpg |  Bin 0 -> 160505 bytes
+ .../FFTAveragebackgroundMeasurement03032026.jpg    |  Bin 0 -> 154278 bytes
+ .../FFTAveragebackgroundMeasurement06032026.jpg    |  Bin 0 -> 162085 bytes
+ .../FFTAveragebackgroundMeasurement13022026.jpg    |  Bin 0 -> 151379 bytes
+ .../FFTAveragebackgroundMeasurement13032026.jpg    |  Bin 0 -> 159192 bytes
+ .../FFTAveragebackgroundMeasurement16022026.jpg    |  Bin 0 -> 159457 bytes
+ .../FFTAveragebackgroundMeasurement18022026.jpg    |  Bin 0 -> 159942 bytes
+ .../FFTAveragebackgroundMeasurement20022026.jpg    |  Bin 0 -> 155165 bytes
+ .../FFTAveragebackgroundMeasurement20032026.jpg    |  Bin 0 -> 154420 bytes
+ .../FFTAveragebackgroundMeasurement27022026.jpg    |  Bin 0 -> 165547 bytes
+ .../FFTAveragebackgroundMeasurement28022026.jpg    |  Bin 0 -> 155215 bytes
+ .../FFTAveragecompleteBackgroundNOise28032026.jpg  |  Bin 0 -> 136366 bytes
+ .../FFTAveragecompleteOpenNoise28032026.jpg        |  Bin 0 -> 144484 bytes
+ ...veragepoolOgBordF\303\245Mennesker13022026.jpg" |  Bin 0 -> 159931 bytes
+ ...AveragepoolSpilMedLidtBaggrundsSnak13022026.jpg |  Bin 0 -> 160746 bytes
+ .../FFTMic1DEAAbning02022026kl1415-1431.jpg        |  Bin 0 -> 152810 bytes
+ ...Mic1DEAAbning02022026kl1448-1459MangeIBaren.jpg |  Bin 0 -> 153442 bytes
+ .../FFTMic1DEAAbning02022026kl1536-1547Tits.jpg    |  Bin 0 -> 156741 bytes
+ ...TMic1DEAAbning02022026kl1632-1640IndenMusik.jpg |  Bin 0 -> 156754 bytes
+ .../noisePlots/FFTMic1DEAndenFredag13022026.jpg    |  Bin 0 -> 155397 bytes
+ .../noisePlots/FFTMic1DEAndenFredag130220262.jpg   |  Bin 0 -> 163235 bytes
+ .../FFTMic1DEAndenFredag13022026Beerpong.jpg       |  Bin 0 -> 151776 bytes
+ .../FFTMic1DEAndenFredag13022026Tits.jpg           |  Bin 0 -> 157966 bytes
+ .../FFTMic1DEFemteFredag06032026kl1311-1323.jpg    |  Bin 0 -> 160598 bytes
+ .../FFTMic1DEFemteFredag06032026kl1337-1357.jpg    |  Bin 0 -> 156072 bytes
+ .../FFTMic1DEFemteFredag06032026kl1408-1415.jpg    |  Bin 0 -> 163825 bytes
+ .../FFTMic1DEFemteFredag06032026kl1424-1445.jpg    |  Bin 0 -> 155153 bytes
+ .../noisePlots/FFTMic1DEFjerdeFredag27022026.jpg   |  Bin 0 -> 159869 bytes
+ .../FFTMic1DEFjerdeFredag27022026kl14-1420.jpg     |  Bin 0 -> 154485 bytes
+ .../FFTMic1DEFjerdeFredag27022026kl1427-1442.jpg   |  Bin 0 -> 154419 bytes
+ .../FFTMic1DEFoersteFredag06022026Snestorm.jpg     |  Bin 0 -> 156457 bytes
+ .../FFTMic1DEFoersteFredag06022026Snestorm2.jpg    |  Bin 0 -> 154618 bytes
+ .../noisePlots/FFTMic1DELombard55dB27032026.jpg    |  Bin 0 -> 162452 bytes
+ .../noisePlots/FFTMic1DELombard60dB27032026.jpg    |  Bin 0 -> 157348 bytes
+ .../noisePlots/FFTMic1DELombard65dB27032026.jpg    |  Bin 0 -> 157005 bytes
+ .../noisePlots/FFTMic1DELombard70dB27032026.jpg    |  Bin 0 -> 158010 bytes
+ .../noisePlots/FFTMic1DELombard75dB27032026.jpg    |  Bin 0 -> 162113 bytes
+ .../FFTMic1DESjetteFredag13032026kl1301-1317.jpg   |  Bin 0 -> 157900 bytes
+ .../FFTMic1DESjetteFredag13032026kl1322-1335.jpg   |  Bin 0 -> 155224 bytes
+ .../FFTMic1DESjetteFredag13032026kl1339-1356.jpg   |  Bin 0 -> 156227 bytes
+ .../FFTMic1DESyvendeFredag20032026kl1300-1312.jpg  |  Bin 0 -> 159136 bytes
+ .../FFTMic1DESyvendeFredag20032026kl1324-1339.jpg  |  Bin 0 -> 156195 bytes
+ .../FFTMic1DESyvendeFredag20032026kl1355-1401.jpg  |  Bin 0 -> 160770 bytes
+ ...TMic1DESyvendeFredag20032026kl1410-1417Tits.jpg |  Bin 0 -> 161655 bytes
+ ...1DESyvendeFredag20032026kl1420-1501Beerpong.jpg |  Bin 0 -> 146511 bytes
+ .../FFTMic1DESyvendeFredag20032026kl1518-1535.jpg  |  Bin 0 -> 154947 bytes
+ .../FFTMic1DESyvendeFredag20032026kl1539-1547.jpg  |  Bin 0 -> 161380 bytes
+ ...1DESyvendeFredag20032026kl1613-1625Vihygger.jpg |  Bin 0 -> 159695 bytes
+ .../FFTMic1DESyvendeFredag20032026kl1717-1734.jpg  |  Bin 0 -> 158892 bytes
+ .../FFTMic1DESyvendeFredag20032026kl1744-1844.jpg  |  Bin 0 -> 150128 bytes
+ .../FFTMic1DETredjeFredag20022026JengaTits.jpg     |  Bin 0 -> 157112 bytes
+ .../FFTMic1DETredjeFredag20022026kl1306-1317.jpg   |  Bin 0 -> 159122 bytes
+ .../FFTMic1DETredjeFredag20022026kl1330-1344.jpg   |  Bin 0 -> 159524 bytes
+ .../FFTMic1DETredjeFredag20022026kl1410-1424.jpg   |  Bin 0 -> 155299 bytes
+ .../FFTMic1DETredjeFredag20022026kl1432-1452.jpg   |  Bin 0 -> 153289 bytes
+ .../FFTMic1DETredjeFredag20022026kl1519-1529.jpg   |  Bin 0 -> 155129 bytes
+ .../FFTMic1backgroundMeasurement03032026.jpg       |  Bin 0 -> 155430 bytes
+ .../FFTMic1backgroundMeasurement06032026.jpg       |  Bin 0 -> 158445 bytes
+ .../FFTMic1backgroundMeasurement13022026.jpg       |  Bin 0 -> 151851 bytes
+ .../FFTMic1backgroundMeasurement13032026.jpg       |  Bin 0 -> 158805 bytes
+ .../FFTMic1backgroundMeasurement16022026.jpg       |  Bin 0 -> 160541 bytes
+ .../FFTMic1backgroundMeasurement18022026.jpg       |  Bin 0 -> 159093 bytes
+ .../FFTMic1backgroundMeasurement20022026.jpg       |  Bin 0 -> 155801 bytes
+ .../FFTMic1backgroundMeasurement20032026.jpg       |  Bin 0 -> 156385 bytes
+ .../FFTMic1backgroundMeasurement27022026.jpg       |  Bin 0 -> 163881 bytes
+ .../FFTMic1backgroundMeasurement28022026.jpg       |  Bin 0 -> 154368 bytes
+ .../FFTMic1completeBackgroundNOise28032026.jpg     |  Bin 0 -> 137893 bytes
+ .../FFTMic1completeOpenNoise28032026.jpg           |  Bin 0 -> 144880 bytes
+ ...FTMic1poolOgBordF\303\245Mennesker13022026.jpg" |  Bin 0 -> 159154 bytes
+ ...FFTMic1poolSpilMedLidtBaggrundsSnak13022026.jpg |  Bin 0 -> 156206 bytes
+ .../FFTMic2DEAAbning02022026kl1415-1431.jpg        |  Bin 0 -> 152562 bytes
+ ...Mic2DEAAbning02022026kl1448-1459MangeIBaren.jpg |  Bin 0 -> 155446 bytes
+ .../FFTMic2DEAAbning02022026kl1536-1547Tits.jpg    |  Bin 0 -> 157151 bytes
+ ...TMic2DEAAbning02022026kl1632-1640IndenMusik.jpg |  Bin 0 -> 157027 bytes
+ .../noisePlots/FFTMic2DEAndenFredag13022026.jpg    |  Bin 0 -> 157436 bytes
+ .../noisePlots/FFTMic2DEAndenFredag130220262.jpg   |  Bin 0 -> 159933 bytes
+ .../FFTMic2DEAndenFredag13022026Beerpong.jpg       |  Bin 0 -> 148466 bytes
+ .../FFTMic2DEAndenFredag13022026Tits.jpg           |  Bin 0 -> 152990 bytes
+ .../FFTMic2DEFemteFredag06032026kl1311-1323.jpg    |  Bin 0 -> 154261 bytes
+ .../FFTMic2DEFemteFredag06032026kl1337-1357.jpg    |  Bin 0 -> 154127 bytes
+ .../FFTMic2DEFemteFredag06032026kl1408-1415.jpg    |  Bin 0 -> 159955 bytes
+ .../FFTMic2DEFemteFredag06032026kl1424-1445.jpg    |  Bin 0 -> 152952 bytes
+ .../noisePlots/FFTMic2DEFjerdeFredag27022026.jpg   |  Bin 0 -> 160777 bytes
+ .../FFTMic2DEFjerdeFredag27022026kl14-1420.jpg     |  Bin 0 -> 153940 bytes
+ .../FFTMic2DEFjerdeFredag27022026kl1427-1442.jpg   |  Bin 0 -> 155129 bytes
+ .../FFTMic2DEFoersteFredag06022026Snestorm.jpg     |  Bin 0 -> 155236 bytes
+ .../FFTMic2DEFoersteFredag06022026Snestorm2.jpg    |  Bin 0 -> 156811 bytes
+ .../noisePlots/FFTMic2DELombard55dB27032026.jpg    |  Bin 0 -> 158909 bytes
+ .../noisePlots/FFTMic2DELombard60dB27032026.jpg    |  Bin 0 -> 156265 bytes
+ .../noisePlots/FFTMic2DELombard65dB27032026.jpg    |  Bin 0 -> 155747 bytes
+ .../noisePlots/FFTMic2DELombard70dB27032026.jpg    |  Bin 0 -> 156953 bytes
+ .../noisePlots/FFTMic2DELombard75dB27032026.jpg    |  Bin 0 -> 160259 bytes
+ .../FFTMic2DESjetteFredag13032026kl1301-1317.jpg   |  Bin 0 -> 160164 bytes
+ .../FFTMic2DESjetteFredag13032026kl1322-1335.jpg   |  Bin 0 -> 156217 bytes
+ .../FFTMic2DESjetteFredag13032026kl1339-1356.jpg   |  Bin 0 -> 153874 bytes
+ .../FFTMic2DESyvendeFredag20032026kl1300-1312.jpg  |  Bin 0 -> 158625 bytes
+ .../FFTMic2DESyvendeFredag20032026kl1324-1339.jpg  |  Bin 0 -> 159043 bytes
+ .../FFTMic2DESyvendeFredag20032026kl1355-1401.jpg  |  Bin 0 -> 161402 bytes
+ ...TMic2DESyvendeFredag20032026kl1410-1417Tits.jpg |  Bin 0 -> 160943 bytes
+ ...2DESyvendeFredag20032026kl1420-1501Beerpong.jpg |  Bin 0 -> 148730 bytes
+ .../FFTMic2DESyvendeFredag20032026kl1518-1535.jpg  |  Bin 0 -> 153093 bytes
+ .../FFTMic2DESyvendeFredag20032026kl1539-1547.jpg  |  Bin 0 -> 160294 bytes
+ ...2DESyvendeFredag20032026kl1613-1625Vihygger.jpg |  Bin 0 -> 158071 bytes
+ .../FFTMic2DESyvendeFredag20032026kl1717-1734.jpg  |  Bin 0 -> 158209 bytes
+ .../FFTMic2DESyvendeFredag20032026kl1744-1844.jpg  |  Bin 0 -> 147290 bytes
+ .../FFTMic2DETredjeFredag20022026JengaTits.jpg     |  Bin 0 -> 155849 bytes
+ .../FFTMic2DETredjeFredag20022026kl1306-1317.jpg   |  Bin 0 -> 158983 bytes
+ .../FFTMic2DETredjeFredag20022026kl1330-1344.jpg   |  Bin 0 -> 156804 bytes
+ .../FFTMic2DETredjeFredag20022026kl1410-1424.jpg   |  Bin 0 -> 152983 bytes
+ .../FFTMic2DETredjeFredag20022026kl1432-1452.jpg   |  Bin 0 -> 152835 bytes
+ .../FFTMic2DETredjeFredag20022026kl1519-1529.jpg   |  Bin 0 -> 156651 bytes
+ .../FFTMic2backgroundMeasurement03032026.jpg       |  Bin 0 -> 156526 bytes
+ .../FFTMic2backgroundMeasurement06032026.jpg       |  Bin 0 -> 161905 bytes
+ .../FFTMic2backgroundMeasurement13022026.jpg       |  Bin 0 -> 152719 bytes
+ .../FFTMic2backgroundMeasurement13032026.jpg       |  Bin 0 -> 160809 bytes
+ .../FFTMic2backgroundMeasurement16022026.jpg       |  Bin 0 -> 162443 bytes
+ .../FFTMic2backgroundMeasurement18022026.jpg       |  Bin 0 -> 162999 bytes
+ .../FFTMic2backgroundMeasurement20022026.jpg       |  Bin 0 -> 157314 bytes
+ .../FFTMic2backgroundMeasurement20032026.jpg       |  Bin 0 -> 154721 bytes
+ .../FFTMic2backgroundMeasurement27022026.jpg       |  Bin 0 -> 166404 bytes
+ .../FFTMic2backgroundMeasurement28022026.jpg       |  Bin 0 -> 154682 bytes
+ .../FFTMic2completeBackgroundNOise28032026.jpg     |  Bin 0 -> 143134 bytes
+ .../FFTMic2completeOpenNoise28032026.jpg           |  Bin 0 -> 144533 bytes
+ ...FTMic2poolOgBordF\303\245Mennesker13022026.jpg" |  Bin 0 -> 156770 bytes
+ ...FFTMic2poolSpilMedLidtBaggrundsSnak13022026.jpg |  Bin 0 -> 157246 bytes
+ .../FFTMic3DEAAbning02022026kl1415-1431.jpg        |  Bin 0 -> 152755 bytes
+ ...Mic3DEAAbning02022026kl1448-1459MangeIBaren.jpg |  Bin 0 -> 156013 bytes
+ .../FFTMic3DEAAbning02022026kl1536-1547Tits.jpg    |  Bin 0 -> 158201 bytes
+ ...TMic3DEAAbning02022026kl1632-1640IndenMusik.jpg |  Bin 0 -> 157814 bytes
+ .../noisePlots/FFTMic3DEAndenFredag13022026.jpg    |  Bin 0 -> 155386 bytes
+ .../noisePlots/FFTMic3DEAndenFredag130220262.jpg   |  Bin 0 -> 156263 bytes
+ .../FFTMic3DEAndenFredag13022026Beerpong.jpg       |  Bin 0 -> 151394 bytes
+ .../FFTMic3DEAndenFredag13022026Tits.jpg           |  Bin 0 -> 154550 bytes
+ .../FFTMic3DEFemteFredag06032026kl1311-1323.jpg    |  Bin 0 -> 154897 bytes
+ .../FFTMic3DEFemteFredag06032026kl1337-1357.jpg    |  Bin 0 -> 151836 bytes
+ .../FFTMic3DEFemteFredag06032026kl1408-1415.jpg    |  Bin 0 -> 159322 bytes
+ .../FFTMic3DEFemteFredag06032026kl1424-1445.jpg    |  Bin 0 -> 151413 bytes
+ .../noisePlots/FFTMic3DEFjerdeFredag27022026.jpg   |  Bin 0 -> 163081 bytes
+ .../FFTMic3DEFjerdeFredag27022026kl14-1420.jpg     |  Bin 0 -> 152395 bytes
+ .../FFTMic3DEFjerdeFredag27022026kl1427-1442.jpg   |  Bin 0 -> 155136 bytes
+ .../FFTMic3DEFoersteFredag06022026Snestorm.jpg     |  Bin 0 -> 153414 bytes
+ .../FFTMic3DEFoersteFredag06022026Snestorm2.jpg    |  Bin 0 -> 152737 bytes
+ .../noisePlots/FFTMic3DELombard55dB27032026.jpg    |  Bin 0 -> 158021 bytes
+ .../noisePlots/FFTMic3DELombard60dB27032026.jpg    |  Bin 0 -> 154027 bytes
+ .../noisePlots/FFTMic3DELombard65dB27032026.jpg    |  Bin 0 -> 155450 bytes
+ .../noisePlots/FFTMic3DELombard70dB27032026.jpg    |  Bin 0 -> 158140 bytes
+ .../noisePlots/FFTMic3DELombard75dB27032026.jpg    |  Bin 0 -> 161441 bytes
+ .../FFTMic3DESjetteFredag13032026kl1301-1317.jpg   |  Bin 0 -> 153960 bytes
+ .../FFTMic3DESjetteFredag13032026kl1322-1335.jpg   |  Bin 0 -> 156392 bytes
+ .../FFTMic3DESjetteFredag13032026kl1339-1356.jpg   |  Bin 0 -> 153912 bytes
+ .../FFTMic3DESyvendeFredag20032026kl1300-1312.jpg  |  Bin 0 -> 158115 bytes
+ .../FFTMic3DESyvendeFredag20032026kl1324-1339.jpg  |  Bin 0 -> 153221 bytes
+ .../FFTMic3DESyvendeFredag20032026kl1355-1401.jpg  |  Bin 0 -> 159528 bytes
+ ...TMic3DESyvendeFredag20032026kl1410-1417Tits.jpg |  Bin 0 -> 160778 bytes
+ ...3DESyvendeFredag20032026kl1420-1501Beerpong.jpg |  Bin 0 -> 145899 bytes
+ .../FFTMic3DESyvendeFredag20032026kl1518-1535.jpg  |  Bin 0 -> 153135 bytes
+ .../FFTMic3DESyvendeFredag20032026kl1539-1547.jpg  |  Bin 0 -> 163258 bytes
+ ...3DESyvendeFredag20032026kl1613-1625Vihygger.jpg |  Bin 0 -> 160928 bytes
+ .../FFTMic3DESyvendeFredag20032026kl1717-1734.jpg  |  Bin 0 -> 158168 bytes
+ .../FFTMic3DESyvendeFredag20032026kl1744-1844.jpg  |  Bin 0 -> 150319 bytes
+ .../FFTMic3DETredjeFredag20022026JengaTits.jpg     |  Bin 0 -> 158251 bytes
+ .../FFTMic3DETredjeFredag20022026kl1306-1317.jpg   |  Bin 0 -> 155740 bytes
+ .../FFTMic3DETredjeFredag20022026kl1330-1344.jpg   |  Bin 0 -> 154932 bytes
+ .../FFTMic3DETredjeFredag20022026kl1410-1424.jpg   |  Bin 0 -> 155914 bytes
+ .../FFTMic3DETredjeFredag20022026kl1432-1452.jpg   |  Bin 0 -> 150901 bytes
+ .../FFTMic3DETredjeFredag20022026kl1519-1529.jpg   |  Bin 0 -> 155061 bytes
+ .../FFTMic3backgroundMeasurement03032026.jpg       |  Bin 0 -> 151597 bytes
+ .../FFTMic3backgroundMeasurement06032026.jpg       |  Bin 0 -> 158484 bytes
+ .../FFTMic3backgroundMeasurement13022026.jpg       |  Bin 0 -> 150070 bytes
+ .../FFTMic3backgroundMeasurement13032026.jpg       |  Bin 0 -> 156387 bytes
+ .../FFTMic3backgroundMeasurement16022026.jpg       |  Bin 0 -> 157126 bytes
+ .../FFTMic3backgroundMeasurement18022026.jpg       |  Bin 0 -> 156215 bytes
+ .../FFTMic3backgroundMeasurement20022026.jpg       |  Bin 0 -> 152322 bytes
+ .../FFTMic3backgroundMeasurement20032026.jpg       |  Bin 0 -> 152887 bytes
+ .../FFTMic3backgroundMeasurement27022026.jpg       |  Bin 0 -> 158742 bytes
+ .../FFTMic3backgroundMeasurement28022026.jpg       |  Bin 0 -> 149512 bytes
+ .../FFTMic3completeBackgroundNOise28032026.jpg     |  Bin 0 -> 136626 bytes
+ .../FFTMic3completeOpenNoise28032026.jpg           |  Bin 0 -> 142622 bytes
+ ...FTMic3poolOgBordF\303\245Mennesker13022026.jpg" |  Bin 0 -> 155287 bytes
+ ...FFTMic3poolSpilMedLidtBaggrundsSnak13022026.jpg |  Bin 0 -> 156424 bytes
+ .../FFTMic4DEAAbning02022026kl1415-1431.jpg        |  Bin 0 -> 152775 bytes
+ ...Mic4DEAAbning02022026kl1448-1459MangeIBaren.jpg |  Bin 0 -> 156929 bytes
+ .../FFTMic4DEAAbning02022026kl1536-1547Tits.jpg    |  Bin 0 -> 156046 bytes
+ ...TMic4DEAAbning02022026kl1632-1640IndenMusik.jpg |  Bin 0 -> 156150 bytes
+ .../noisePlots/FFTMic4DEAndenFredag13022026.jpg    |  Bin 0 -> 157033 bytes
+ .../noisePlots/FFTMic4DEAndenFredag130220262.jpg   |  Bin 0 -> 158705 bytes
+ .../FFTMic4DEAndenFredag13022026Beerpong.jpg       |  Bin 0 -> 152169 bytes
+ .../FFTMic4DEAndenFredag13022026Tits.jpg           |  Bin 0 -> 154543 bytes
+ .../FFTMic4DEFemteFredag06032026kl1311-1323.jpg    |  Bin 0 -> 153956 bytes
+ .../FFTMic4DEFemteFredag06032026kl1337-1357.jpg    |  Bin 0 -> 154990 bytes
+ .../FFTMic4DEFemteFredag06032026kl1408-1415.jpg    |  Bin 0 -> 159489 bytes
+ .../FFTMic4DEFemteFredag06032026kl1424-1445.jpg    |  Bin 0 -> 152539 bytes
+ .../noisePlots/FFTMic4DEFjerdeFredag27022026.jpg   |  Bin 0 -> 161213 bytes
+ .../FFTMic4DEFjerdeFredag27022026kl14-1420.jpg     |  Bin 0 -> 155609 bytes
+ .../FFTMic4DEFjerdeFredag27022026kl1427-1442.jpg   |  Bin 0 -> 155716 bytes
+ .../FFTMic4DEFoersteFredag06022026Snestorm.jpg     |  Bin 0 -> 156987 bytes
+ .../FFTMic4DEFoersteFredag06022026Snestorm2.jpg    |  Bin 0 -> 156491 bytes
+ .../noisePlots/FFTMic4DELombard55dB27032026.jpg    |  Bin 0 -> 158995 bytes
+ .../noisePlots/FFTMic4DELombard60dB27032026.jpg    |  Bin 0 -> 156563 bytes
+ .../noisePlots/FFTMic4DELombard65dB27032026.jpg    |  Bin 0 -> 158122 bytes
+ .../noisePlots/FFTMic4DELombard70dB27032026.jpg    |  Bin 0 -> 159562 bytes
+ .../noisePlots/FFTMic4DELombard75dB27032026.jpg    |  Bin 0 -> 165359 bytes
+ .../FFTMic4DESjetteFredag13032026kl1301-1317.jpg   |  Bin 0 -> 158216 bytes
+ .../FFTMic4DESjetteFredag13032026kl1322-1335.jpg   |  Bin 0 -> 154894 bytes
+ .../FFTMic4DESjetteFredag13032026kl1339-1356.jpg   |  Bin 0 -> 152863 bytes
+ .../FFTMic4DESyvendeFredag20032026kl1300-1312.jpg  |  Bin 0 -> 159301 bytes
+ .../FFTMic4DESyvendeFredag20032026kl1324-1339.jpg  |  Bin 0 -> 158411 bytes
+ .../FFTMic4DESyvendeFredag20032026kl1355-1401.jpg  |  Bin 0 -> 161499 bytes
+ ...TMic4DESyvendeFredag20032026kl1410-1417Tits.jpg |  Bin 0 -> 161012 bytes
+ ...4DESyvendeFredag20032026kl1420-1501Beerpong.jpg |  Bin 0 -> 147831 bytes
+ .../FFTMic4DESyvendeFredag20032026kl1518-1535.jpg  |  Bin 0 -> 152553 bytes
+ .../FFTMic4DESyvendeFredag20032026kl1539-1547.jpg  |  Bin 0 -> 163268 bytes
+ ...4DESyvendeFredag20032026kl1613-1625Vihygger.jpg |  Bin 0 -> 161873 bytes
+ .../FFTMic4DESyvendeFredag20032026kl1717-1734.jpg  |  Bin 0 -> 160383 bytes
+ .../FFTMic4DESyvendeFredag20032026kl1744-1844.jpg  |  Bin 0 -> 147303 bytes
+ .../FFTMic4DETredjeFredag20022026JengaTits.jpg     |  Bin 0 -> 154759 bytes
+ .../FFTMic4DETredjeFredag20022026kl1306-1317.jpg   |  Bin 0 -> 157034 bytes
+ .../FFTMic4DETredjeFredag20022026kl1330-1344.jpg   |  Bin 0 -> 154203 bytes
+ .../FFTMic4DETredjeFredag20022026kl1410-1424.jpg   |  Bin 0 -> 154208 bytes
+ .../FFTMic4DETredjeFredag20022026kl1432-1452.jpg   |  Bin 0 -> 150304 bytes
+ .../FFTMic4DETredjeFredag20022026kl1519-1529.jpg   |  Bin 0 -> 155403 bytes
+ .../FFTMic4backgroundMeasurement03032026.jpg       |  Bin 0 -> 152222 bytes
+ .../FFTMic4backgroundMeasurement06032026.jpg       |  Bin 0 -> 161447 bytes
+ .../FFTMic4backgroundMeasurement13022026.jpg       |  Bin 0 -> 150875 bytes
+ .../FFTMic4backgroundMeasurement13032026.jpg       |  Bin 0 -> 157914 bytes
+ .../FFTMic4backgroundMeasurement16022026.jpg       |  Bin 0 -> 162071 bytes
+ .../FFTMic4backgroundMeasurement18022026.jpg       |  Bin 0 -> 162223 bytes
+ .../FFTMic4backgroundMeasurement20022026.jpg       |  Bin 0 -> 157385 bytes
+ .../FFTMic4backgroundMeasurement20032026.jpg       |  Bin 0 -> 155647 bytes
+ .../FFTMic4backgroundMeasurement27022026.jpg       |  Bin 0 -> 165968 bytes
+ .../FFTMic4backgroundMeasurement28022026.jpg       |  Bin 0 -> 153687 bytes
+ .../FFTMic4completeBackgroundNOise28032026.jpg     |  Bin 0 -> 142204 bytes
+ .../FFTMic4completeOpenNoise28032026.jpg           |  Bin 0 -> 146314 bytes
+ ...FTMic4poolOgBordF\303\245Mennesker13022026.jpg" |  Bin 0 -> 161974 bytes
+ ...FFTMic4poolSpilMedLidtBaggrundsSnak13022026.jpg |  Bin 0 -> 156567 bytes
+ .../FFTMic5DEAAbning02022026kl1415-1431.jpg        |  Bin 0 -> 152333 bytes
+ ...Mic5DEAAbning02022026kl1448-1459MangeIBaren.jpg |  Bin 0 -> 154934 bytes
+ .../FFTMic5DEAAbning02022026kl1536-1547Tits.jpg    |  Bin 0 -> 155936 bytes
+ ...TMic5DEAAbning02022026kl1632-1640IndenMusik.jpg |  Bin 0 -> 156881 bytes
+ .../noisePlots/FFTMic5DEAndenFredag13022026.jpg    |  Bin 0 -> 154222 bytes
+ .../noisePlots/FFTMic5DEAndenFredag130220262.jpg   |  Bin 0 -> 159179 bytes
+ .../FFTMic5DEAndenFredag13022026Beerpong.jpg       |  Bin 0 -> 150782 bytes
+ .../FFTMic5DEAndenFredag13022026Tits.jpg           |  Bin 0 -> 156662 bytes
+ .../FFTMic5DEFemteFredag06032026kl1311-1323.jpg    |  Bin 0 -> 154165 bytes
+ .../FFTMic5DEFemteFredag06032026kl1337-1357.jpg    |  Bin 0 -> 153356 bytes
+ .../FFTMic5DEFemteFredag06032026kl1408-1415.jpg    |  Bin 0 -> 159544 bytes
+ .../FFTMic5DEFemteFredag06032026kl1424-1445.jpg    |  Bin 0 -> 152641 bytes
+ .../noisePlots/FFTMic5DEFjerdeFredag27022026.jpg   |  Bin 0 -> 160068 bytes
+ .../FFTMic5DEFjerdeFredag27022026kl14-1420.jpg     |  Bin 0 -> 153249 bytes
+ .../FFTMic5DEFjerdeFredag27022026kl1427-1442.jpg   |  Bin 0 -> 155247 bytes
+ .../FFTMic5DEFoersteFredag06022026Snestorm.jpg     |  Bin 0 -> 155490 bytes
+ .../FFTMic5DEFoersteFredag06022026Snestorm2.jpg    |  Bin 0 -> 154930 bytes
+ .../noisePlots/FFTMic5DELombard55dB27032026.jpg    |  Bin 0 -> 157108 bytes
+ .../noisePlots/FFTMic5DELombard60dB27032026.jpg    |  Bin 0 -> 156442 bytes
+ .../noisePlots/FFTMic5DELombard65dB27032026.jpg    |  Bin 0 -> 158208 bytes
+ .../noisePlots/FFTMic5DELombard70dB27032026.jpg    |  Bin 0 -> 156848 bytes
+ .../noisePlots/FFTMic5DELombard75dB27032026.jpg    |  Bin 0 -> 161714 bytes
+ .../FFTMic5DESjetteFredag13032026kl1301-1317.jpg   |  Bin 0 -> 155892 bytes
+ .../FFTMic5DESjetteFredag13032026kl1322-1335.jpg   |  Bin 0 -> 154640 bytes
+ .../FFTMic5DESjetteFredag13032026kl1339-1356.jpg   |  Bin 0 -> 151962 bytes
+ .../FFTMic5DESyvendeFredag20032026kl1300-1312.jpg  |  Bin 0 -> 158336 bytes
+ .../FFTMic5DESyvendeFredag20032026kl1324-1339.jpg  |  Bin 0 -> 156420 bytes
+ .../FFTMic5DESyvendeFredag20032026kl1355-1401.jpg  |  Bin 0 -> 161562 bytes
+ ...TMic5DESyvendeFredag20032026kl1410-1417Tits.jpg |  Bin 0 -> 159059 bytes
+ ...5DESyvendeFredag20032026kl1420-1501Beerpong.jpg |  Bin 0 -> 145405 bytes
+ .../FFTMic5DESyvendeFredag20032026kl1518-1535.jpg  |  Bin 0 -> 151710 bytes
+ .../FFTMic5DESyvendeFredag20032026kl1539-1547.jpg  |  Bin 0 -> 161265 bytes
+ ...5DESyvendeFredag20032026kl1613-1625Vihygger.jpg |  Bin 0 -> 159399 bytes
+ .../FFTMic5DESyvendeFredag20032026kl1717-1734.jpg  |  Bin 0 -> 159246 bytes
+ .../FFTMic5DESyvendeFredag20032026kl1744-1844.jpg  |  Bin 0 -> 148825 bytes
+ .../FFTMic5DETredjeFredag20022026JengaTits.jpg     |  Bin 0 -> 156612 bytes
+ .../FFTMic5DETredjeFredag20022026kl1306-1317.jpg   |  Bin 0 -> 157359 bytes
+ .../FFTMic5DETredjeFredag20022026kl1330-1344.jpg   |  Bin 0 -> 156536 bytes
+ .../FFTMic5DETredjeFredag20022026kl1410-1424.jpg   |  Bin 0 -> 153815 bytes
+ .../FFTMic5DETredjeFredag20022026kl1432-1452.jpg   |  Bin 0 -> 152024 bytes
+ .../FFTMic5DETredjeFredag20022026kl1519-1529.jpg   |  Bin 0 -> 154385 bytes
+ .../FFTMic5backgroundMeasurement03032026.jpg       |  Bin 0 -> 152388 bytes
+ .../FFTMic5backgroundMeasurement06032026.jpg       |  Bin 0 -> 161081 bytes
+ .../FFTMic5backgroundMeasurement13022026.jpg       |  Bin 0 -> 149693 bytes
+ .../FFTMic5backgroundMeasurement13032026.jpg       |  Bin 0 -> 156604 bytes
+ .../FFTMic5backgroundMeasurement16022026.jpg       |  Bin 0 -> 159958 bytes
+ .../FFTMic5backgroundMeasurement18022026.jpg       |  Bin 0 -> 158711 bytes
+ .../FFTMic5backgroundMeasurement20022026.jpg       |  Bin 0 -> 156571 bytes
+ .../FFTMic5backgroundMeasurement20032026.jpg       |  Bin 0 -> 153475 bytes
+ .../FFTMic5backgroundMeasurement27022026.jpg       |  Bin 0 -> 163928 bytes
+ .../FFTMic5backgroundMeasurement28022026.jpg       |  Bin 0 -> 153216 bytes
+ .../FFTMic5completeBackgroundNOise28032026.jpg     |  Bin 0 -> 140377 bytes
+ .../FFTMic5completeOpenNoise28032026.jpg           |  Bin 0 -> 144125 bytes
+ ...FTMic5poolOgBordF\303\245Mennesker13022026.jpg" |  Bin 0 -> 159945 bytes
+ ...FFTMic5poolSpilMedLidtBaggrundsSnak13022026.jpg |  Bin 0 -> 156346 bytes
+ .../FFTMic6DEAAbning02022026kl1415-1431.jpg        |  Bin 0 -> 152027 bytes
+ ...Mic6DEAAbning02022026kl1448-1459MangeIBaren.jpg |  Bin 0 -> 155408 bytes
+ .../FFTMic6DEAAbning02022026kl1536-1547Tits.jpg    |  Bin 0 -> 156710 bytes
+ ...TMic6DEAAbning02022026kl1632-1640IndenMusik.jpg |  Bin 0 -> 156874 bytes
+ .../noisePlots/FFTMic6DEAndenFredag13022026.jpg    |  Bin 0 -> 155451 bytes
+ .../noisePlots/FFTMic6DEAndenFredag130220262.jpg   |  Bin 0 -> 158371 bytes
+ .../FFTMic6DEAndenFredag13022026Beerpong.jpg       |  Bin 0 -> 151310 bytes
+ .../FFTMic6DEAndenFredag13022026Tits.jpg           |  Bin 0 -> 155866 bytes
+ .../FFTMic6DEFemteFredag06032026kl1311-1323.jpg    |  Bin 0 -> 155604 bytes
+ .../FFTMic6DEFemteFredag06032026kl1337-1357.jpg    |  Bin 0 -> 153744 bytes
+ .../FFTMic6DEFemteFredag06032026kl1408-1415.jpg    |  Bin 0 -> 158954 bytes
+ .../FFTMic6DEFemteFredag06032026kl1424-1445.jpg    |  Bin 0 -> 150383 bytes
+ .../noisePlots/FFTMic6DEFjerdeFredag27022026.jpg   |  Bin 0 -> 161743 bytes
+ .../FFTMic6DEFjerdeFredag27022026kl14-1420.jpg     |  Bin 0 -> 151904 bytes
+ .../FFTMic6DEFjerdeFredag27022026kl1427-1442.jpg   |  Bin 0 -> 153673 bytes
+ .../FFTMic6DEFoersteFredag06022026Snestorm.jpg     |  Bin 0 -> 153435 bytes
+ .../FFTMic6DEFoersteFredag06022026Snestorm2.jpg    |  Bin 0 -> 152907 bytes
+ .../noisePlots/FFTMic6DELombard55dB27032026.jpg    |  Bin 0 -> 156805 bytes
+ .../noisePlots/FFTMic6DELombard60dB27032026.jpg    |  Bin 0 -> 154871 bytes
+ .../noisePlots/FFTMic6DELombard65dB27032026.jpg    |  Bin 0 -> 156261 bytes
+ .../noisePlots/FFTMic6DELombard70dB27032026.jpg    |  Bin 0 -> 156967 bytes
+ .../noisePlots/FFTMic6DELombard75dB27032026.jpg    |  Bin 0 -> 161221 bytes
+ .../FFTMic6DESjetteFredag13032026kl1301-1317.jpg   |  Bin 0 -> 153233 bytes
+ .../FFTMic6DESjetteFredag13032026kl1322-1335.jpg   |  Bin 0 -> 154696 bytes
+ .../FFTMic6DESjetteFredag13032026kl1339-1356.jpg   |  Bin 0 -> 153026 bytes
+ .../FFTMic6DESyvendeFredag20032026kl1300-1312.jpg  |  Bin 0 -> 158751 bytes
+ .../FFTMic6DESyvendeFredag20032026kl1324-1339.jpg  |  Bin 0 -> 154394 bytes
+ .../FFTMic6DESyvendeFredag20032026kl1355-1401.jpg  |  Bin 0 -> 161569 bytes
+ ...TMic6DESyvendeFredag20032026kl1410-1417Tits.jpg |  Bin 0 -> 158462 bytes
+ ...6DESyvendeFredag20032026kl1420-1501Beerpong.jpg |  Bin 0 -> 147257 bytes
+ .../FFTMic6DESyvendeFredag20032026kl1518-1535.jpg  |  Bin 0 -> 152561 bytes
+ .../FFTMic6DESyvendeFredag20032026kl1539-1547.jpg  |  Bin 0 -> 160906 bytes
+ ...6DESyvendeFredag20032026kl1613-1625Vihygger.jpg |  Bin 0 -> 159718 bytes
+ .../FFTMic6DESyvendeFredag20032026kl1717-1734.jpg  |  Bin 0 -> 158885 bytes
+ .../FFTMic6DESyvendeFredag20032026kl1744-1844.jpg  |  Bin 0 -> 149043 bytes
+ .../FFTMic6DETredjeFredag20022026JengaTits.jpg     |  Bin 0 -> 155592 bytes
+ .../FFTMic6DETredjeFredag20022026kl1306-1317.jpg   |  Bin 0 -> 155493 bytes
+ .../FFTMic6DETredjeFredag20022026kl1330-1344.jpg   |  Bin 0 -> 154265 bytes
+ .../FFTMic6DETredjeFredag20022026kl1410-1424.jpg   |  Bin 0 -> 153400 bytes
+ .../FFTMic6DETredjeFredag20022026kl1432-1452.jpg   |  Bin 0 -> 151232 bytes
+ .../FFTMic6DETredjeFredag20022026kl1519-1529.jpg   |  Bin 0 -> 154346 bytes
+ .../FFTMic6backgroundMeasurement03032026.jpg       |  Bin 0 -> 151739 bytes
+ .../FFTMic6backgroundMeasurement06032026.jpg       |  Bin 0 -> 155073 bytes
+ .../FFTMic6backgroundMeasurement13022026.jpg       |  Bin 0 -> 147917 bytes
+ .../FFTMic6backgroundMeasurement13032026.jpg       |  Bin 0 -> 154915 bytes
+ .../FFTMic6backgroundMeasurement16022026.jpg       |  Bin 0 -> 154276 bytes
+ .../FFTMic6backgroundMeasurement18022026.jpg       |  Bin 0 -> 155294 bytes
+ .../FFTMic6backgroundMeasurement20022026.jpg       |  Bin 0 -> 151223 bytes
+ .../FFTMic6backgroundMeasurement20032026.jpg       |  Bin 0 -> 151207 bytes
+ .../FFTMic6backgroundMeasurement27022026.jpg       |  Bin 0 -> 159383 bytes
+ .../FFTMic6backgroundMeasurement28022026.jpg       |  Bin 0 -> 152411 bytes
+ .../FFTMic6completeBackgroundNOise28032026.jpg     |  Bin 0 -> 136051 bytes
+ .../FFTMic6completeOpenNoise28032026.jpg           |  Bin 0 -> 141662 bytes
+ ...FTMic6poolOgBordF\303\245Mennesker13022026.jpg" |  Bin 0 -> 157590 bytes
+ ...FFTMic6poolSpilMedLidtBaggrundsSnak13022026.jpg |  Bin 0 -> 158608 bytes
+ .../FFTMic7DEAAbning02022026kl1415-1431.jpg        |  Bin 0 -> 152144 bytes
+ ...Mic7DEAAbning02022026kl1448-1459MangeIBaren.jpg |  Bin 0 -> 153812 bytes
+ .../FFTMic7DEAAbning02022026kl1536-1547Tits.jpg    |  Bin 0 -> 157713 bytes
+ ...TMic7DEAAbning02022026kl1632-1640IndenMusik.jpg |  Bin 0 -> 157590 bytes
+ .../noisePlots/FFTMic7DEAndenFredag13022026.jpg    |  Bin 0 -> 154015 bytes
+ .../noisePlots/FFTMic7DEAndenFredag130220262.jpg   |  Bin 0 -> 158987 bytes
+ .../FFTMic7DEAndenFredag13022026Beerpong.jpg       |  Bin 0 -> 151425 bytes
+ .../FFTMic7DEAndenFredag13022026Tits.jpg           |  Bin 0 -> 156448 bytes
+ .../FFTMic7DEFemteFredag06032026kl1311-1323.jpg    |  Bin 0 -> 156785 bytes
+ .../FFTMic7DEFemteFredag06032026kl1337-1357.jpg    |  Bin 0 -> 153355 bytes
+ .../FFTMic7DEFemteFredag06032026kl1408-1415.jpg    |  Bin 0 -> 160873 bytes
+ .../FFTMic7DEFemteFredag06032026kl1424-1445.jpg    |  Bin 0 -> 150845 bytes
+ .../noisePlots/FFTMic7DEFjerdeFredag27022026.jpg   |  Bin 0 -> 160200 bytes
+ .../FFTMic7DEFjerdeFredag27022026kl14-1420.jpg     |  Bin 0 -> 153342 bytes
+ .../FFTMic7DEFjerdeFredag27022026kl1427-1442.jpg   |  Bin 0 -> 155868 bytes
+ .../FFTMic7DEFoersteFredag06022026Snestorm.jpg     |  Bin 0 -> 152377 bytes
+ .../FFTMic7DEFoersteFredag06022026Snestorm2.jpg    |  Bin 0 -> 154059 bytes
+ .../noisePlots/FFTMic7DELombard55dB27032026.jpg    |  Bin 0 -> 156593 bytes
+ .../noisePlots/FFTMic7DELombard60dB27032026.jpg    |  Bin 0 -> 156148 bytes
+ .../noisePlots/FFTMic7DELombard65dB27032026.jpg    |  Bin 0 -> 156965 bytes
+ .../noisePlots/FFTMic7DELombard70dB27032026.jpg    |  Bin 0 -> 156348 bytes
+ .../noisePlots/FFTMic7DELombard75dB27032026.jpg    |  Bin 0 -> 160210 bytes
+ .../FFTMic7DESjetteFredag13032026kl1301-1317.jpg   |  Bin 0 -> 156118 bytes
+ .../FFTMic7DESjetteFredag13032026kl1322-1335.jpg   |  Bin 0 -> 154145 bytes
+ .../FFTMic7DESjetteFredag13032026kl1339-1356.jpg   |  Bin 0 -> 153999 bytes
+ .../FFTMic7DESyvendeFredag20032026kl1300-1312.jpg  |  Bin 0 -> 158273 bytes
+ .../FFTMic7DESyvendeFredag20032026kl1324-1339.jpg  |  Bin 0 -> 155160 bytes
+ .../FFTMic7DESyvendeFredag20032026kl1355-1401.jpg  |  Bin 0 -> 162509 bytes
+ ...TMic7DESyvendeFredag20032026kl1410-1417Tits.jpg |  Bin 0 -> 158842 bytes
+ ...7DESyvendeFredag20032026kl1420-1501Beerpong.jpg |  Bin 0 -> 147105 bytes
+ .../FFTMic7DESyvendeFredag20032026kl1518-1535.jpg  |  Bin 0 -> 153134 bytes
+ .../FFTMic7DESyvendeFredag20032026kl1539-1547.jpg  |  Bin 0 -> 161374 bytes
+ ...7DESyvendeFredag20032026kl1613-1625Vihygger.jpg |  Bin 0 -> 161079 bytes
+ .../FFTMic7DESyvendeFredag20032026kl1717-1734.jpg  |  Bin 0 -> 157908 bytes
+ .../FFTMic7DESyvendeFredag20032026kl1744-1844.jpg  |  Bin 0 -> 149136 bytes
+ .../FFTMic7DETredjeFredag20022026JengaTits.jpg     |  Bin 0 -> 156517 bytes
+ .../FFTMic7DETredjeFredag20022026kl1306-1317.jpg   |  Bin 0 -> 157387 bytes
+ .../FFTMic7DETredjeFredag20022026kl1330-1344.jpg   |  Bin 0 -> 156133 bytes
+ .../FFTMic7DETredjeFredag20022026kl1410-1424.jpg   |  Bin 0 -> 153811 bytes
+ .../FFTMic7DETredjeFredag20022026kl1432-1452.jpg   |  Bin 0 -> 149787 bytes
+ .../FFTMic7DETredjeFredag20022026kl1519-1529.jpg   |  Bin 0 -> 155327 bytes
+ .../FFTMic7backgroundMeasurement03032026.jpg       |  Bin 0 -> 153312 bytes
+ .../FFTMic7backgroundMeasurement06032026.jpg       |  Bin 0 -> 159916 bytes
+ .../FFTMic7backgroundMeasurement13022026.jpg       |  Bin 0 -> 150833 bytes
+ .../FFTMic7backgroundMeasurement13032026.jpg       |  Bin 0 -> 159579 bytes
+ .../FFTMic7backgroundMeasurement16022026.jpg       |  Bin 0 -> 160767 bytes
+ .../FFTMic7backgroundMeasurement18022026.jpg       |  Bin 0 -> 159348 bytes
+ .../FFTMic7backgroundMeasurement20022026.jpg       |  Bin 0 -> 155260 bytes
+ .../FFTMic7backgroundMeasurement20032026.jpg       |  Bin 0 -> 153268 bytes
+ .../FFTMic7backgroundMeasurement27022026.jpg       |  Bin 0 -> 165243 bytes
+ .../FFTMic7backgroundMeasurement28022026.jpg       |  Bin 0 -> 151859 bytes
+ .../FFTMic7completeBackgroundNOise28032026.jpg     |  Bin 0 -> 138272 bytes
+ .../FFTMic7completeOpenNoise28032026.jpg           |  Bin 0 -> 143118 bytes
+ ...FTMic7poolOgBordF\303\245Mennesker13022026.jpg" |  Bin 0 -> 157984 bytes
+ ...FFTMic7poolSpilMedLidtBaggrundsSnak13022026.jpg |  Bin 0 -> 157376 bytes
+ .../FFTMic8DEAAbning02022026kl1415-1431.jpg        |  Bin 0 -> 153047 bytes
+ ...Mic8DEAAbning02022026kl1448-1459MangeIBaren.jpg |  Bin 0 -> 155614 bytes
+ .../FFTMic8DEAAbning02022026kl1536-1547Tits.jpg    |  Bin 0 -> 156837 bytes
+ ...TMic8DEAAbning02022026kl1632-1640IndenMusik.jpg |  Bin 0 -> 157029 bytes
+ .../noisePlots/FFTMic8DEAndenFredag13022026.jpg    |  Bin 0 -> 155809 bytes
+ .../noisePlots/FFTMic8DEAndenFredag130220262.jpg   |  Bin 0 -> 159653 bytes
+ .../FFTMic8DEAndenFredag13022026Beerpong.jpg       |  Bin 0 -> 150629 bytes
+ .../FFTMic8DEAndenFredag13022026Tits.jpg           |  Bin 0 -> 154497 bytes
+ .../FFTMic8DEFemteFredag06032026kl1311-1323.jpg    |  Bin 0 -> 154136 bytes
+ .../FFTMic8DEFemteFredag06032026kl1337-1357.jpg    |  Bin 0 -> 152471 bytes
+ .../FFTMic8DEFemteFredag06032026kl1408-1415.jpg    |  Bin 0 -> 159841 bytes
+ .../FFTMic8DEFemteFredag06032026kl1424-1445.jpg    |  Bin 0 -> 151055 bytes
+ .../noisePlots/FFTMic8DEFjerdeFredag27022026.jpg   |  Bin 0 -> 159372 bytes
+ .../FFTMic8DEFjerdeFredag27022026kl14-1420.jpg     |  Bin 0 -> 151573 bytes
+ .../FFTMic8DEFjerdeFredag27022026kl1427-1442.jpg   |  Bin 0 -> 154458 bytes
+ .../FFTMic8DEFoersteFredag06022026Snestorm.jpg     |  Bin 0 -> 153891 bytes
+ .../FFTMic8DEFoersteFredag06022026Snestorm2.jpg    |  Bin 0 -> 155761 bytes
+ .../noisePlots/FFTMic8DELombard55dB27032026.jpg    |  Bin 0 -> 158125 bytes
+ .../noisePlots/FFTMic8DELombard60dB27032026.jpg    |  Bin 0 -> 154135 bytes
+ .../noisePlots/FFTMic8DELombard65dB27032026.jpg    |  Bin 0 -> 155988 bytes
+ .../noisePlots/FFTMic8DELombard70dB27032026.jpg    |  Bin 0 -> 157525 bytes
+ .../noisePlots/FFTMic8DELombard75dB27032026.jpg    |  Bin 0 -> 160325 bytes
+ .../FFTMic8DESjetteFredag13032026kl1301-1317.jpg   |  Bin 0 -> 157002 bytes
+ .../FFTMic8DESjetteFredag13032026kl1322-1335.jpg   |  Bin 0 -> 154631 bytes
+ .../FFTMic8DESjetteFredag13032026kl1339-1356.jpg   |  Bin 0 -> 153467 bytes
+ .../FFTMic8DESyvendeFredag20032026kl1300-1312.jpg  |  Bin 0 -> 158937 bytes
+ .../FFTMic8DESyvendeFredag20032026kl1324-1339.jpg  |  Bin 0 -> 155306 bytes
+ .../FFTMic8DESyvendeFredag20032026kl1355-1401.jpg  |  Bin 0 -> 162428 bytes
+ ...TMic8DESyvendeFredag20032026kl1410-1417Tits.jpg |  Bin 0 -> 160289 bytes
+ ...8DESyvendeFredag20032026kl1420-1501Beerpong.jpg |  Bin 0 -> 148274 bytes
+ .../FFTMic8DESyvendeFredag20032026kl1518-1535.jpg  |  Bin 0 -> 152768 bytes
+ .../FFTMic8DESyvendeFredag20032026kl1539-1547.jpg  |  Bin 0 -> 162974 bytes
+ ...8DESyvendeFredag20032026kl1613-1625Vihygger.jpg |  Bin 0 -> 160427 bytes
+ .../FFTMic8DESyvendeFredag20032026kl1717-1734.jpg  |  Bin 0 -> 157566 bytes
+ .../FFTMic8DESyvendeFredag20032026kl1744-1844.jpg  |  Bin 0 -> 148159 bytes
+ .../FFTMic8DETredjeFredag20022026JengaTits.jpg     |  Bin 0 -> 155311 bytes
+ .../FFTMic8DETredjeFredag20022026kl1306-1317.jpg   |  Bin 0 -> 157058 bytes
+ .../FFTMic8DETredjeFredag20022026kl1330-1344.jpg   |  Bin 0 -> 154753 bytes
+ .../FFTMic8DETredjeFredag20022026kl1410-1424.jpg   |  Bin 0 -> 154576 bytes
+ .../FFTMic8DETredjeFredag20022026kl1432-1452.jpg   |  Bin 0 -> 149816 bytes
+ .../FFTMic8DETredjeFredag20022026kl1519-1529.jpg   |  Bin 0 -> 154663 bytes
+ .../FFTMic8backgroundMeasurement03032026.jpg       |  Bin 0 -> 154518 bytes
+ .../FFTMic8backgroundMeasurement06032026.jpg       |  Bin 0 -> 160711 bytes
+ .../FFTMic8backgroundMeasurement13022026.jpg       |  Bin 0 -> 151268 bytes
+ .../FFTMic8backgroundMeasurement13032026.jpg       |  Bin 0 -> 158272 bytes
+ .../FFTMic8backgroundMeasurement16022026.jpg       |  Bin 0 -> 160419 bytes
+ .../FFTMic8backgroundMeasurement18022026.jpg       |  Bin 0 -> 161012 bytes
+ .../FFTMic8backgroundMeasurement20022026.jpg       |  Bin 0 -> 156007 bytes
+ .../FFTMic8backgroundMeasurement20032026.jpg       |  Bin 0 -> 152724 bytes
+ .../FFTMic8backgroundMeasurement27022026.jpg       |  Bin 0 -> 165600 bytes
+ .../FFTMic8backgroundMeasurement28022026.jpg       |  Bin 0 -> 151625 bytes
+ .../FFTMic8completeBackgroundNOise28032026.jpg     |  Bin 0 -> 139439 bytes
+ .../FFTMic8completeOpenNoise28032026.jpg           |  Bin 0 -> 145720 bytes
+ ...FTMic8poolOgBordF\303\245Mennesker13022026.jpg" |  Bin 0 -> 158146 bytes
+ ...FFTMic8poolSpilMedLidtBaggrundsSnak13022026.jpg |  Bin 0 -> 157344 bytes
+ 504 files changed, 2041 insertions(+), 122 deletions(-)
+2026-03-27 389620c cleanup
+
+ Numerical Scientific Computing/NSCLecturers.pem | 27 -------------------------
+ 1 file changed, 27 deletions(-)
+2026-03-27 48a7280 check
+
+ .gitignore | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+2026-03-27 9d86637 project update
+
+ ...oint Time Frequency Analysis by Flemming Munk.pdf | Bin 46269677 -> 0 bytes
+ ...c physics of sound and media change - slides.pptx | Bin 67758028 -> 0 bytes
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+2026-03-27 7db726f project update
+
+ ...nt Time Frequency Analysis by Flemming Munk.pdf |  Bin 0 -> 46269677 bytes
+ ...physics of sound and media change - slides.pptx |  Bin 0 -> 67758028 bytes
+ Numerical Scientific Computing/NSCLecturers.pem    |   27 +
+ .../Opgaver/mandelBrotDaskForVM.py                 |  607 +++++++
+ Projekt/Diverse/acousticMathForDE.mw               |  374 ++++-
+ ...rsComfortSI_EuropeanPerspective_DPG_BiR_JBR.pdf |  Bin 570532 -> 0 bytes
+ Projekt/Lydfiler/PerMic_AllMeasurements.csv        |  385 +++++
+ .../RTDCCalculatorFromImpulseResponseMeasurer.m    |   42 +-
+ .../Lydfiler/SpatialAverages_AllMeasurements.csv   |   49 +
+ Projekt/Lydfiler/Stats_PerMic.csv                  |   17 +
+ Projekt/Lydfiler/Stats_Spatial.csv                 |    3 +
+ Projekt/Lydfiler/calibrationFactor2.m              |    4 +-
+ .../omniPower/DEAcoustics_MLS_AllPairs.csv         | 1730 ++++++++++++++++++++
+ .../omniPower/DEAcoustics_Sweep_AllPairs.csv       | 1730 ++++++++++++++++++++
+ .../omniPower/LatexTable_MLS.txt                   |  137 ++
+ .../omniPower/LatexTable_Sweep.txt                 |  137 ++
+ .../omniPower/RoomAcoustics_MLS_AllPairs.csv       | 1729 +++++++++++++++++++
+ .../omniPower/RoomAcoustics_Sweep_AllPairs.csv     | 1729 +++++++++++++++++++
+ .../omniPower/desktop.ini                          |    4 +
+ .../omniPower/excelOfValues.xlsx                   |  Bin 0 -> 14441 bytes
+ .../omniPower/impulseResponsePlots/MLSFFTMic1.jpg  |  Bin 0 -> 209408 bytes
+ .../omniPower/impulseResponsePlots/MLSFFTMic2.jpg  |  Bin 0 -> 202489 bytes
+ .../omniPower/impulseResponsePlots/MLSFFTMic3.jpg  |  Bin 0 -> 210592 bytes
+ .../omniPower/impulseResponsePlots/MLSFFTMic4.jpg  |  Bin 0 -> 199615 bytes
+ .../omniPower/impulseResponsePlots/MLSFFTMic5.jpg  |  Bin 0 -> 201784 bytes
+ .../omniPower/impulseResponsePlots/MLSFFTMic6.jpg  |  Bin 0 -> 208554 bytes
+ .../omniPower/impulseResponsePlots/MLSFFTMic7.jpg  |  Bin 0 -> 201298 bytes
+ .../omniPower/impulseResponsePlots/MLSFFTMic8.jpg  |  Bin 0 -> 200324 bytes
+ .../impulseResponsePlots/MLSRT60Boxplot.jpg        |  Bin 0 -> 74363 bytes
+ .../impulseResponsePlots/MLSSchroederMic1.jpg      |  Bin 0 -> 107662 bytes
+ .../impulseResponsePlots/MLSSchroederMic2.jpg      |  Bin 0 -> 108586 bytes
+ .../impulseResponsePlots/MLSSchroederMic3.jpg      |  Bin 0 -> 109936 bytes
+ .../impulseResponsePlots/MLSSchroederMic4.jpg      |  Bin 0 -> 107785 bytes
+ .../impulseResponsePlots/MLSSchroederMic5.jpg      |  Bin 0 -> 106720 bytes
+ .../impulseResponsePlots/MLSSchroederMic6.jpg      |  Bin 0 -> 103283 bytes
+ .../impulseResponsePlots/MLSSchroederMic7.jpg      |  Bin 0 -> 104551 bytes
+ .../impulseResponsePlots/MLSSchroederMic8.jpg      |  Bin 0 -> 109601 bytes
+ .../impulseResponsePlots/MLST20Speaker1.jpg        |  Bin 0 -> 130701 bytes
+ .../impulseResponsePlots/MLST20Speaker2.jpg        |  Bin 0 -> 134798 bytes
+ .../impulseResponsePlots/MLST20Speaker3.jpg        |  Bin 0 -> 130722 bytes
+ .../impulseResponsePlots/MLST20Speaker4.jpg        |  Bin 0 -> 130332 bytes
+ .../impulseResponsePlots/MLST20Speaker5.jpg        |  Bin 0 -> 132950 bytes
+ .../impulseResponsePlots/MLST20Speaker6.jpg        |  Bin 0 -> 129220 bytes
+ .../impulseResponsePlots/MLST20Speaker7.jpg        |  Bin 0 -> 134680 bytes
+ .../impulseResponsePlots/MLST20Speaker8.jpg        |  Bin 0 -> 132727 bytes
+ .../impulseResponsePlots/SweepFFTMic1.jpg          |  Bin 0 -> 204063 bytes
+ .../impulseResponsePlots/SweepFFTMic2.jpg          |  Bin 0 -> 203058 bytes
+ .../impulseResponsePlots/SweepFFTMic3.jpg          |  Bin 0 -> 210501 bytes
+ .../impulseResponsePlots/SweepFFTMic4.jpg          |  Bin 0 -> 200772 bytes
+ .../impulseResponsePlots/SweepFFTMic5.jpg          |  Bin 0 -> 206947 bytes
+ .../impulseResponsePlots/SweepFFTMic6.jpg          |  Bin 0 -> 206832 bytes
+ .../impulseResponsePlots/SweepFFTMic7.jpg          |  Bin 0 -> 199563 bytes
+ .../impulseResponsePlots/SweepFFTMic8.jpg          |  Bin 0 -> 205024 bytes
+ .../impulseResponsePlots/SweepRT60Boxplot.jpg      |  Bin 0 -> 84268 bytes
+ .../impulseResponsePlots/SweepSchroederMic1.jpg    |  Bin 0 -> 110610 bytes
+ .../impulseResponsePlots/SweepSchroederMic2.jpg    |  Bin 0 -> 107140 bytes
+ .../impulseResponsePlots/SweepSchroederMic3.jpg    |  Bin 0 -> 108661 bytes
+ .../impulseResponsePlots/SweepSchroederMic4.jpg    |  Bin 0 -> 106102 bytes
+ .../impulseResponsePlots/SweepSchroederMic5.jpg    |  Bin 0 -> 114494 bytes
+ .../impulseResponsePlots/SweepSchroederMic6.jpg    |  Bin 0 -> 104226 bytes
+ .../impulseResponsePlots/SweepSchroederMic7.jpg    |  Bin 0 -> 106426 bytes
+ .../impulseResponsePlots/SweepSchroederMic8.jpg    |  Bin 0 -> 107122 bytes
+ .../impulseResponsePlots/SweepT20Speaker1.jpg      |  Bin 0 -> 137084 bytes
+ .../impulseResponsePlots/SweepT20Speaker2.jpg      |  Bin 0 -> 134731 bytes
+ .../impulseResponsePlots/SweepT20Speaker3.jpg      |  Bin 0 -> 134346 bytes
+ .../impulseResponsePlots/SweepT20Speaker4.jpg      |  Bin 0 -> 133803 bytes
+ .../impulseResponsePlots/SweepT20Speaker5.jpg      |  Bin 0 -> 138292 bytes
+ .../impulseResponsePlots/SweepT20Speaker6.jpg      |  Bin 0 -> 129762 bytes
+ .../impulseResponsePlots/SweepT20Speaker7.jpg      |  Bin 0 -> 133467 bytes
+ .../impulseResponsePlots/SweepT20Speaker8.jpg      |  Bin 0 -> 132179 bytes
+ .../omniPower/mls03032025.mat                      |  Bin 0 -> 128 bytes
+ .../omniSource/LatexTable_MLS.txt                  |  137 ++
+ .../omniSource/LatexTable_Sweep.txt                |  137 ++
+ .../omniSource/RoomAcoustics_MLS_AllPairs.csv      | 1729 +++++++++++++++++++
+ .../omniSource/RoomAcoustics_Sweep_AllPairs.csv    | 1729 +++++++++++++++++++
+ .../omniSource/desktop.ini                         |    4 +
+ .../omniSource/impulseResponsePlots/MLSFFTMic1.jpg |  Bin 0 -> 212206 bytes
+ .../omniSource/impulseResponsePlots/MLSFFTMic2.jpg |  Bin 0 -> 208276 bytes
+ .../omniSource/impulseResponsePlots/MLSFFTMic3.jpg |  Bin 0 -> 210480 bytes
+ .../omniSource/impulseResponsePlots/MLSFFTMic4.jpg |  Bin 0 -> 202569 bytes
+ .../omniSource/impulseResponsePlots/MLSFFTMic5.jpg |  Bin 0 -> 202320 bytes
+ .../omniSource/impulseResponsePlots/MLSFFTMic6.jpg |  Bin 0 -> 210315 bytes
+ .../omniSource/impulseResponsePlots/MLSFFTMic7.jpg |  Bin 0 -> 201812 bytes
+ .../omniSource/impulseResponsePlots/MLSFFTMic8.jpg |  Bin 0 -> 201898 bytes
+ .../impulseResponsePlots/MLSRT60Boxplot.jpg        |  Bin 0 -> 65079 bytes
+ .../impulseResponsePlots/MLSSchroederMic1.jpg      |  Bin 0 -> 92368 bytes
+ .../impulseResponsePlots/MLSSchroederMic2.jpg      |  Bin 0 -> 89168 bytes
+ .../impulseResponsePlots/MLSSchroederMic3.jpg      |  Bin 0 -> 93613 bytes
+ .../impulseResponsePlots/MLSSchroederMic4.jpg      |  Bin 0 -> 94927 bytes
+ .../impulseResponsePlots/MLSSchroederMic5.jpg      |  Bin 0 -> 91979 bytes
+ .../impulseResponsePlots/MLSSchroederMic6.jpg      |  Bin 0 -> 86406 bytes
+ .../impulseResponsePlots/MLSSchroederMic7.jpg      |  Bin 0 -> 91800 bytes
+ .../impulseResponsePlots/MLSSchroederMic8.jpg      |  Bin 0 -> 96670 bytes
+ .../impulseResponsePlots/MLST20Speaker1.jpg        |  Bin 0 -> 108451 bytes
+ .../impulseResponsePlots/MLST20Speaker2.jpg        |  Bin 0 -> 108560 bytes
+ .../impulseResponsePlots/MLST20Speaker3.jpg        |  Bin 0 -> 108608 bytes
+ .../impulseResponsePlots/MLST20Speaker4.jpg        |  Bin 0 -> 108493 bytes
+ .../impulseResponsePlots/MLST20Speaker5.jpg        |  Bin 0 -> 108575 bytes
+ .../impulseResponsePlots/MLST20Speaker6.jpg        |  Bin 0 -> 108517 bytes
+ .../impulseResponsePlots/MLST20Speaker7.jpg        |  Bin 0 -> 108508 bytes
+ .../impulseResponsePlots/MLST20Speaker8.jpg        |  Bin 0 -> 108579 bytes
+ .../impulseResponsePlots/SweepFFTMic1.jpg          |  Bin 0 -> 210318 bytes
+ .../impulseResponsePlots/SweepFFTMic2.jpg          |  Bin 0 -> 207751 bytes
+ .../impulseResponsePlots/SweepFFTMic3.jpg          |  Bin 0 -> 213773 bytes
+ .../impulseResponsePlots/SweepFFTMic4.jpg          |  Bin 0 -> 203951 bytes
+ .../impulseResponsePlots/SweepFFTMic5.jpg          |  Bin 0 -> 206753 bytes
+ .../impulseResponsePlots/SweepFFTMic6.jpg          |  Bin 0 -> 211052 bytes
+ .../impulseResponsePlots/SweepFFTMic7.jpg          |  Bin 0 -> 203013 bytes
+ .../impulseResponsePlots/SweepFFTMic8.jpg          |  Bin 0 -> 203112 bytes
+ .../impulseResponsePlots/SweepRT60Boxplot.jpg      |  Bin 0 -> 74758 bytes
+ .../impulseResponsePlots/SweepSchroederMic1.jpg    |  Bin 0 -> 108756 bytes
+ .../impulseResponsePlots/SweepSchroederMic2.jpg    |  Bin 0 -> 104405 bytes
+ .../impulseResponsePlots/SweepSchroederMic3.jpg    |  Bin 0 -> 114707 bytes
+ .../impulseResponsePlots/SweepSchroederMic4.jpg    |  Bin 0 -> 112031 bytes
+ .../impulseResponsePlots/SweepSchroederMic5.jpg    |  Bin 0 -> 108634 bytes
+ .../impulseResponsePlots/SweepSchroederMic6.jpg    |  Bin 0 -> 106275 bytes
+ .../impulseResponsePlots/SweepSchroederMic7.jpg    |  Bin 0 -> 106863 bytes
+ .../impulseResponsePlots/SweepSchroederMic8.jpg    |  Bin 0 -> 104974 bytes
+ .../impulseResponsePlots/SweepT20Speaker1.jpg      |  Bin 0 -> 126614 bytes
+ .../impulseResponsePlots/SweepT20Speaker2.jpg      |  Bin 0 -> 127523 bytes
+ .../impulseResponsePlots/SweepT20Speaker3.jpg      |  Bin 0 -> 133271 bytes
+ .../impulseResponsePlots/SweepT20Speaker4.jpg      |  Bin 0 -> 127934 bytes
+ .../impulseResponsePlots/SweepT20Speaker5.jpg      |  Bin 0 -> 134551 bytes
+ .../impulseResponsePlots/SweepT20Speaker6.jpg      |  Bin 0 -> 129388 bytes
+ .../impulseResponsePlots/SweepT20Speaker7.jpg      |  Bin 0 -> 130619 bytes
+ .../impulseResponsePlots/SweepT20Speaker8.jpg      |  Bin 0 -> 128143 bytes
+ .../omniSource/measured_ir_data.mat                |  Bin 0 -> 128 bytes
+ .../micCalibrationConstants_94dB_1kHz_18022026.mat |  Bin 0 -> 1422 bytes
+ .../micCalibrationConstants_94dB_1kHz_20032026.mat |  Bin 0 -> 1417 bytes
+ .../micCalibrationConstants_94dB_1kHz_25032026.mat |  Bin 0 -> 1416 bytes
+ Projekt/Lydfiler/noiseCalculatorAllWeightings.m    |  120 +-
+ .../FFTAverageDEAAbning02022026kl1415-1431_.jpg    |  Bin 0 -> 159467 bytes
+ Projekt/aacus220057.pdf                            |  Bin 2459055 -> 0 bytes
+ 133 files changed, 12525 insertions(+), 35 deletions(-)
+2026-03-19 b09f7bf NSC code made and a lot of update for project
+
+ ...nt Time Frequency Analysis by Flemming Munk.pdf |  Bin 46269677 -> 0 bytes
+ ...undamentals of Acoustics and Sound Lecture 7.mw |  473 ++++++
+ Fundamentals of Acoustics/Opgaver/exerciseMM7.m    |   19 +
+ .../Opgaver/dask_chunk_sweep.png                   |  Bin 0 -> 21034 bytes
+ .../Opgaver/mandelbrot.py                          |    5 +-
+ .../Opgaver/mandelbrotMP2.py                       |  606 +++++++
+ .../Opgaver/monteCarlo.py                          |   29 +-
+ Projekt/Diverse/acousticMathForDE.mw               |   34 +
+ ...rsComfortSI_EuropeanPerspective_DPG_BiR_JBR.pdf |  Bin 0 -> 570532 bytes
+ Projekt/IMG_0290.HEIC                              |  Bin 0 -> 3165943 bytes
+ Projekt/IMG_0295.HEIC                              |  Bin 0 -> 3382840 bytes
+ Projekt/IMG_0296.HEIC                              |  Bin 0 -> 1701691 bytes
+ Projekt/IMG_0339.HEIC                              |  Bin 0 -> 3140794 bytes
+ .../RTDCCalculatorFromImpulseResponseMeasurer.m    |  279 +++-
+ Projekt/Lydfiler/averageCalibrationFactors.m       |   53 +
+ Projekt/Lydfiler/calibrationFactor2.m              |    8 +-
+ Projekt/Lydfiler/desktop.ini                       |    4 +
+ .../DEAcoustics_MLS_AllPairs.csv                   | 1730 ++++++++++++++++++++
+ .../DEAcoustics_Sweep_AllPairs.csv                 | 1730 ++++++++++++++++++++
+ .../impulseResponseMeasurerData/LatexTable_MLS.txt |  137 ++
+ .../LatexTable_Sweep.txt                           |  137 ++
+ .../RoomAcoustics_MLS_AllPairs.csv                 | 1729 +++++++++++++++++++
+ .../RoomAcoustics_Sweep_AllPairs.csv               | 1729 +++++++++++++++++++
+ .../impulseResponseMeasurerData/desktop.ini        |    4 +
+ .../impulseResponsePlots/MLSFFTMic1.jpg            |  Bin 0 -> 209408 bytes
+ .../impulseResponsePlots/MLSFFTMic2.jpg            |  Bin 0 -> 202489 bytes
+ .../impulseResponsePlots/MLSFFTMic3.jpg            |  Bin 0 -> 210592 bytes
+ .../impulseResponsePlots/MLSFFTMic4.jpg            |  Bin 0 -> 199615 bytes
+ .../impulseResponsePlots/MLSFFTMic5.jpg            |  Bin 0 -> 201784 bytes
+ .../impulseResponsePlots/MLSFFTMic6.jpg            |  Bin 0 -> 208554 bytes
+ .../impulseResponsePlots/MLSFFTMic7.jpg            |  Bin 0 -> 201298 bytes
+ .../impulseResponsePlots/MLSFFTMic8.jpg            |  Bin 0 -> 200324 bytes
+ .../impulseResponsePlots/MLSRT60Boxplot.jpg        |  Bin 0 -> 74363 bytes
+ .../impulseResponsePlots/MLSSchroederMic1.jpg      |  Bin 0 -> 107662 bytes
+ .../impulseResponsePlots/MLSSchroederMic2.jpg      |  Bin 0 -> 108586 bytes
+ .../impulseResponsePlots/MLSSchroederMic3.jpg      |  Bin 0 -> 109936 bytes
+ .../impulseResponsePlots/MLSSchroederMic4.jpg      |  Bin 0 -> 107785 bytes
+ .../impulseResponsePlots/MLSSchroederMic5.jpg      |  Bin 0 -> 106720 bytes
+ .../impulseResponsePlots/MLSSchroederMic6.jpg      |  Bin 0 -> 103283 bytes
+ .../impulseResponsePlots/MLSSchroederMic7.jpg      |  Bin 0 -> 104551 bytes
+ .../impulseResponsePlots/MLSSchroederMic8.jpg      |  Bin 0 -> 109601 bytes
+ .../impulseResponsePlots/MLST20Speaker1.jpg        |  Bin 0 -> 130701 bytes
+ .../impulseResponsePlots/MLST20Speaker2.jpg        |  Bin 0 -> 134798 bytes
+ .../impulseResponsePlots/MLST20Speaker3.jpg        |  Bin 0 -> 130722 bytes
+ .../impulseResponsePlots/MLST20Speaker4.jpg        |  Bin 0 -> 130332 bytes
+ .../impulseResponsePlots/MLST20Speaker5.jpg        |  Bin 0 -> 132950 bytes
+ .../impulseResponsePlots/MLST20Speaker6.jpg        |  Bin 0 -> 129220 bytes
+ .../impulseResponsePlots/MLST20Speaker7.jpg        |  Bin 0 -> 134680 bytes
+ .../impulseResponsePlots/MLST20Speaker8.jpg        |  Bin 0 -> 132727 bytes
+ .../impulseResponsePlots/SweepFFTMic1.jpg          |  Bin 0 -> 204063 bytes
+ .../impulseResponsePlots/SweepFFTMic2.jpg          |  Bin 0 -> 203058 bytes
+ .../impulseResponsePlots/SweepFFTMic3.jpg          |  Bin 0 -> 210501 bytes
+ .../impulseResponsePlots/SweepFFTMic4.jpg          |  Bin 0 -> 200772 bytes
+ .../impulseResponsePlots/SweepFFTMic5.jpg          |  Bin 0 -> 206947 bytes
+ .../impulseResponsePlots/SweepFFTMic6.jpg          |  Bin 0 -> 206832 bytes
+ .../impulseResponsePlots/SweepFFTMic7.jpg          |  Bin 0 -> 199563 bytes
+ .../impulseResponsePlots/SweepFFTMic8.jpg          |  Bin 0 -> 205024 bytes
+ .../impulseResponsePlots/SweepRT60Boxplot.jpg      |  Bin 0 -> 84268 bytes
+ .../impulseResponsePlots/SweepSchroederMic1.jpg    |  Bin 0 -> 110610 bytes
+ .../impulseResponsePlots/SweepSchroederMic2.jpg    |  Bin 0 -> 107140 bytes
+ .../impulseResponsePlots/SweepSchroederMic3.jpg    |  Bin 0 -> 108661 bytes
+ .../impulseResponsePlots/SweepSchroederMic4.jpg    |  Bin 0 -> 106102 bytes
+ .../impulseResponsePlots/SweepSchroederMic5.jpg    |  Bin 0 -> 114494 bytes
+ .../impulseResponsePlots/SweepSchroederMic6.jpg    |  Bin 0 -> 104226 bytes
+ .../impulseResponsePlots/SweepSchroederMic7.jpg    |  Bin 0 -> 106426 bytes
+ .../impulseResponsePlots/SweepSchroederMic8.jpg    |  Bin 0 -> 107122 bytes
+ .../impulseResponsePlots/SweepT20Speaker1.jpg      |  Bin 0 -> 137084 bytes
+ .../impulseResponsePlots/SweepT20Speaker2.jpg      |  Bin 0 -> 134731 bytes
+ .../impulseResponsePlots/SweepT20Speaker3.jpg      |  Bin 0 -> 134346 bytes
+ .../impulseResponsePlots/SweepT20Speaker4.jpg      |  Bin 0 -> 133803 bytes
+ .../impulseResponsePlots/SweepT20Speaker5.jpg      |  Bin 0 -> 138292 bytes
+ .../impulseResponsePlots/SweepT20Speaker6.jpg      |  Bin 0 -> 129762 bytes
+ .../impulseResponsePlots/SweepT20Speaker7.jpg      |  Bin 0 -> 133467 bytes
+ .../impulseResponsePlots/SweepT20Speaker8.jpg      |  Bin 0 -> 132179 bytes
+ .../Lydfiler/micCalibrationConstants_94dB1kHz.mat  |  Bin 0 -> 1412 bytes
+ .../micCalibrationConstants_94dB1kHz_matlab.mat    |  Bin 0 -> 1767 bytes
+ .../micCalibrationConstants_94dB_1kHz_02022026.mat |  Bin 0 -> 243 bytes
+ .../micCalibrationConstants_94dB_1kHz_03032026.mat |  Bin 0 -> 1421 bytes
+ .../micCalibrationConstants_94dB_1kHz_06022026.mat |  Bin 0 -> 243 bytes
+ .../micCalibrationConstants_94dB_1kHz_06032026.mat |  Bin 0 -> 1418 bytes
+ .../micCalibrationConstants_94dB_1kHz_13022026.mat |  Bin 1413 -> 1418 bytes
+ .../micCalibrationConstants_94dB_1kHz_13032026.mat |  Bin 0 -> 1404 bytes
+ .../micCalibrationConstants_94dB_1kHz_20022026.mat |  Bin 1412 -> 1417 bytes
+ .../micCalibrationConstants_94dB_1kHz_27022026.mat |  Bin 1414 -> 1419 bytes
+ .../micCalibrationConstants_94dB_1kHz_28022026.mat |  Bin 1407 -> 1407 bytes
+ .../micCalibrationConstants_94dB_1kHz_30012026.mat |  Bin 0 -> 1414 bytes
+ .../Lydfiler/micCalibrationConstants_average.mat   |  Bin 0 -> 243 bytes
+ Projekt/Lydfiler/noiseCalculatorAllWeightings.m    |  179 +-
+ Projekt/aacus220057.pdf                            |  Bin 0 -> 2459055 bytes
+ Projekt/s10209-009-0175-y.pdf                      |  Bin 0 -> 533137 bytes
+ 90 files changed, 8834 insertions(+), 51 deletions(-)
+2026-03-19 b9ffd45 updated ignore
+
+ .gitignore | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+2026-03-19 41681e9 updated ignore
+
+ .gitignore | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+2026-03-12 badd066 Updated RTDC calculations, simulations and more
+
+ .../Noter/noise_source_location.pdf                | Bin 0 -> 1038861 bytes
+ Fundamentals of Acoustics/Opgaver/exerciseMM5.m    | 162 ++++++++++++++++
+ Fundamentals of Acoustics/Opgaver/exerciseMM6.asv  | 200 ++++++++++++++++++++
+ Fundamentals of Acoustics/Opgaver/exerciseMM6.m    | 200 ++++++++++++++++++++
+ ...physics of sound and media change - slides.pptx | Bin 67758028 -> 0 bytes
+ Fundamentals of Acoustics/Slides/Topic5_slides.pdf | Bin 0 -> 7010652 bytes
+ .../Opgaver/1024plot.png                           | Bin 0 -> 263069 bytes
+ .../Opgaver/fastProfile.prof                       | Bin 5233 -> 5306 bytes
+ .../Opgaver/mandelbrot.py                          |   6 +-
+ .../Opgaver/monteCarlo.py                          |  31 +++
+ .../Opgaver/monteCarlo.txt                         |   0
+ .../Opgaver/naiveProfile.prof                      | Bin 2757 -> 2622 bytes
+ Projekt/DEFloorPlan.bak                            | Bin 239053 -> 264712 bytes
+ Projekt/DEFloorPlan.dwg                            | Bin 239504 -> 268263 bytes
+ Projekt/DEFloorPlanMicPlacements.jpg               | Bin 174956 -> 158916 bytes
+ Projekt/DEFloorPlanMicPlacements.pdf               | Bin 99211 -> 99346 bytes
+ Projekt/DEFloorPlanSpeakerPlacementsVer2.jpg       | Bin 0 -> 311434 bytes
+ Projekt/DEFloorPlanSpeakerPlacementsVer2.pdf       | Bin 0 -> 98849 bytes
+ Projekt/Diverse/acousticMathForDE.mw               | 209 +++++++++++++++++++++
+ Projekt/Kode/teensySoundSetup/teensySoundSetup.ino |  31 +--
+ .../RTDCCalculatorFromImpulseResponseMeasurer.m    | 191 ++++++++++++++++++-
+ .../micCalibrationConstants_94dB_1kHz_28022026.mat | Bin 1402 -> 1407 bytes
+ ...46rsnit - Mellembygninger - Bygning D og E.pdf" | Bin 0 -> 6422328 bytes
+ .../PDF'er/AR6623 - Nedh\303\246ngt gipsloft.pdf"  | Bin 0 -> 2223231 bytes
+ Projekt/Simuleringer/DEMedAltLavOpLoesning.proj    | Bin 0 -> 4191667 bytes
+ Projekt/Simuleringer/Tutorial2.proj                | Bin 0 -> 783011 bytes
+ 26 files changed, 1012 insertions(+), 18 deletions(-)
+2026-03-04 93f485c Functional RTDC calculator
+
+ .../RTDCCalculatorFromImpulseResponseMeasurer.m    | 81 +++++++++++++++++-----
+ 1 file changed, 62 insertions(+), 19 deletions(-)
+2026-03-04 11e615a Possibly functional RTDCCalculator
+
+ .gitignore                                         |    3 +-
+ .../Opgaver/MP1HandinCLJ.zip                       |  Bin 0 -> 1661845 bytes
+ .../Opgaver/MP1HandinCLJ/fastProfile.prof          |  Bin 0 -> 5233 bytes
+ .../Opgaver/MP1HandinCLJ/git_log.txt               |  107 +
+ .../Opgaver/MP1HandinCLJ/mandelbrot.py             |  347 +++
+ .../MP1HandinCLJ/mandelbrotWithOutputs.ipynb       | 2379 ++++++++++++++++++++
+ .../Opgaver/MP1HandinCLJ/naiveProfile.prof         |  Bin 0 -> 2757 bytes
+ .../Opgaver/MP1HandinCLJ/numbaProfile.prof         |  Bin 0 -> 3786 bytes
+ Numerical Scientific Computing/Opgaver/git_log.txt |  107 +
+ Projekt/Lydfiler/ISO3382_Results.csv               | 2177 ++++++++++++++++++
+ Projekt/Lydfiler/ISO3382_Statistics.csv            |  273 +++
+ Projekt/Lydfiler/RTDCCalculator.m                  |  426 ++++
+ .../RTDCCalculatorFromImpulseResponseMeasurer.asv  |  181 ++
+ .../RTDCCalculatorFromImpulseResponseMeasurer.m    |  164 ++
+ .../RTDCCalculatorUsingBuiltinRoomAcoustics.m      |  139 ++
+ Projekt/Lydfiler/calibrationFactor2.m              |    4 +-
+ .../micCalibrationConstants_94dB_1kHz_20022026.mat |  Bin 1412 -> 1412 bytes
+ .../micCalibrationConstants_94dB_1kHz_27022026.mat |  Bin 0 -> 1414 bytes
+ .../micCalibrationConstants_94dB_1kHz_28022026.mat |  Bin 0 -> 1402 bytes
+ Projekt/Lydfiler/noiseCalculatorAllWeightings.m    |    4 +-
+ 20 files changed, 6306 insertions(+), 5 deletions(-)
+2026-03-02 15250a9 answered the questions for mp1
+
+ .../Opgaver/mandelbrotWithOutputs.ipynb            | 373 ++++++++++++++++++++-
+ 1 file changed, 368 insertions(+), 5 deletions(-)
+2026-03-02 9ec1e13 All milestones completed, should be ready for handin
+
+ .../Opgaver/mandelbrot.py                          |  322 +++-
+ .../Opgaver/mandelbrotWithOutputs.ipynb            | 2016 ++++++++++++++++++++
+ 2 files changed, 2245 insertions(+), 93 deletions(-)
+2026-03-01 c0673cc Updated plotting for mandelbrot
+
+ .../Opgaver/fastProfile.prof                       | Bin 0 -> 5233 bytes
+ .../Opgaver/mandelbrot.py                          | 157 ++++++++++++++++-----
+ .../Opgaver/naiveProfile.prof                      | Bin 0 -> 2757 bytes
+ .../Opgaver/numbaProfile.prof                      | Bin 0 -> 3786 bytes
+ 4 files changed, 124 insertions(+), 33 deletions(-)
+2026-02-23 b6ed618 Finalized sound signal code
+
+ Projekt/Kode/teensySoundSetup/teensySoundSetup.ino | 49 ++++++++++++----------
+ 1 file changed, 26 insertions(+), 23 deletions(-)
+2026-02-20 ca125d4 Updated Teensy code - should work now
+
+ .../Noter/Architecture_and_Vectorisation.pdf       | Bin 0 -> 19340231 bytes
+ .../Noter/Reproducible_Science_Infrastructure.pdf  | Bin 0 -> 16937890 bytes
+ .../Opgaver/mandelbrot.py                          | 120 +++++++++++++++++++++
+ .../Slides/L02_comparch_multi-core.pdf             | Bin 0 -> 1056897 bytes
+ Projekt/Kode/teensySoundSetup/teensySoundSetup.ino |  49 ++++++++-
+ Projekt/Lydfiler/calibrationFactor2.m              |   4 +-
+ .../micCalibrationConstants_94dB_1kHz_16022026.mat | Bin 1417 -> 1417 bytes
+ .../micCalibrationConstants_94dB_1kHz_20022026.mat | Bin 0 -> 1412 bytes
+ Projekt/Lydfiler/noiseCalculatorAllWeightings.m    |   4 +-
+ 9 files changed, 168 insertions(+), 9 deletions(-)
+2026-02-20 f170893 Made gitignore
+
+ .gitignore | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+2026-02-19 1e2ff69 Added a lot of matlab scripts and a teensy
+
+ .../FAaS Agenda F2025 Basic physics.pdf            | Bin 0 -> 138464 bytes
+ .../Noter/Chapter 5 (Kinsler et al. 4th).pdf       | Bin 0 -> 1781122 bytes
+ .../Noter/Chapter 6 (Kinsler et al. 4th).pdf       | Bin 0 -> 1088659 bytes
+ ...nt Time Frequency Analysis by Flemming Munk.pdf | Bin 0 -> 46269677 bytes
+ ... in audio signal feature extraction methods.pdf | Bin 0 -> 4414049 bytes
+ .../Opgaver/02-chris_&_chokoladefabrikken_#1.mp3   | Bin 0 -> 3605193 bytes
+ Fundamentals of Acoustics/Opgaver/02.Lay Down.mp3  | Bin 0 -> 7435609 bytes
+ ...solutions - basic physics and media changes.pdf | Bin 0 -> 93076 bytes
+ Fundamentals of Acoustics/Opgaver/Exercise1.wav    | Bin 0 -> 529244 bytes
+ Fundamentals of Acoustics/Opgaver/Exercise3.wav    | Bin 0 -> 1764044 bytes
+ .../FAaS Agenda F2025 Basic physics Lecture 3.pdf  | Bin 0 -> 138464 bytes
+ Fundamentals of Acoustics/Opgaver/FAaS2.m          |   5 +
+ Fundamentals of Acoustics/Opgaver/FAaS2Live.mlx    | Bin 0 -> 4941 bytes
+ ...undamentals of Acoustics and Sound Lecture 2.mw | 152 +++++
+ ...undamentals of Acoustics and Sound Lecture 3.mw | 735 +++++++++++++++++++++
+ .../Opgaver/SolutionsTopic1.m                      |  86 +++
+ ...physics of sound and media change - slides.pptx | Bin 0 -> 67758028 bytes
+ Fundamentals of Acoustics/Slides/Topic2_slides.pdf | Bin 4204963 -> 4975526 bytes
+ Fundamentals of Acoustics/Topic1_agenda.pdf        | Bin 0 -> 147736 bytes
+ Fundamentals of Acoustics/Topic2_agenda.pdf        | Bin 0 -> 135213 bytes
+ Projekt/DEFloorPlan.bak                            | Bin 0 -> 239053 bytes
+ Projekt/DEFloorPlan.dwg                            | Bin 0 -> 239504 bytes
+ Projekt/DEFloorPlan.jpg                            | Bin 0 -> 196646 bytes
+ Projekt/DEFloorPlan.pdf                            | Bin 0 -> 98429 bytes
+ Projekt/DEFloorPlanMicPlacements.jpg               | Bin 0 -> 174956 bytes
+ Projekt/DEFloorPlanMicPlacements.pdf               | Bin 0 -> 99211 bytes
+ Projekt/DEFloorPlanSpeakerPlacements.jpg           | Bin 0 -> 189024 bytes
+ Projekt/DEFloorPlanSpeakerPlacements.pdf           | Bin 0 -> 99154 bytes
+ Projekt/Kode/teensySoundSetup/teensySoundSetup.ino | 266 ++++++++
+ Projekt/Lydfiler/backgroundNoiseCalculator.m       |  12 +-
+ Projekt/Lydfiler/calibrationFactor.m               |   2 +-
+ Projekt/Lydfiler/calibrationFactor2.m              | 290 ++++++++
+ .../Lydfiler/micCalibrationConstants_94dB_1kHz.mat | Bin 1466 -> 1412 bytes
+ .../micCalibrationConstants_94dB_1kHz_13022026.mat | Bin 0 -> 1413 bytes
+ .../micCalibrationConstants_94dB_1kHz_16022026.mat | Bin 0 -> 1417 bytes
+ Projekt/Lydfiler/noiseCalculatorAllWeightings.m    | 283 ++++++++
+ Projekt/Lydfiler/toneGeneratorTeensyClone.m        | 341 ++++++++++
+ Projekt/Simuleringer/DEKunVaegge.proj              | Bin 0 -> 944219 bytes
+ .../Simuleringer/DEKunVaeggeSimpelMenForkert.proj  | Bin 0 -> 122562 bytes
+ .../Simuleringer/DEKunV\303\246ggeSimpel.proj"     | Bin 0 -> 4881950 bytes
+ Projekt/Simuleringer/Tutorial1.proj                | Bin 0 -> 4340350 bytes
+ 41 files changed, 2165 insertions(+), 7 deletions(-)
+2026-02-12 55c7c5a Possibly correct calibration and background noise scripts
+
+ .../backgroundMeasurementWithShortWindow.m         |  168 ++
+ Projekt/Lydfiler/backgroundNoiseCalculator.asv     |  239 +++
+ Projekt/Lydfiler/backgroundNoiseCalculator.m       |  239 +++
+ Projekt/Lydfiler/calibrationFactor.m               |  191 ++
+ Projekt/Lydfiler/kalibrering02022026.mat           |  Bin 0 -> 418 bytes
+ Projekt/Lydfiler/kalibrering020220262.mat          |  Bin 0 -> 419 bytes
+ Projekt/Lydfiler/kalibrering11022026Lab.mat        |  Bin 0 -> 292 bytes
+ Projekt/Lydfiler/kalibrering11022026Lab2.mat       |  Bin 0 -> 292 bytes
+ Projekt/Lydfiler/kalibrering30012026.mat           |  Bin 0 -> 420 bytes
+ .../Lydfiler/micCalibrationConstants_94dB_1kHz.mat |  Bin 0 -> 1466 bytes
+ .../micCalibrationConstants_94dB_1kHz_matlab.mat   |  Bin 0 -> 1767 bytes
+ Projekt/Lydfiler/mic_calibration.mat               |  Bin 0 -> 420 bytes
+ Projekt/Lydfiler/mikrofonKalibrering.m             |   55 +
+ Projekt/Lydfiler/setupFor8Channels.dc3             | 1838 ++++++++++++++++++++
+ Projekt/Lydfiler/setupFor8ChannelsShowAll.dc3      | 1838 ++++++++++++++++++++
+ Projekt/Lydfiler/splTest.m                         |    5 +
+ 16 files changed, 4573 insertions(+)
+2026-02-06 08ac922 Initial Commit
+
+ .../Slides/L1-Fundamentals-of-Deep-Learning.pdf      | Bin 0 -> 20106705 bytes
+ Fundamentals of Acoustics/Slides/Topic1_slides.pdf   | Bin 0 -> 4153436 bytes
+ Fundamentals of Acoustics/Slides/Topic2_slides.pdf   | Bin 0 -> 4204963 bytes
+ .../Slides/L01_CourseIntro_DevTools.pdf              | Bin 0 -> 557138 bytes
+ "Projekt/seddelTilDEOmM\303\245linger.docx"          | Bin 0 -> 17490 bytes
+ 5 files changed, 0 insertions(+), 0 deletions(-)
